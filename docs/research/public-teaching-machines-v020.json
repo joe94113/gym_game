@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "checkedDate": "2026-11-03",
+  "scope": "器械與有氧器材的公開資料核對；未進行真人教練簽核、影片逐格驗收或醫療適用性判定。",
+  "statusDefinitions": {
+    "source-reviewed": "已開啟並讀到實際操作教學；仍須看 equipmentScope 與 coverage，不能當成遊戲動畫通過驗收。",
+    "product-reference-only": "僅產品規格、結構或相關機型，不能據此認定完整動作正確。",
+    "no-accessible-instruction": "本次未取得可核對、且符合此變式的完整操作內容；部分項目交由另一研究清單合併。"
+  },
+  "coverageDefinitions": {
+    "setup": "資料明述入位或器材設定",
+    "movement": "資料明述運動方式",
+    "return": "資料明述單次回程",
+    "exit": "資料明述完成後停靠、解除固定或下機"
+  },
+  "muscleNote": "targetMuscles 只列來源確實提到的肌群，不自行推定紅色主肌群／橘色輔助肌群排名。",
+  "sources": [
+    {
+      "id": "lf-insignia-be",
+      "title": "Life Fitness Insignia Series Owner's Manual — 9481201 Rev BE",
+      "url": "https://kb.cybexintl.com/Owners_Manuals/Strength/Life_Fitness_Insignia_Series_Owners_Manual_9481201_Rev_BE.pdf",
+      "publisher": "Life Fitness",
+      "kind": "official-owner-manual",
+      "checkedDate": "2026-11-03",
+      "verifiedSections": ["SS-ADC p11", "SS-CP p16", "SS-HAB p23", "SS-HAD p24", "SS-LR p25", "SS-LE p27", "SS-FLY p28", "SS-PD p29", "SS-RW p31", "SS-SLC p32", "SS-SP p33"],
+      "note": "頁碼依手冊印刷頁碼。SS-LC 是趴姿腿彎舉，與 SS-SLC 坐姿不同。"
+    },
+    {
+      "id": "hs-plate-ag",
+      "title": "Hammer Strength Plate Loaded Owner's Manual — 1000420-0001 Rev AG",
+      "url": "https://kb.cybexintl.com/Owners_Manuals/Strength/OM_Hammer_Strength_Plate_Loaded_Owners_Manual_1000420-0001.pdf",
+      "publisher": "Life Fitness / Hammer Strength",
+      "kind": "official-owner-manual",
+      "checkedDate": "2026-11-03",
+      "verifiedSections": ["PL-GLD p41", "PL-HSQ p45", "PL-LP p48", "PL-BI p51", "PL-CALF p52"],
+      "note": "已讀取的是舊款 Rev AG；目前支援入口另列 Rev AJ。PL-LP 並非本遊戲的斜軌雪橇，不能移植其解扣流程。"
+    },
+    {
+      "id": "hs-iso-ac",
+      "title": "Hammer Strength Iso-Lateral Owner's Manual — 1000419-0001 AC",
+      "url": "https://resources.lifefitness.com/hub/life-fitness/en-US/1000419-0001-xd_32ce9968be620066-6b5ac64-1817a3e5ec1--7f3d.ditamap?onepage=true",
+      "publisher": "Life Fitness / Hammer Strength",
+      "kind": "official-owner-manual",
+      "checkedDate": "2026-11-03",
+      "verifiedSections": ["2.4 IL-DCP", "2.7 IL-HR", "2.8 IL-HBP", "2.9 IL-IPH", "2.10 IL-IPV", "2.17 IL-SP"],
+      "note": "IL-DCP 是坐姿下胸推，不能視為躺姿下斜椅的完整依據。"
+    },
+    {
+      "id": "lf-linear-leg-product",
+      "title": "Life Fitness Plate Loaded Linear Leg Press — SPLLLP",
+      "url": "https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/life-fitness-linear-leg-press",
+      "publisher": "Life Fitness",
+      "kind": "official-product-page",
+      "checkedDate": "2026-11-03",
+      "note": "產品頁列出可翻轉的滑車釋放機構；未在此頁讀到完整操作程序。"
+    },
+    {
+      "id": "lf-horizontal-product",
+      "title": "Hammer Strength Iso-Lateral Horizontal Bench Press — IL-HBP",
+      "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-horizontal-bench-press",
+      "publisher": "Life Fitness / Hammer Strength",
+      "kind": "official-product-page",
+      "checkedDate": "2026-11-03",
+      "note": "與原本連結的直立式 Bench Press 不同；操作依據須另讀 IL-HBP 手冊。"
+    },
+    {
+      "id": "matrix-fly-brochure",
+      "title": "Matrix Ultra 蝴蝶機及後三角訓練機 G7-S22-AS2007",
+      "url": "https://images-direct.jhtassets.com/bcffcda4f10cb26cbe70fe30908df1431ee6e478/original/named/UltraPecFlyRearDelt%2BIntelligentTrainingItc20%2B66306%2B85967%2Bzht%2Btw%2B.pdf",
+      "publisher": "Matrix / Johnson Health Tech",
+      "kind": "official-product-brochure",
+      "checkedDate": "2026-11-03",
+      "note": "已讀兩頁，只有可旋轉握把、座位及起始位置等規格，沒有逐步運動教學。"
+    },
+    {
+      "id": "lf-highrow-product",
+      "title": "Life Fitness Plate Loaded High Row",
+      "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/life-fitness-high-row",
+      "publisher": "Life Fitness",
+      "kind": "official-product-page",
+      "checkedDate": "2026-11-03",
+      "note": "只有向下拉與分離式機臂等產品資訊。"
+    },
+    {
+      "id": "lf-smith-product",
+      "title": "Hammer Strength Plate-Loaded Vertical Smith Machine — HSSMV",
+      "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/plate-loaded-vertical-smith-machine",
+      "publisher": "Life Fitness / Hammer Strength",
+      "kind": "official-product-page",
+      "checkedDate": "2026-11-03",
+      "note": "確認垂直導軌與多段掛槓位置，未提供深蹲完整操作教學。"
+    },
+    {
+      "id": "lf-backextension-product",
+      "title": "Life Fitness Signature Back Extension Bench — LBR-BE",
+      "url": "https://shop.lifefitness.com/products/signature-series-back-extension",
+      "publisher": "Life Fitness",
+      "kind": "official-product-page",
+      "checkedDate": "2026-11-03",
+      "note": "確認大腿墊、下方滾墊與進出扶手，沒有完整髖鉸鏈教學。"
+    },
+    {
+      "id": "c2-rowing",
+      "title": "Concept2 Rowing Technique",
+      "url": "https://www.concept2.com/training/rowing-technique",
+      "publisher": "Concept2",
+      "kind": "official-technique-guide",
+      "checkedDate": "2026-11-03",
+      "note": "實讀 Catch、Drive、Finish、Recovery 文字；未觀看或下載影片。"
+    },
+    {
+      "id": "c2-bikeerg",
+      "title": "Concept2 Setting Up the BikeErg",
+      "url": "https://www.concept2.com/training/articles/setting-up-the-bikeerg",
+      "publisher": "Concept2",
+      "kind": "official-setup-guide",
+      "checkedDate": "2026-11-03",
+      "note": "座墊與握把設定；BikeErg 自由輪機構不能代表所有固定飛輪車。"
+    },
+    {
+      "id": "lf-atmos-sl",
+      "title": "Life Fitness Atmos Treadmill — How to Use Your SL Console Guided Tour",
+      "url": "https://support.lifefitness.com/hc/en-us/articles/42814152246039-Life-Fitness-Atmos-Treadmill-How-to-Use-Your-SL-Console-Guided-Tour",
+      "publisher": "Life Fitness",
+      "kind": "official-console-guide",
+      "checkedDate": "2026-11-03",
+      "note": "實讀 GO／STOP／COOL DOWN；本文沒有安全夾與上下跑帶的完整教學。"
+    },
+    {
+      "id": "lf-integrity-cross",
+      "title": "Integrity+ and Club Series+ Cross-Trainer — 1023156-0001",
+      "url": "https://kb.cybexintl.com/Assembly_Manuals/Cross_Trainer/Integrity_Plus/1023156-0001_ENGLISH.pdf",
+      "publisher": "Life Fitness",
+      "kind": "official-assembly-and-user-manual",
+      "checkedDate": "2026-11-03",
+      "verifiedSections": ["印刷 p10／PDF p12：How to Use、Mounting and Dismounting"],
+      "note": "標題含組裝，但此章確實提供使用及上下機教學。"
+    },
+    {
+      "id": "lf-powermill-product",
+      "title": "Life Fitness PowerMill Climber",
+      "url": "https://www.lifefitness.com/en-us/catalog/cardio/stair-climbers-stepper-machines/powermill-climber",
+      "publisher": "Life Fitness",
+      "kind": "official-product-page",
+      "checkedDate": "2026-11-03",
+      "note": "確認停止鍵、雙煞車、進出自動停止功能；產品頁沒有完整步態或上下機教學。"
+    }
+  ],
+  "activities": [
+    {
+      "id": "machine-chest-press", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-CP p16",
+      "equipmentScope": "坐姿配重胸推的相關機型；遊戲非品牌精確複製品。",
+      "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["胸大肌", "三角肌前束", "肱三頭肌"],
+      "cues": ["握把齊胸中段；背部靠穩；慢推慢回。"]
+    },
+    {
+      "id": "machine-lat-pulldown", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-PD p29",
+      "equipmentScope": "有大腿固定墊的高位下拉；不把此機型軀幹傾角泛用於所有下拉機。",
+      "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["背闊肌", "肱二頭肌"], "cues": ["先握把再入座；大腿固定；控制回程。"]
+    },
+    {
+      "id": "machine-seated-row", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-RW p31",
+      "equipmentScope": "SS-RW 有胸靠；遊戲是無胸靠滑輪划船，只能核對腳部支撐與控制拉回原則。",
+      "coverage": {"setup": "partial", "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["背闊肌", "菱形肌", "斜方肌", "大小圓肌", "三角肌後束", "肱二頭肌"],
+      "cues": ["雙腳支撐；軀幹穩定；控制拉回。"]
+    },
+    {
+      "id": "machine-leg-press", "status": "product-reference-only", "sourceIds": ["lf-linear-leg-product"],
+      "equipmentScope": "遊戲為槓片斜軌雪橇；排除非雪橇式 PL-LP 手冊流程。",
+      "coverage": {"setup": false, "movement": false, "return": false, "exit": false},
+      "targetMuscles": [], "cues": [], "findingIds": ["legpress-parking"]
+    },
+    {
+      "id": "machine-leg-extension", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-LE p27",
+      "equipmentScope": "坐姿腿伸展的相關機型。", "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["股四頭肌"], "cues": ["膝蓋對轉軸；滾墊在踝上；慢回。"]
+    },
+    {
+      "id": "machine-shoulder-press", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-SP p33",
+      "equipmentScope": "坐姿肩推的相關機型。", "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["三角肌", "肱三頭肌"], "cues": ["握把齊肩或稍高；背靠墊；慢回。"]
+    },
+    {
+      "id": "machine-cable-fly", "status": "no-accessible-instruction", "sourceIds": [],
+      "equipmentScope": "自由重量／滑輪研究另行合併；本檔未核對既有 ACE 網址。", "coverage": {"setup": false, "movement": false, "return": false, "exit": false}, "targetMuscles": [], "cues": []
+    },
+    {
+      "id": "machine-squat-rack", "status": "no-accessible-instruction", "sourceIds": [],
+      "equipmentScope": "槓鈴動作研究另行合併；本檔未核對既有 ACE 網址。", "coverage": {"setup": false, "movement": false, "return": false, "exit": false}, "targetMuscles": [], "cues": []
+    },
+    {
+      "id": "machine-bench-press", "status": "no-accessible-instruction", "sourceIds": [],
+      "equipmentScope": "槓鈴動作研究另行合併；本檔未核對既有 NASM 網址。", "coverage": {"setup": false, "movement": false, "return": false, "exit": false}, "targetMuscles": [], "cues": []
+    },
+    {
+      "id": "machine-treadmill", "status": "source-reviewed", "sourceIds": ["lf-atmos-sl"],
+      "equipmentScope": "只核對 Atmos SL 控制台啟停；不代表遊戲跑步步態與上下機已核對。",
+      "coverage": {"setup": "console-only", "movement": false, "return": false, "exit": "stop-control-only"},
+      "targetMuscles": [], "cues": ["GO 開始；STOP 暫停，再按結束；COOL DOWN 進入緩和。"], "findingIds": ["treadmill-source-scope"]
+    },
+    {
+      "id": "machine-bike", "status": "source-reviewed", "sourceIds": ["c2-bikeerg"],
+      "equipmentScope": "只核對 BikeErg 座墊設定；不同健身車的停踏與緊急煞車須按機型說明。",
+      "coverage": {"setup": true, "movement": "pedal-fit-only", "return": false, "exit": false},
+      "targetMuscles": [], "cues": ["以前腳掌騎乘時，踏板最低處的膝蓋仍微彎。"]
+    },
+    {
+      "id": "machine-plate-incline-press", "status": "source-reviewed", "sourceIds": ["hs-iso-ac"], "section": "2.9／2.10 IL-IPH／IL-IPV",
+      "equipmentScope": "分離式上斜胸推的相關機型。", "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["胸大肌", "三角肌前束", "肱三頭肌"], "cues": ["握把齊胸中段或稍高；背靠穩；慢回。"]
+    },
+    {
+      "id": "machine-plate-high-row", "status": "source-reviewed", "sourceIds": ["hs-iso-ac", "lf-highrow-product"], "section": "2.7 IL-HR",
+      "equipmentScope": "官方 IL-HR 以大腿墊固定，與遊戲幾何相近；現有文字卻描述不存在的胸墊。",
+      "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["背闊肌", "菱形肌", "三角肌後束", "斜方肌", "大小圓肌", "肱二頭肌"],
+      "cues": ["握把後入座；大腿固定；肘向後下拉，慢回。"], "findingIds": ["highrow-chestpad-copy"]
+    },
+    {
+      "id": "machine-plate-shoulder-press", "status": "source-reviewed", "sourceIds": ["hs-iso-ac"], "section": "2.17 IL-SP",
+      "equipmentScope": "槓片肩推的相關機型。", "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["三角肌", "肱三頭肌"], "cues": ["握把齊肩或稍高；肩背靠墊；慢回。"]
+    },
+    {
+      "id": "machine-hack-squat", "status": "source-reviewed", "sourceIds": ["hs-plate-ag"], "section": "PL-HSQ p45",
+      "equipmentScope": "具機械停靠把手的哈克機；遊戲須另核對實際支撐裝置。", "coverage": {"setup": true, "movement": true, "return": true, "exit": true},
+      "targetMuscles": ["股四頭肌", "臀肌", "髖外展肌", "髖內收肌"], "cues": ["先設定限位；近伸直再解扣；退場前停回擋座。"]
+    },
+    {
+      "id": "machine-hip-thrust", "status": "source-reviewed", "sourceIds": ["hs-plate-ag"], "section": "PL-GLD p41",
+      "equipmentScope": "PL-GLD 是腰帶式；遊戲為壓墊機臂，固定與放開流程不可視為同款。", "coverage": {"setup": "related-variant", "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["臀肌", "股四頭肌"], "cues": ["背靠穩、腰帶固定；髖推起後慢降。"], "findingIds": ["hipthrust-variant"]
+    },
+    {
+      "id": "machine-calf-raise", "status": "source-reviewed", "sourceIds": ["hs-plate-ag"], "section": "PL-CALF p52",
+      "equipmentScope": "有停靠支撐的坐姿提踵；遊戲支撐移動仍須另驗。", "coverage": {"setup": true, "movement": true, "return": true, "exit": true},
+      "targetMuscles": ["比目魚肌"], "cues": ["前掌踩穩；提踵清空擋座；扣回支撐再離開。"]
+    },
+    {
+      "id": "machine-smith-squat", "status": "product-reference-only", "sourceIds": ["lf-smith-product"],
+      "equipmentScope": "已確認垂直導軌，未從此產品頁取得深蹲完整程序。", "coverage": {"setup": false, "movement": false, "return": false, "exit": false}, "targetMuscles": [], "cues": []
+    },
+    {
+      "id": "machine-leg-curl", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-SLC p32",
+      "equipmentScope": "使用坐姿 SS-SLC；排除趴姿 SS-LC。遊戲握把位置不同。", "coverage": {"setup": true, "movement": true, "return": true, "exit": true},
+      "targetMuscles": ["腿後肌群"], "cues": ["膝對轉軸；固定大腿；彎腿慢回，抬墊再離開。"]
+    },
+    {
+      "id": "machine-pec-deck", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-FLY p28：Pectoral Fly",
+      "equipmentScope": "直握把夾胸變式。", "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["胸大肌", "三角肌前束"], "cues": ["直握把；肘微彎且略低於肩；控制回程。"]
+    },
+    {
+      "id": "machine-lateral-raise", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-LR p25",
+      "equipmentScope": "以手臂墊承托的側平舉機。", "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["三角肌"], "cues": ["肩對轉軸；前臂靠墊；肘到肩高再慢降。"]
+    },
+    {
+      "id": "machine-elliptical", "status": "source-reviewed", "sourceIds": ["lf-integrity-cross"], "section": "印刷 p10",
+      "equipmentScope": "Integrity+ 橢圓機上下機與扶手教學。", "coverage": {"setup": true, "movement": true, "return": "cyclic", "exit": true},
+      "targetMuscles": [], "cues": ["先把靠近自己的踏板降到最低，握固定扶手跨上。", "下機腳的踏板先歸最低；握固定扶手跨下，落地才放手。"], "findingIds": ["elliptical-release-order"]
+    },
+    {
+      "id": "machine-rower", "status": "source-reviewed", "sourceIds": ["c2-rowing"],
+      "equipmentScope": "Concept2 划船技術；不包含遊戲腳帶及上下機機構驗收。", "coverage": {"setup": "catch-posture", "movement": true, "return": true, "exit": false},
+      "targetMuscles": [], "cues": ["推進依序是腿、軀幹、手；回程是手、軀幹、腿。", "手先過膝再彎膝；手腕平直、肩膀放鬆。"]
+    },
+    {
+      "id": "machine-stair-climber", "status": "product-reference-only", "sourceIds": ["lf-powermill-product"],
+      "equipmentScope": "目前只有產品結構與停機功能；操作手冊網址本次無法讀取。", "coverage": {"setup": false, "movement": false, "return": false, "exit": false}, "targetMuscles": [], "cues": []
+    },
+    {
+      "id": "machine-assisted-pullup", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-ADC p11：Assist Chin",
+      "equipmentScope": "膝墊輔助機；配重增加代表輔助增加。", "coverage": {"setup": true, "movement": true, "return": true, "exit": true},
+      "targetMuscles": ["背闊肌", "肱二頭肌"], "cues": ["握穩再跪墊；退場先讓膝墊升頂，再倒退下階。"]
+    },
+    {
+      "id": "machine-assisted-dip", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-ADC p11：Assist Dip",
+      "equipmentScope": "膝墊輔助雙槓機；非坐姿下壓機。", "coverage": {"setup": true, "movement": true, "return": true, "exit": true},
+      "targetMuscles": ["肱三頭肌", "三角肌前束", "胸大肌"], "cues": ["軀幹直、下降可控；膝墊升頂再倒退下階。"]
+    },
+    {
+      "id": "machine-hip-abduction", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-HAB p23",
+      "equipmentScope": "坐姿髖外展的相關機型。", "coverage": {"setup": true, "movement": true, "return": true, "exit": true},
+      "targetMuscles": ["髖外展肌群"], "cues": ["膝推墊外開、慢回；退場先釋放壓墊。"]
+    },
+    {
+      "id": "machine-hip-adduction", "status": "source-reviewed", "sourceIds": ["lf-insignia-be"], "section": "SS-HAD p24",
+      "equipmentScope": "坐姿髖內收的相關機型。", "coverage": {"setup": true, "movement": true, "return": true, "exit": true},
+      "targetMuscles": ["髖內收肌群"], "cues": ["膝推墊內收、慢回；退場先釋放壓墊。"]
+    },
+    {
+      "id": "machine-back-extension", "status": "product-reference-only", "sourceIds": ["lf-backextension-product"],
+      "equipmentScope": "45° 背伸展椅；不可套用坐姿 SS-BE 的壓背操作。", "coverage": {"setup": false, "movement": false, "return": false, "exit": false}, "targetMuscles": [], "cues": []
+    },
+    {
+      "id": "machine-preacher-curl", "status": "source-reviewed", "sourceIds": ["hs-plate-ag"], "section": "PL-BI p51",
+      "equipmentScope": "槓片式坐姿彎舉，較原配重式 Insignia 引用接近遊戲。", "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["肱二頭肌"], "cues": ["腋下靠近墊頂；肘對轉軸；上臂留墊、慢回。"]
+    },
+    {
+      "id": "machine-lying-chest-press", "status": "source-reviewed", "sourceIds": ["hs-iso-ac", "lf-horizontal-product"], "section": "2.8 IL-HBP",
+      "equipmentScope": "水平躺姿胸推；原連結的直立 Bench Press 機型不符。", "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["胸大肌", "肱三頭肌", "三角肌前束"], "cues": ["肩、頭靠墊；肘略低於肩；控制推回。"], "findingIds": ["horizontal-source-mismatch"]
+    },
+    {
+      "id": "machine-decline-chest-press", "status": "product-reference-only", "sourceIds": ["hs-iso-ac"], "section": "2.4 IL-DCP（坐姿相關變式）",
+      "equipmentScope": "讀到的 IL-DCP 教學是坐姿安全帶機；遊戲是下斜躺椅，不能視為相同入位與固定程序。", "coverage": {"setup": false, "movement": "related-variant", "return": "related-variant", "exit": false},
+      "targetMuscles": ["胸大肌", "肱三頭肌", "三角肌前束"], "cues": [], "findingIds": ["decline-model-mismatch"]
+    },
+    {
+      "id": "machine-reverse-fly", "status": "source-reviewed", "sourceIds": ["lf-insignia-be", "matrix-fly-brochure"], "section": "SS-FLY p28：Rear Deltoid",
+      "equipmentScope": "操作依據改採 Life Fitness 雙功能機；Matrix PDF 僅能作產品參考。", "coverage": {"setup": true, "movement": true, "return": true, "exit": false},
+      "targetMuscles": ["三角肌後束", "斜方肌"], "cues": ["面向胸墊、握內側橫把；手臂齊平、肘微彎。"], "findingIds": ["reversefly-brochure-label"]
+    }
+  ],
+  "codeFindings": [
+    {
+      "id": "legpress-parking", "severity": "needs-motion-correction", "files": ["src/equipment.js:164", "src/machine-lifecycle.js:204"],
+      "finding": "遊戲沿斜軌移動槓片雪橇，退場直接抬腳離開踏板。未在此分支看到停靠扣件或腳離板前的停靠操作。",
+      "action": "先選定相符機型，補實際停靠幾何／狀態；確認雪橇由安全裝置承重後，才移腳放手。",
+      "limits": "此為程式讀查，沒有宣稱畫面已碰撞或人體工學通過。"
+    },
+    {
+      "id": "highrow-chestpad-copy", "severity": "copy-geometry-mismatch", "files": ["src/data.js", "src/equipment.js:143"],
+      "finding": "plateHighRow 的現有步驟要求胸部貼胸墊；此幾何只有座椅及大腿滾墊，沒有胸墊。",
+      "action": "依大腿固定機型修改文字並核對手握、入座順序。"
+    },
+    {
+      "id": "elliptical-release-order", "severity": "needs-motion-correction", "files": ["src/cardio-lifecycle-paths.js:28"],
+      "finding": "退場分支先轉成 freeHands 再跨下踏板，沒有保留固定扶手支撐。equipment.js 的橢圓機只有活動臂、活動握把及控制台立柱，沒有建模固定扶手或提供固定握點 API。",
+      "action": "先補真實固定扶手與接觸 API，再維持扶手接觸下機；腳下踏板歸最低，雙腳落地後再放手。不可只改標籤或把手指向未建模的空中位置。",
+      "implementationStatus": "尚未修改：只調整路徑無法滿足真實固定扶手接觸，也沒有以假握點繞過既有手腳誤差門檻。"
+    },
+    {
+      "id": "horizontal-source-mismatch", "severity": "source-model-mismatch", "files": ["src/additional-equipment-data.js", "src/additional-equipment.js:147"],
+      "finding": "平躺機原來源為 upright Iso-Lateral Bench Press。",
+      "action": "改連結 Horizontal Bench Press IL-HBP，引用手冊 2.8。"
+    },
+    {
+      "id": "decline-model-mismatch", "severity": "source-model-mismatch", "files": ["src/additional-equipment.js:147", "src/additional-equipment-data.js"],
+      "finding": "遊戲下斜長椅與來源坐姿 IL-DCP 的座高、背靠和安全帶結構不同。",
+      "action": "保留相關變式標記，取得躺姿下斜機的實際說明後才核對全流程。"
+    },
+    {
+      "id": "reversefly-brochure-label", "severity": "source-scope-overclaim", "files": ["src/additional-equipment-data.js"],
+      "finding": "Matrix 兩頁產品規格被標成使用說明。",
+      "action": "改標產品型錄；操作另外引用已讀過的 SS-FLY 後三角章節。"
+    },
+    {
+      "id": "hipthrust-variant", "severity": "related-variant-only", "files": ["src/equipment.js:218"],
+      "finding": "遊戲為可翻壓墊機臂，PL-GLD 來源為腰帶錨點固定；來源列臀肌與股四頭肌，未建立現有腿後肌群／軀幹的主輔排名。",
+      "action": "標示機型差異；不能據腰帶手冊宣稱壓墊固定或放開動作已驗收。"
+    },
+    {
+      "id": "treadmill-source-scope", "severity": "source-scope-overclaim", "files": ["src/data.js"],
+      "finding": "來源是 Atmos SL 控制台導覽，現有標籤卻涵蓋啟停與安全；未讀到安全夾或上下跑帶教學。",
+      "action": "縮小標籤為控制台啟停參考，補正確操作手冊前維持其餘待核對。"
+    }
+  ],
+  "inaccessibleAttempts": [
+    {"url": "https://www.lftechsupport.com/c/document_library/get_file?folderId=4454135&name=DLFE-102707.pdf", "result": "網頁工具無法存取；不列為已讀 PowerMill 操作依據。"}
+  ],
+  "verificationLimits": [
+    "沒有把產品圖、搜尋摘要、外站轉貼或影片標題當成已看過的實際教學。",
+    "沒有下載或重製教學影片、音訊與圖片。",
+    "所有教學皆為精簡改述；多個動作共用手冊時合計摘要維持精簡。",
+    "資料核對與程式讀查不能取代真人教練審查、人體工學驗收或實機畫面驗收。"
+  ]
+}

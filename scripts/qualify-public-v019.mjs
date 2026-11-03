@@ -88,6 +88,12 @@ if(options['expected-version']){
     check('Delivered release includes catch-up and NPC matrix fixes',bundleText.includes('deferAmbient')&&bundleText.includes('getWorldMatrixCacheDiagnostics'));
     check('Delivered release includes physical trainer actors',bundleText.includes('floor-coach-'));
   }
+  if(report.expectedVersion==='0.20.0'){
+    check('Delivered release includes dated public teaching metadata',bundleText.includes('公開教學對照')&&bundleText.includes('2026-11-03')&&bundleText.includes('corrected-checked'));
+    const panels=[...htmlPages.values()].flatMap(html=>[...html.matchAll(/data-teaching-reference="([^"]+)"/g)].map(match=>match[1]));
+    check('All 65 source panels delivered once in static guides',panels.length===65&&new Set(panels).size===65,{panels:panels.length,unique:new Set(panels).size});
+    check('Guide preserves unresolved mechanism gaps',htmlPages.get('guide/machines/')?.includes('動畫待修')&&htmlPages.get('guide/cardio/')?.includes('固定扶手'));
+  }
 }
 const robots=await request('robots.txt'),sitemap=await request('sitemap.xml');
 if(canonical){check('Robots publishes canonical sitemap',robots.text.includes(new URL('sitemap.xml',canonical).href)&&!/^Disallow:\s*\/\s*$/m.test(robots.text));

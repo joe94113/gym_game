@@ -4,6 +4,7 @@ import {extendedExercises} from './extended-exercises.js';
 import {cableExercisesV011} from './cable-exercises-v011.js';
 import {reverseFlyActivity} from './additional-equipment-data.js';
 import {groupClassActivities,groupWarmupActivity} from './classes/class-data.js';
+import {withTeachingReference} from './teaching-references-v020.js';
 
 const canonicalMachine=new Map();
 for(const station of stations)if(!canonicalMachine.has(station.type))canonicalMachine.set(station.type,station.id);
@@ -18,7 +19,7 @@ const ordinary=stations.filter(station=>!['dumbbellCurl','stretchZone','facility
 }));
 
 const facilities=stations.filter(station=>station.type==='facility').map(station=>({...station,stationId:station.id,runtime:'facility',duration:station.duration||10,side:'both',muscleKeys:station.muscleKeys||[],secondaryMuscleKeys:station.secondaryMuscleKeys||[],...(station.id==='group-class'?groupWarmupActivity:{})}));
-export const activities=[...exercises.map(exercise=>({...exercise,runtime:'rig',movementId:exercise.id})),...[...extendedExercises,...cableExercisesV011].map(exercise=>({...exercise,runtime:'rig',movementId:exercise.id})),...ordinary,{...reverseFlyActivity,movementId:reverseFlyActivity.id},...facilities.map(facility=>({...facility,movementId:facility.id})),...groupClassActivities];
+export const activities=[...exercises.map(exercise=>({...exercise,runtime:'rig',movementId:exercise.id})),...[...extendedExercises,...cableExercisesV011].map(exercise=>({...exercise,runtime:'rig',movementId:exercise.id})),...ordinary,{...reverseFlyActivity,movementId:reverseFlyActivity.id},...facilities.map(facility=>({...facility,movementId:facility.id})),...groupClassActivities].map(withTeachingReference);
 // Multiple installed treadmills are places to do the same learned movement.
 // Keep an activity for each interaction point while showing one library entry.
 const listed=new Set();

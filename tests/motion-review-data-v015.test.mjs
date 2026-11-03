@@ -50,3 +50,20 @@ test('過量紀錄、深層資料及偽造接點會拒絕，匯出不自動建�
  const bad=pack();bad.records[0].contact=JSON.parse('{"__proto__":{"polluted":true}}');assert.throws(()=>importReviewPackage(JSON.stringify(bad),catalog),/contact/);assert.equal({}.polluted,undefined);
  const empty=createReviewPackage({catalog,records:[],evidence:[]});assert.equal(empty.records.length,0);assert.equal(empty.evidence.length,0);assert.ok(empty.checklist.every(item=>item.status==='pending'));
 });
+test('公開來源對照隨匯出保留，來源已讀不會自動建立人員意見',()=>{
+ const payload=createReviewPackage({catalog,records:[],evidence:[]});
+ assert.equal(payload.checklist.length,65);
+ assert.ok(payload.checklist.every(row=>row.publicTeaching?.checkedOn==='2026-11-03'&&row.status==='pending'&&!row.latestReviewer));
+ assert.equal(payload.checklist.find(row=>row.id==='cable-straight-arm-pulldown').publicTeaching.animation.status,'corrected-checked');
+ assert.equal(payload.records.length,0);assert.equal(payload.professionalSignoff,false);
+ const html=reviewHTML(payload,catalog);
+ assert.equal([...html.matchAll(/data-teaching-reference=/g)].length,65);
+ assert.match(html,/動畫待修/);assert.match(html,/公開教學對照/);
+});
+test('不信任匯入檔自填的來源對照，重新匯出採用本版逐項資料',()=>{
+ const payload=pack();payload.checklist=[{id:'dumbbell-curl',publicTeaching:{professionalSignoff:true,kind:'certified'}}];
+ const imported=importReviewPackage(JSON.stringify(payload),catalog);
+ const exported=createReviewPackage({catalog,records:imported.records,evidence:imported.evidence});
+ assert.equal(exported.checklist.find(row=>row.id==='dumbbell-curl').publicTeaching.kind,'direct_instruction');
+ assert.equal(exported.professionalSignoff,false);
+});

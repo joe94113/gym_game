@@ -90,6 +90,29 @@ export function configureCableStageV011({stage,THREE,metrics,box,rod,setRod,mat,
     }
     stage.gearContacts=copy(result.contactTargets);return result.pose;
   };
+  let straightArmRadius;
+  function straightArmPose(pose,angle,radius){
+    pose.hands=signs.map(sign=>[sign*.32,n.shoulder[1]+radius*Math.cos(angle),n.shoulder[2]+radius*Math.sin(angle)]);
+    pose.handDirections=[[1,0,0],[-1,0,0]];
+    // The elbow plane follows the shoulder arc. A fixed world-space pole
+    // would change the bend and wrist orientation as the bar travels down.
+    pose.elbowHints=signs.map(sign=>[sign,-.3*Math.sin(angle),.3*Math.cos(angle)]);
+    return pose;
+  }
+  function straightArmReach(){
+    if(straightArmRadius!==undefined)return straightArmRadius;
+    const arm=metrics.arms[0],included=165*Math.PI/180;
+    // A small, fixed bend is an animation design target, not a universal
+    // exercise prescription. Solve the actual wrist/palm contact adapter;
+    // a fixed shoulder-to-handle radius ignores palm length and grip offset.
+    const wristReach=Math.sqrt(arm.upper**2+arm.lower**2-2*arm.upper*arm.lower*Math.cos(included));
+    let low=Math.abs(arm.upper-arm.lower),high=arm.upper+arm.lower+arm.palmLength+Math.hypot(...arm.palmOffset);
+    for(let i=0;i<32;i++){
+      const radius=(low+high)/2,raw=directions(straightArmPose(neutral(),.83,radius)),adapted=stage.adaptHandPose(raw),hand=solveHandContactFrame(metrics,adapted,0),root=add(n.shoulder,arm.shoulderOffset);
+      if(V(hand.wrist).distanceTo(V(root))<wristReach)low=radius;else high=radius;
+    }
+    straightArmRadius=(low+high)/2;return straightArmRadius;
+  }
   stage.sample=(phase,cycle=0)=>{
     const e=(capturedPose?inertialCurlEffort(id,phase,cycle):null)??effort(phase),pose=neutral();
     if(curl){
@@ -99,8 +122,7 @@ export function configureCableStageV011({stage,THREE,metrics,box,rod,setRod,mat,
       pose.handDirections=signs.map(()=>[0,Math.sin(angle),Math.cos(angle)]);
     }else if(bar){
       const angle=.83+1.68*e;
-      pose.hands=signs.map(sign=>[sign*.32,n.shoulder[1]+.48*Math.cos(angle),n.shoulder[2]+.48*Math.sin(angle)]);
-      pose.handDirections=[[1,0,0],[-1,0,0]];pose.elbowHints=[[-1,-.3,.2],[1,-.3,.2]];
+      straightArmPose(pose,angle,straightArmReach());
     }else{
       // pelvis orientation and hip position remain fixed. Only the three
       // spine bones flex, rather than pitching the whole torso at the hip.

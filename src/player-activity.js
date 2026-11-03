@@ -59,7 +59,10 @@ export function createPlayerActivity({THREE,character,runtime,crowd,findPath,flo
     session.returnFrom=phase;session.returnTo=target;session.returnDuration=Math.max(.5,Math.min(3,Math.abs(target-phase)*session.duration));paused=false;setStage('returning');
   }
   function update(dt){
-    if(!session)return;if(inspection){apply(runtime.sampleLifecycle(session.id,inspection.direction,inspection.u));report();return;}session.time+=dt;const s=session;
+    if(!session)return;
+    // Keep the selected review pose across RAF ticks without advancing the session.
+    if(inspection){if(inspection.direction==='loop')poseExercise(inspection.u,inspection.cycle);else apply(runtime.sampleLifecycle(session.id,inspection.direction,inspection.u));report();return;}
+    session.time+=dt;const s=session;
     if(s.stage==='approaching'){
       while(s.index<s.route.length&&Math.hypot(s.route[s.index].x-character.group.position.x,s.route[s.index].z-character.group.position.z)<.10)s.index++;
       const target=s.route[s.index];if(!target){character.group.position.copy(s.gate);atGate();return;}
@@ -96,7 +99,7 @@ export function createPlayerActivity({THREE,character,runtime,crowd,findPath,flo
     setSpeed(value){speed=Math.max(.25,Math.min(2,Number(value)||1));},setPaused(value){paused=!!value;report();},
     seek(phase){inspection=null;if(!['exercising','completed'].includes(session?.stage))return false;const wasComplete=session.stage==='completed';session.forced=clamp(Number(phase)||0);session.clock=session.forced*session.duration;if(isCourse(session)){session.previewed=true;paused=true;if(wasComplete){runtime.begin(session.id);setStage('exercising');}}poseExercise(session.forced,session.forced);if(isCourse(session)&&session.clock>=session.duration)completeCourse();report();return true;},
     restartCourse(){if(!isCourse(session)||!['exercising','completed'].includes(session.stage))return false;if(session.stage==='completed'){session.clock=0;session.forced=null;session.previewed=false;session.attendedSeconds=0;paused=false;session.progress=1;readyToStart();}else{queued=session.id;stop({preserveQueue:true});}return true;},
-    inspect(phase,cycle=phase){inspection=null;if(session?.stage!=='exercising')return false;poseExercise(clamp(phase),cycle);return true;},
+    inspect(phase,cycle=phase){inspection=null;if(session?.stage!=='exercising')return false;inspection={direction:'loop',u:clamp(phase),cycle};poseExercise(inspection.u,inspection.cycle);return true;},
     inspectLifecycle(direction,u){if(!session)return null;if(!session.prepared){runtime.prepare(session.id);session.prepared=true;}inspection={direction,u:clamp(u)};const frame=runtime.sampleLifecycle(session.id,direction,clamp(u));apply(frame);return frame;},
     getMetadata(){return session?.meta||null;},getSetup(){return session?.setup||null;},
   };

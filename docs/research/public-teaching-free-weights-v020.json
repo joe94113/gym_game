@@ -1,0 +1,992 @@
+{
+  "schemaVersion": 1,
+  "checkedDate": "2026-11-03",
+  "method": "實際開啟公開教學網頁與原廠 PDF 文字，再對照目前程式的動作定義及過場順序。",
+  "status": "public-instruction-comparison",
+  "professionalApproval": false,
+  "humanCoachReviewCount": 0,
+  "animationFrameReview": "not-performed",
+  "motionCaptureImported": false,
+  "scope": [
+    "本檔驗證來源存在、器材與動作是否相符，以及程式碼可確認的姿勢與流程；沒有將閱讀教學視為真人教練審查。",
+    "coveredStages 的 return 指每次動作的受控回程；歸還器材、坐起與離開另列 lifecycleCoverage，避免混為一談。",
+    "紅橘肌肉標色是主要出力與輔助／穩定肌群的教學分類，不代表實測肌電、即時出力比例或受傷風險。",
+    "固定模型的展示角度、行程與握距不應宣稱適用所有體型；動作以可穩定控制的範圍為準。",
+    "未下載、重製或匯入來源影片或真人動捕；未執行新的效能、碰撞或逐影格視覺驗收。"
+  ],
+  "sources": [
+    {
+      "id": "mayo-dumbbell-curl",
+      "verifiedURL": "https://www.mayoclinic.org/healthy-lifestyle/fitness/multimedia/biceps-curl/vid-20084675",
+      "title": "Video: Biceps curl with dumbbell",
+      "publisher": "Mayo Clinic",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "網頁影片的文字逐字稿",
+      "sourceScope": "啞鈴彎舉；文字明列可站姿、坐姿、單雙側或交替操作。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "掌心向上，手肘靠近身體，慢慢彎肘再放下。手腕保持自然，不靠擺動上臂或身體把重量甩起。",
+      "coverageLimits": "沒有教啞鈴架取放、走到定位點或離場。",
+      "locator": "逐字稿：Starting with the dumbbell / For best results 段落"
+    },
+    {
+      "id": "ace-hammer-curl",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/10/hammer-curl/",
+      "title": "Hammer Curl",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "站姿啞鈴中立握彎舉；可單手、雙手或交替。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "掌心相對、拇指閉握，站穩並穩住軀幹。彎肘時不把手肘往前送、不聳肩；手腕不折，回程慢慢放下。",
+      "coverageLimits": "沒有教架上取鈴或歸還。",
+      "locator": "Starting Position / Upward Phase / Downward Phase"
+    },
+    {
+      "id": "ace-dumbbell-chest-press",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/19/chest-press/",
+      "title": "Chest Press",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "平板椅、雙啞鈴臥推；有保護者交接重量的版本。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "頭、肩、臀部靠穩椅墊，雙腳有支撐，手腕自然且閉握。控制下放到胸旁，再平順推起。文中結束交鈴採保護者協助，對方拿穩前維持握持。",
+      "coverageLimits": "不是獨自持重坐起、大腿承鈴與歸架的完整示範。",
+      "locator": "Equipment: Bench, Dumbbells；Starting Position 與結束交接段落"
+    },
+    {
+      "id": "ace-beginner-workout",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/blog/3714/beginner-strength-training-workout/",
+      "title": "Beginner Strength Training Workout",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "網頁文章文字",
+      "sourceScope": "初學者綜合文章中的平板雙啞鈴臥推段落。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "持兩顆啞鈴坐上平板椅，慢慢後躺並讓頭部有支撐，將鈴移到胸旁，再控制推起及下放。",
+      "coverageLimits": "現有來源確實包含啞鈴臥推，不能標為器材引用錯誤；但沒有具體大腿承鈴、獨自坐起、歸架流程。",
+      "locator": "Dumbbell Chest Press 段落（開啟頁文字第 153–157 行）"
+    },
+    {
+      "id": "ace-goblet-squat",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/362/goblet-squat/",
+      "title": "Goblet Squat",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "胸前直抱單顆啞鈴的深蹲。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "雙手把啞鈴穩穩抱在胸前，雙腳站穩，背部維持自然。屈髖屈膝下蹲，再透過雙腳推地站起。",
+      "coverageLimits": "來源有示範蹲深，不應換算成每個體型都必須達到的固定深度；未教從架上抱鈴或放回。",
+      "locator": "動作描述與 Equipment: Dumbbells"
+    },
+    {
+      "id": "ace-single-arm-row",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/126/single-arm-row/",
+      "title": "Single-arm Row",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "一手及同側膝蓋支撐椅墊的單手啞鈴划船，與遊戲雙腳落地版本不同。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "扶椅側的手與膝蓋都放在椅上，軀幹穩定。工作側手肘往後帶，避免轉腰或肩膀下沉，控制放回。",
+      "coverageLimits": "可參考划船方向與軀幹穩定，不能當作遊戲雙腳落地站姿的完整就位證據。",
+      "locator": "Starting Position 明列 left knee and left hand on the bench"
+    },
+    {
+      "id": "ace-cable-lateral-raise",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/354/single-arm-lateral-raise/",
+      "title": "Single-arm Lateral Raise",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "腰高滑輪、單側拉線的側平舉；不是啞鈴。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "來源使用腰高滑輪，握把跨過身前，單手抬至肩部附近，再控制回程。",
+      "coverageLimits": "拉力方向、附件與站位都不能直接視為雙啞鈴版本的完整校正。",
+      "locator": "Equipment: Resistance Bands/Cables；pulley at waist height"
+    },
+    {
+      "id": "ace-dumbbell-lateral-raise",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+      "title": "Lateral Raise",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "站姿雙啞鈴側平舉；可採穩定分腿或略寬站位。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "啞鈴在身側、手肘略彎，軀幹穩定。雙臂向側面抬到肩高附近，再慢慢放下，手腕不折。",
+      "coverageLimits": "來源不涵蓋架上取放；不應強迫內旋或把單一抬臂角度當作人人適用的標準。",
+      "locator": "Equipment: Dumbbells；Starting Position / Upward Phase / Downward Phase"
+    },
+    {
+      "id": "ace-deltoid-shoulder-press",
+      "verifiedURL": "https://www.acefitness.org/resources/pros/expert-articles/9074/smart-shoulder-solutions-an-evidence-based-approach-to-training-the-deltoids/",
+      "title": "Smart Shoulder Solutions: An Evidence-based Approach to Training the Deltoids",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "專業文章文字，未下載或逐格審閱影片",
+      "sourceScope": "三角肌訓練文章；明列啞鈴肩推可站姿或坐姿，站姿可用前後站位。",
+      "coveredStages": [
+        "setup",
+        "loop"
+      ],
+      "conciseChineseParaphrase": "啞鈴肩推主要帶動肩部並需要手臂協助。站姿需要更多軀幹穩定；採前後站位或降低重量、改坐姿，可依穩定能力調整。",
+      "coverageLimits": "不是完整的站姿取鈴、翻鈴、放回及離開教學。",
+      "locator": "Dumbbell Shoulder Press 與站姿／坐姿變化段落"
+    },
+    {
+      "id": "ace-seated-overhead-press",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+      "title": "Seated Overhead Press",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "有椅背支撐的坐姿雙啞鈴肩推；只補充上肢控制原則。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "雙腳有支撐、軀幹穩定，從肩旁推起後受控放回。維持自然手腕，不用腰部過度後仰把重量送上去。",
+      "coverageLimits": "不能將坐姿支撐點與就位動作套稱為站姿肩推的完整教學；不以文章指示強制固定肩胛所有動作。",
+      "locator": "Starting Position / Upward Phase / Downward Phase"
+    },
+    {
+      "id": "nasm-dumbbell-rdl",
+      "verifiedURL": "https://www.nasm.org/resource-center/exercise-library/dumbbell-romanian-deadlift",
+      "title": "Dumbbell Romanian Deadlift",
+      "publisher": "National Academy of Sports Medicine",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "站姿雙啞鈴羅馬尼亞硬舉。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "雙腳約髖寬、膝蓋微彎，啞鈴貼近腿部。保持背部自然並把髖往後送，降到能控制的腿後側伸展範圍，再把髖帶回站姿。",
+      "coverageLimits": "不是固定要降到地面的動作，行程隨活動度而異；未完整教架上取放。",
+      "locator": "How to Perform / Muscles Worked / Common Mistakes"
+    },
+    {
+      "id": "ace-rdl",
+      "verifiedURL": "https://www.acefitness.org/continuing-education/certified/may-2025/8865/the-ace-do-it-better-series-the-romanian-deadlift/",
+      "title": "The ACE Do it Better Series: The Romanian Deadlift",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "專業文章文字",
+      "sourceScope": "槓鈴示範為主，文字明確允許雙手各持一顆啞鈴。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "從適當架高取重量，膝蓋保持微彎，髖往後送，重量靠近身體。下放行程依腿後側伸展與控制能力決定，再平順站回。",
+      "coverageLimits": "提供架高取重與髖鉸鏈的一般原則，不等同遊戲啞鈴托盤的精確握位及碰撞驗證。",
+      "locator": "文章動作教學段落；明列 dumbbells 與依活動度調整的行程"
+    },
+    {
+      "id": "ace-back-squat",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/11/back-squat/",
+      "title": "Back Squat",
+      "publisher": "American Council on Exercise",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "自由槓背蹲、由槓架出槓後退步定位。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "先把槓架調到肩膀下方，鑽入槓下讓上背承槓，握穩後伸腿出槓並退步站穩。屈髖屈膝下蹲，雙腳推地站回。",
+      "coverageLimits": "不是史密斯固定導軌教學；來源示範的蹲深不應當作所有體型都必須達到的固定值。",
+      "locator": "Starting Position 與動作步驟"
+    },
+    {
+      "id": "hammer-vertical-smith",
+      "verifiedURL": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/plate-loaded-vertical-smith-machine",
+      "title": "Plate-Loaded Vertical Smith Machine",
+      "publisher": "Hammer Strength / Life Fitness",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "產品規格頁文字",
+      "sourceScope": "零度垂直導軌史密斯機的機構規格。",
+      "coveredStages": [],
+      "conciseChineseParaphrase": "這款機型的槓沿垂直導軌移動，有多個掛槓高度。",
+      "coverageLimits": "規格頁不是完整動作、掛鉤、保護或就位教學，不能據此宣稱史密斯深蹲全流程通過原廠審查。",
+      "locator": "Zero-degree bar path / racking positions 規格"
+    },
+    {
+      "id": "cybex-ion-smith-manual",
+      "verifiedURL": "https://kb.cybexintl.com/Assembly_Manuals/Strength/Cybex_ION_AI_CI-SM_Smith_Rack_1015904-0001.pdf",
+      "title": "Ion Series Smith Rack: Assembly Instructions",
+      "publisher": "Cybex / Life Fitness",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "原廠 PDF 文字，未將圖示視為已完成的動畫逐格驗收",
+      "sourceScope": "Cybex ION Smith Rack 的操作與深蹲；屬不同機型的安全原則參考。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "先調整槓高與安全止擋並平衡加重。握穩、抬槓並轉動解鎖，控制下蹲到自身可掌握的範圍。結束時轉回掛鉤並確認承重後才放手。",
+      "coverageLimits": "不得把此機型的朝向、掛鉤旋轉方向或站位直接宣稱適用所有史密斯機；沒有證明遊戲模型就是該機型。",
+      "locator": "PDF 第 19–20 頁（零起算 18–19；印刷頁 17–18），操作說明及 Squat Press"
+    },
+    {
+      "id": "nasm-barbell-bench-press",
+      "verifiedURL": "https://www.nasm.org/resource-center/exercise-library/barbell-bench-press",
+      "title": "Barbell Bench Press",
+      "publisher": "National Academy of Sports Medicine",
+      "checkedDate": "2026-11-03",
+      "opened": true,
+      "inspection": "動作資料庫文字",
+      "sourceScope": "平板自由槓臥推的主動作。",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "conciseChineseParaphrase": "平躺後讓雙腳有支撐、肩部與核心穩定，採能控制的握距。受控下放與推起，避免快速落槓、過度拱腰或失控。",
+      "coverageLimits": "頁面沒有完整交代掛鉤出槓、保護者交接、回架確認與離椅；不照搬固定英吋握距或把單一胸前停點當作通用行程。",
+      "locator": "How to Perform / Muscles Worked / Common Mistakes"
+    }
+  ],
+  "entries": [
+    {
+      "exerciseId": "dumbbell-curl",
+      "name": "站姿啞鈴彎舉",
+      "verifiedURL": "https://www.mayoclinic.org/healthy-lifestyle/fitness/multimedia/biceps-curl/vid-20084675",
+      "title": "Video: Biceps curl with dumbbell",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "mayo-dumbbell-curl"
+      ],
+      "referenceMatch": "相同器材與主動作",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "雙啞鈴彎舉；來源允許站姿與雙側操作。",
+      "targetMuscles": {
+        "primary": [
+          "肱二頭肌"
+        ],
+        "secondary": [
+          "前臂穩定"
+        ]
+      },
+      "teaching": {
+        "setup": "站穩，啞鈴自然垂在身側，手腕保持自然。",
+        "movement": "上臂靠近身體，慢慢彎肘，不用身體晃動把重量甩起。",
+        "return": "控制伸肘回到起點，避免突然鬆手或甩下。"
+      },
+      "cautions": [
+        "不能靠肘部大幅前移或軀幹擺動代替彎肘。",
+        "回程與握持完成，仍不代表架上取放已獲真人確認。"
+      ],
+      "lifecycleCoverage": "來源未涵蓋架上取鈴、搬運與歸位。",
+      "codeFindings": [
+        {
+          "file": "src/exercises.js",
+          "line": 4,
+          "status": "consistent",
+          "detail": "主動作說明與目前 Mayo 啞鈴來源相符。"
+        },
+        {
+          "file": "src/exercise-rig.js",
+          "line": 103,
+          "status": "consistent-at-code-level",
+          "detail": "上臂肘點靠近身體，主要以肘部彎曲改變手部位置；這是程式形狀對照，未重做逐格視覺驗收。"
+        },
+        {
+          "file": "src/dumbbell-lifecycle-paths.js",
+          "line": 18,
+          "status": "source-gap",
+          "detail": "架上握持與取放是共用自製過場；來源沒有展示這一段。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "dumbbell-hammer-curl",
+      "name": "啞鈴槌式彎舉",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/10/hammer-curl/",
+      "title": "Hammer Curl",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "ace-hammer-curl"
+      ],
+      "referenceMatch": "相同器材與主動作",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "中立握站姿啞鈴彎舉。",
+      "targetMuscles": {
+        "primary": [
+          "肱二頭肌",
+          "肱肌"
+        ],
+        "secondary": [
+          "前臂肌群"
+        ]
+      },
+      "teaching": {
+        "setup": "掌心相對握穩啞鈴，雙腳站穩。",
+        "movement": "彎肘把重量帶起，肩部和軀幹保持穩定。",
+        "return": "保持握法與手腕自然，慢慢伸肘放回身側。"
+      },
+      "cautions": [
+        "不要聳肩、把手肘往前送或甩動身體。",
+        "不同前臂結構不必強迫啞鈴貼死大腿。"
+      ],
+      "lifecycleCoverage": "來源未涵蓋架上取放與步行。",
+      "codeFindings": [
+        {
+          "file": "src/extended-exercises.js",
+          "line": 8,
+          "status": "consistent",
+          "detail": "掌心相對與控制彎肘的文字和來源相符。"
+        },
+        {
+          "file": "src/extended-rig.js",
+          "line": 67,
+          "status": "consistent-at-code-level",
+          "detail": "主動作使用中立握與固定上臂，再改變肘部屈曲；尚未以影片逐格確認自然度。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "dumbbell-bench-press",
+      "name": "平板啞鈴臥推",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/19/chest-press/",
+      "title": "Chest Press",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "ace-dumbbell-chest-press",
+        "ace-beginner-workout"
+      ],
+      "referenceMatch": "主動作相同；現有過場只有部分順序有公開文字支持",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "平板雙啞鈴臥推。資料庫採保護者交接，綜合文章概述獨自坐下後躺。",
+      "targetMuscles": {
+        "primary": [
+          "胸大肌"
+        ],
+        "secondary": [
+          "肱三頭肌",
+          "前三角肌"
+        ]
+      },
+      "teaching": {
+        "setup": "頭、肩與臀部靠穩椅墊，雙腳有支撐，先握穩再進入推舉位置。",
+        "movement": "在能控制的胸旁範圍受控下放與推起，手腕不要折。",
+        "return": "每次動作慢慢回到起點；結束交接或收鈴應依重量與協助條件安排。"
+      },
+      "cautions": [
+        "公開文章的概略後躺不能證明固定模型的大腿承鈴及持重坐起適合所有重量。",
+        "需要協助時讓保護者接穩前維持握持。",
+        "不得以程式沒有幾何穿透推論真人負重安全。"
+      ],
+      "lifecycleCoverage": "坐上椅、後躺有概略文字支持；大腿承鈴、帶鈴坐起與自行歸架仍是程式自製流程，缺少精確示範依據。",
+      "codeFindings": [
+        {
+          "file": "src/exercises.js",
+          "line": 31,
+          "status": "source-improvement",
+          "detail": "現有 ACE 綜合文章確實有啞鈴臥推段落，不是錯器材；建議改資料庫 19 為主要來源，綜合文章保留為概略後躺補充。"
+        },
+        {
+          "file": "src/exercise-rig.js",
+          "line": 126,
+          "status": "consistent-at-code-level",
+          "detail": "程式設置躺姿、雙腳落地與握持；不等於已量測背部承重或真人關節負荷。"
+        },
+        {
+          "file": "src/dumbbell-lifecycle-paths.js",
+          "line": 34,
+          "status": "partial-source-coverage",
+          "detail": "先持鈴坐下再後躺與文章概略順序相符；大腿承鈴的接觸與姿勢尚無該來源的具體示範。"
+        },
+        {
+          "file": "src/rig-lifecycle.js",
+          "line": 46,
+          "status": "source-gap",
+          "detail": "離開以帶鈴坐起回走共用反向過場；不能當作原廠或真人教練已驗證的負重離椅方法。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "dumbbell-shoulder-press",
+      "name": "站姿啞鈴肩推",
+      "verifiedURL": "https://www.acefitness.org/resources/pros/expert-articles/9074/smart-shoulder-solutions-an-evidence-based-approach-to-training-the-deltoids/",
+      "title": "Smart Shoulder Solutions: An Evidence-based Approach to Training the Deltoids",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "ace-deltoid-shoulder-press",
+        "ace-seated-overhead-press"
+      ],
+      "referenceMatch": "主要文章包含站姿；坐姿資料庫僅補充上肢控制",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "站姿啞鈴肩推；不得把坐姿靠背就位稱為相同全身動作。",
+      "targetMuscles": {
+        "primary": [
+          "三角肌"
+        ],
+        "secondary": [
+          "肱三頭肌",
+          "軀幹穩定肌群"
+        ]
+      },
+      "teaching": {
+        "setup": "站穩並控制肋骨與骨盆，先把啞鈴穩定帶到肩旁。",
+        "movement": "平順推到頭部上方，不靠腰部後仰代償。",
+        "return": "慢慢回到肩旁可控制的位置，再安排收鈴。"
+      },
+      "cautions": [
+        "從身側把啞鈴翻到肩旁的方式與適用重量，不能由主動作文章推論已驗證。",
+        "坐姿來源不提供站姿腳位與平衡的完整證據。",
+        "不要把肩胛完全固定當作所有過頭動作的必要條件。"
+      ],
+      "lifecycleCoverage": "站姿選項與肩推原則有依據；取鈴、翻鈴至肩旁、放回仍缺完整來源。",
+      "codeFindings": [
+        {
+          "file": "src/extended-exercises.js",
+          "line": 9,
+          "status": "consistent",
+          "detail": "現有站穩、控制肋骨、避免腰部後仰的文字與公開教學原則相符。"
+        },
+        {
+          "file": "src/dumbbell-lifecycle-paths.js",
+          "line": 40,
+          "status": "source-gap",
+          "detail": "目前是自製先彎肘再把鈴帶到肩旁的過場，沒有逐格真人素材可支持整段。"
+        },
+        {
+          "file": "src/extended-rig.js",
+          "line": 73,
+          "status": "review-limit",
+          "detail": "姿勢還會套用 capturedPose／下肢參考；不能僅依基礎插值公式宣布最終所有關節角度通過審查。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "dumbbell-lateral-raise",
+      "name": "啞鈴側平舉",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+      "title": "Lateral Raise",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "ace-dumbbell-lateral-raise"
+      ],
+      "replacedReferenceIds": [
+        "ace-cable-lateral-raise"
+      ],
+      "referenceMatch": "建議改為相同器材與主動作",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "雙啞鈴站姿側平舉；來源 354 是滑輪版本，來源 26 才是啞鈴版本。",
+      "targetMuscles": {
+        "primary": [
+          "三角肌中束"
+        ],
+        "secondary": [
+          "肩帶與上背穩定肌群"
+        ]
+      },
+      "teaching": {
+        "setup": "啞鈴放身側，手肘微彎，軀幹站穩。",
+        "movement": "雙臂往兩側抬到可控制的肩高附近，不聳肩或甩動。",
+        "return": "保持自然手腕，控制放回身側。"
+      },
+      "cautions": [
+        "不要照搬滑輪拉力方向與腰高滑輪設定。",
+        "展示範圍不能變成每個玩家必須達到的固定角度。"
+      ],
+      "lifecycleCoverage": "主動作有同器材依據；架上取放沒有完整來源。",
+      "codeFindings": [
+        {
+          "file": "src/extended-exercises.js",
+          "line": 30,
+          "status": "source-mismatch",
+          "detail": "目前雖標啞鈴變式參考，但連到來源 354 的腰高單側滑輪；已有直接相符的來源 26，應替換主要來源。"
+        },
+        {
+          "file": "src/extended-rig.js",
+          "line": 69,
+          "status": "bounded-demonstration-range",
+          "detail": "基礎抬臂角度以 .29+1.10*e 產生，還有參考平面調整；這是固定展示，不能稱由文章完成個別活動度校正。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "dumbbell-single-arm-row",
+      "name": "單手啞鈴划船",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/126/single-arm-row/",
+      "title": "Single-arm Row",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "ace-single-arm-row"
+      ],
+      "referenceMatch": "站姿支撐變式；不是相同下肢就位",
+      "coveredStages": [
+        "loop",
+        "return"
+      ],
+      "sourceScope": "來源膝與手支撐椅面；遊戲一手扶椅、雙腳落地。",
+      "targetMuscles": {
+        "primary": [
+          "背闊肌",
+          "上背划船肌群"
+        ],
+        "secondary": [
+          "肱二頭肌",
+          "軀幹穩定肌群"
+        ]
+      },
+      "teaching": {
+        "setup": "遊戲採一手扶椅、雙腳前後站穩的變式；不要把來源的跪椅設定混用。",
+        "movement": "手肘往後帶，軀幹保持穩定，不用旋轉身體甩起啞鈴。",
+        "return": "受控放回手臂下方，支撐手維持穩定。"
+      },
+      "cautions": [
+        "上肢划船原則可比較，站姿下肢與支撐受力尚不能由跪椅來源完成驗證。",
+        "現有來源標籤已註明站姿支撐變式，應保留。"
+      ],
+      "lifecycleCoverage": "目前只足以支持划船方向與軀幹穩定；架上取放與站姿扶椅就位未有精確相符來源。",
+      "codeFindings": [
+        {
+          "file": "src/extended-exercises.js",
+          "line": 31,
+          "status": "honest-variant-label",
+          "detail": "已標示站姿支撐變式參考，應繼續保留來源差異說明。"
+        },
+        {
+          "file": "src/extended-rig.js",
+          "line": 70,
+          "status": "variant-difference",
+          "detail": "雙腳都在地面、左手支撐椅面；來源明列左膝與左手在椅上。不能把其完整 setup 列為相符。"
+        },
+        {
+          "file": "src/dumbbell-lifecycle-paths.js",
+          "line": 43,
+          "status": "partial-source-coverage",
+          "detail": "先讓支撐手接近椅面再就位；動作方向相符不表示跨全行程的肩、髖、膝負重已檢查。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "dumbbell-goblet-squat",
+      "name": "啞鈴杯式深蹲",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/362/goblet-squat/",
+      "title": "Goblet Squat",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "ace-goblet-squat"
+      ],
+      "referenceMatch": "相同器材與主動作",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "胸前抱單鈴深蹲。",
+      "targetMuscles": {
+        "primary": [
+          "股四頭肌",
+          "臀大肌"
+        ],
+        "secondary": [
+          "軀幹穩定肌群"
+        ]
+      },
+      "teaching": {
+        "setup": "將單顆啞鈴穩抱胸前，雙腳站穩。",
+        "movement": "屈髖屈膝下蹲，腳掌維持支撐，做到能穩定控制的深度。",
+        "return": "雙腳推地，胸口與骨盆一起回到站姿，不用腰部後仰。"
+      },
+      "cautions": [
+        "來源示範深度不是對每個體型的強制數值。",
+        "抱鈴握法、身體比例與器材尺寸仍需分開做幾何及視覺確認。"
+      ],
+      "lifecycleCoverage": "胸前握鈴主動作有依據；從托盤改抱到胸前、放回仍缺精確來源。",
+      "codeFindings": [
+        {
+          "file": "src/extended-exercises.js",
+          "line": 12,
+          "status": "consistent",
+          "detail": "胸前抱鈴、屈髖屈膝、推地站回的文字順序與來源相符。"
+        },
+        {
+          "file": "src/extended-rig.js",
+          "line": 71,
+          "status": "consistent-at-code-level",
+          "detail": "基礎姿勢有髖部降低與輕度前傾，啞鈴保持在胸前；第 73 行仍會套用參考姿勢，不應只憑基礎位移宣稱蹲深與角度通過。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "dumbbell-romanian-deadlift",
+      "name": "啞鈴羅馬尼亞硬舉",
+      "verifiedURL": "https://www.nasm.org/resource-center/exercise-library/dumbbell-romanian-deadlift",
+      "title": "Dumbbell Romanian Deadlift",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "nasm-dumbbell-rdl",
+        "ace-rdl"
+      ],
+      "referenceMatch": "NASM 為同器材；現有 ACE 文章也明確允許雙啞鈴",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "雙啞鈴髖鉸鏈，不是深蹲或從地板起槓。",
+      "targetMuscles": {
+        "primary": [
+          "腿後側肌群",
+          "臀大肌"
+        ],
+        "secondary": [
+          "背部與軀幹穩定肌群"
+        ]
+      },
+      "teaching": {
+        "setup": "雙腳約髖寬，膝蓋微彎，啞鈴靠近腿部。",
+        "movement": "背部維持自然，髖往後送；只降到能控制的腿後側伸展位置。",
+        "return": "平順把髖帶回站姿，避免猛拉或腰部過度後仰。"
+      },
+      "cautions": [
+        "不要為碰到地板而彎腰或把動作改成深蹲。",
+        "不同活動度可停在膝附近或小腿中段，不給所有人相同低點。",
+        "現有 ACE 不是錯器材來源，可用 NASM 的同器材頁補強。"
+      ],
+      "lifecycleCoverage": "ACE 有一般架高取重原則，兩來源都沒有驗證遊戲固定托盤的整段取放。",
+      "codeFindings": [
+        {
+          "file": "src/extended-exercises.js",
+          "line": 33,
+          "status": "source-improvement",
+          "detail": "現有 ACE RDL 明確允許啞鈴，引用可以保留；建議補同器材 NASM 頁以縮小推論範圍。"
+        },
+        {
+          "file": "src/extended-rig.js",
+          "line": 72,
+          "status": "consistent-at-code-level",
+          "detail": "基礎姿勢以髖往後和軀幹前傾為主，不是大幅屈膝蹲下；最終膝角、背部形狀與鈴到腿間距仍需逐格量測與視覺檢查。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "machine-squat-rack",
+      "name": "槓架背蹲",
+      "verifiedURL": "https://www.acefitness.org/resources/everyone/exercise-library/11/back-squat/",
+      "title": "Back Squat",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "ace-back-squat"
+      ],
+      "referenceMatch": "相同自由槓主動作與概略出槓順序",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "自由槓背蹲，槓會隨身體移動；不是固定導軌。",
+      "targetMuscles": {
+        "primary": [
+          "股四頭肌",
+          "臀大肌"
+        ],
+        "secondary": [
+          "軀幹與背部穩定肌群"
+        ]
+      },
+      "teaching": {
+        "setup": "調整槓高與安全桿，握穩並讓上背承槓；伸腿出槓後小步退到站位。",
+        "movement": "屈髖屈膝，腳掌穩定，下降到能維持姿勢的範圍。",
+        "return": "雙腳推地站回；結束時靠近掛鉤並確認槓已受支撐再鬆手。"
+      },
+      "cautions": [
+        "不要讓槓壓在頸椎上。",
+        "蹲深、足距與上身角度依身體比例及控制能力而異。",
+        "回架確認是安全原則，不表示本次研究已量測真實承重或每一格碰撞。"
+      ],
+      "lifecycleCoverage": "公開來源涵蓋握持、上背承槓、出槓與退步；完整回架離槓需結合程式驗收，來源不能替代。",
+      "codeFindings": [
+        {
+          "file": "src/data.js",
+          "line": 190,
+          "status": "consistent",
+          "detail": "說明含安全桿、上背承槓與可控制的蹲深，引用為相同自由槓動作。"
+        },
+        {
+          "file": "src/barbell-lifecycle-paths.js",
+          "line": 65,
+          "status": "consistent-at-code-level",
+          "detail": "先閉握、再低頭移到槓下、上背承槓與伸腿；第 81 行只讓自由槓退步，順序與來源概述相符。"
+        },
+        {
+          "file": "src/barbell-lifecycle-paths.js",
+          "line": 37,
+          "status": "bounded-demonstration-range",
+          "detail": "蹲深與軀幹角由固定參數產生；不能稱已依不同體型完成個別化校正。"
+        },
+        {
+          "file": "src/barbell-lifecycle-paths.js",
+          "line": 116,
+          "status": "review-limit",
+          "detail": "退出沿已編排節點反向回架並標示確認承重後放手；此次沒有重做支撐接觸或逐格碰撞驗收。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "machine-smith-squat",
+      "name": "史密斯深蹲",
+      "verifiedURL": "https://kb.cybexintl.com/Assembly_Manuals/Strength/Cybex_ION_AI_CI-SM_Smith_Rack_1015904-0001.pdf",
+      "title": "Ion Series Smith Rack: Assembly Instructions",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "hammer-vertical-smith",
+        "cybex-ion-smith-manual"
+      ],
+      "referenceMatch": "垂直機構規格相符；操作手冊屬另一機型的安全原則",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "固定垂直導軌。Cybex 手冊不能當作遊戲 Hammer Strength 造型的完整型號教學。",
+      "targetMuscles": {
+        "primary": [
+          "股四頭肌",
+          "臀大肌"
+        ],
+        "secondary": [
+          "軀幹穩定肌群"
+        ]
+      },
+      "teaching": {
+        "setup": "先設槓高與安全止擋，握穩、上背承槓後抬槓並依該機型轉動解鎖。",
+        "movement": "沿導軌受控屈髖屈膝，腳位依機型與自身比例調整。",
+        "return": "站回後轉回掛鉤，確認掛妥承重才放手離開。"
+      },
+      "cautions": [
+        "不能把斜軌與垂直導軌的腳位、槓路混用。",
+        "掛鉤旋轉方向依實際機型，不將程式的固定角度當通用操作。",
+        "使用自身可控制的範圍，避免把來源的示範平行深度當作所有人的硬性要求。"
+      ],
+      "lifecycleCoverage": "手冊涵蓋安全止擋、解鎖與回掛確認；跨型號引用只提供安全原則，未完成目前模型的原廠全流程認證。",
+      "codeFindings": [
+        {
+          "file": "src/data.js",
+          "line": 436,
+          "status": "insufficient-as-only-teaching-source",
+          "detail": "目前只連產品規格，能證實垂直槓路，不能支撐完整深蹲流程；建議補原廠操作手冊並標註型號差異。"
+        },
+        {
+          "file": "src/barbell-lifecycle-paths.js",
+          "line": 42,
+          "status": "consistent-at-code-level",
+          "detail": "Smith 槓的前後座標固定，與垂直導軌概念相符；未檢驗最終身體各部位的所有接觸。"
+        },
+        {
+          "file": "src/barbell-lifecycle-paths.js",
+          "line": 80,
+          "status": "consistent-at-code-level",
+          "detail": "有抬槓後轉動解鎖，且不做自由槓的退步；固定 -.45 旋轉是模型設定，不是通用實機規格。"
+        },
+        {
+          "file": "src/barbell-lifecycle-paths.js",
+          "line": 116,
+          "status": "partial-source-coverage",
+          "detail": "反向流程包含轉回並放到承重銷後放手，與手冊原則相符；仍需模型接觸與慢放驗收。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    },
+    {
+      "exerciseId": "machine-bench-press",
+      "name": "自由槓平板臥推",
+      "verifiedURL": "https://www.nasm.org/resource-center/exercise-library/barbell-bench-press",
+      "title": "Barbell Bench Press",
+      "checkedDate": "2026-11-03",
+      "referenceIds": [
+        "nasm-barbell-bench-press"
+      ],
+      "referenceMatch": "相同器材與主動作；出槓及回架的來源覆蓋不足",
+      "coveredStages": [
+        "setup",
+        "loop",
+        "return"
+      ],
+      "sourceScope": "自由槓平板臥推，不是史密斯或固定軌道胸推。",
+      "targetMuscles": {
+        "primary": [
+          "胸大肌"
+        ],
+        "secondary": [
+          "肱三頭肌",
+          "前三角肌",
+          "軀幹穩定肌群"
+        ]
+      },
+      "teaching": {
+        "setup": "雙腳踩穩、肩部與臀部有支撐，設定安全桿或安排保護者，再握穩準備出槓。",
+        "movement": "在能控制的範圍受控下放與推起，不快速落槓或反彈。",
+        "return": "先把槓送回掛鉤並確認受支撐，再鬆手坐起離椅。"
+      },
+      "cautions": [
+        "來源沒有完整示範自行出槓與回架，回架教學需另補直接來源。",
+        "不要照搬固定英吋握距、強制碰胸或強制維持固定胸前停點。",
+        "自然腰部弧度與失控過伸不同，不應寫成所有人必須把腰完全壓平。"
+      ],
+      "lifecycleCoverage": "來源有平躺與主動作，未完整涵蓋出槓、回架確認、坐起及離椅。",
+      "codeFindings": [
+        {
+          "file": "src/data.js",
+          "line": 216,
+          "status": "consistent-with-principles",
+          "detail": "已有安全桿／保護者、支撐點、受控槓路與回架確認；NASM 主動作來源本身不包含所有安全過場。"
+        },
+        {
+          "file": "src/barbell-lifecycle-paths.js",
+          "line": 127,
+          "status": "source-gap",
+          "detail": "程式先把槓移到固定回架點再安排鬆手，來源未提供精確回架路徑；這一段需另找直接教學並重做接觸驗收。"
+        },
+        {
+          "file": "src/barbell-lifecycle-paths.js",
+          "line": 129,
+          "status": "independent-exit-sequence",
+          "detail": "回架後另排坐起、站立與離開，並非持槓直接坐起；仍不表示已通過真人負重自然度審查。"
+        }
+      ],
+      "professionalApproval": false,
+      "animationReview": "未執行新的逐格審查"
+    }
+  ],
+  "priorityFindings": [
+    {
+      "priority": 1,
+      "kind": "replace-primary-source",
+      "exerciseId": "dumbbell-lateral-raise",
+      "detail": "來源 354 是滑輪；改為已開啟確認的啞鈴側平舉 26。"
+    },
+    {
+      "priority": 1,
+      "kind": "clarify-transition-evidence",
+      "exerciseId": "dumbbell-bench-press",
+      "detail": "原文確有啞鈴臥推與坐下後躺，不能說成引用錯誤；大腿承鈴及帶鈴坐起缺精確來源，先如實標示。"
+    },
+    {
+      "priority": 1,
+      "kind": "add-operating-manual",
+      "exerciseId": "machine-smith-squat",
+      "detail": "產品規格不足以作全流程教學，補 Cybex 原廠手冊的安全原則並清楚標出不同型號。"
+    },
+    {
+      "priority": 2,
+      "kind": "retain-variant-label",
+      "exerciseId": "dumbbell-single-arm-row",
+      "detail": "保留站姿支撐變式標籤；來源是手與膝在椅上，不能標完整就位相符。"
+    },
+    {
+      "priority": 2,
+      "kind": "source-gap",
+      "exerciseId": "machine-bench-press",
+      "detail": "自由槓臥推尚缺可直接支援出槓、回架與離開的第一方完整教學。"
+    },
+    {
+      "priority": 2,
+      "kind": "review-preparations",
+      "exerciseId": "dumbbell-shoulder-press",
+      "detail": "自製翻鈴至肩旁與放回不能只用主動作來源覆蓋，需另外逐格檢查。"
+    },
+    {
+      "priority": 2,
+      "kind": "preserve-honest-status",
+      "exerciseId": "all",
+      "detail": "公開教學對照、程式幾何檢查與真人教練審查應分開記錄，不因來源已開啟而提升為真人核可。"
+    }
+  ]
+}
