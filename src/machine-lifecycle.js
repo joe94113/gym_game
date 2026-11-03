@@ -5,6 +5,7 @@ import {authorAuxiliaryStrengthExit} from './auxiliary-strength-paths.js';
 import {authorBarbellExit,createRackSquatLifecycle} from './barbell-lifecycle-paths.js';
 import {preparationStepTurn} from './preparation-step-turn-v013.js';
 import {planCapturedTransition,capturedTransitionProgress} from './captured-transition-v018.js';
+import {preparationFootLift} from './preparation-motion-v019.js';
 
 const clone=value=>JSON.parse(JSON.stringify(value));
 const clamp=value=>Math.max(0,Math.min(1,value));
@@ -22,8 +23,8 @@ const MIN_SETUP_SECONDS=Object.freeze({calfRaise:10.4,legPress:9.2,legExtension:
 
 /** Authored, machine-local entry/exit paths. Metadata reads are pure: a busy
  * machine is sampled only when the first actual lifecycle frame is requested. */
-export function createMachineLifecycle({THREE,machine,metrics,activityId=null,capturedTransitionTiming=true}) {
-  if(['squat','smithSquat'].includes(machine.type))return createRackSquatLifecycle({THREE,machine,metrics});
+export function createMachineLifecycle({THREE,machine,metrics,activityId=null,capturedTransitionTiming=true,naturalPreparation=true}) {
+  if(['squat','smithSquat'].includes(machine.type))return createRackSquatLifecycle({THREE,machine,metrics,naturalPreparation});
   const custom=machine.getLifecycle?.(activityId);
   if(custom&&machine.sampleLifecycle)return {
     ...custom,gate:{offset:custom.gateOffset,rotation:custom.gateRotation||0},
@@ -152,7 +153,7 @@ export function createMachineLifecycle({THREE,machine,metrics,activityId=null,ca
       const feet=clone(p.feet);feet[0][0]=left;feet[1][0]=right;
       if(type==='legPress'&&index>=2)feet[index%2][2]=-.30+(index%2?.07:-.07);
       const z=type==='legPress'&&index>=2?(index===2?-.25:-.30):p.hip[2];
-      const n=sideArms(body([cx,metrics.neutral.hip[1]-.14,z],feet,{yaw:-Math.PI/2,footDirections:[[-1,0,0],[-1,0,0]],kneeHints:sideKnees}));step(p,n,index%2,lift,.62,{clearanceFirst:type==='seatedRow'});p=n;
+      const n=sideArms(body([cx,metrics.neutral.hip[1]-.14,z],feet,{yaw:-Math.PI/2,footDirections:[[-1,0,0],[-1,0,0]],kneeHints:sideKnees}));step(p,n,index%2,lift,.62,{clearanceFirst:type==='seatedRow'||naturalPreparation&&['legExtension','legCurl'].includes(type)});p=n;
     }
     const end=idleAt(gate[0],gate[2],gateRotation);walk(p,end,1.5);
   }
@@ -219,7 +220,7 @@ export function createMachineLifecycle({THREE,machine,metrics,activityId=null,ca
     let pose=blend(segment.a,segment.b,captured??walkTime,{free:segment.free,linear:captured!==null||segment.kind==='walk'});
     const feetContact=[0,1].map(index=>vector(segment.a.feet[index]).distanceTo(vector(segment.b.feet[index]))<1e-8||t<1e-6||t>1-1e-6);
     if(segment.kind==='step'){
-      const side=segment.side,s=ease(t);pose.feet[side]=point(segment.a.feet[side],segment.b.feet[side],s);pose.feet[side][1]+=Math.sin(t*Math.PI)*segment.lift;
+      const side=segment.side,s=ease(t),lift=naturalPreparation&&['seatedRow','legExtension','legCurl'].includes(type)?preparationFootLift(t):Math.sin(t*Math.PI);pose.feet[side]=point(segment.a.feet[side],segment.b.feet[side],s);pose.feet[side][1]+=lift*segment.lift;
       if(segment.clearanceFirst){
         // Clear the beam before moving a long shoe across it. Each lift,
         // travel and landing boundary has zero velocity in both directions.

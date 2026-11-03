@@ -3,9 +3,14 @@ import { clone as cloneSkeleton } from 'three/addons/utils/SkeletonUtils.js';
 import {createNpcLodState,loadNpcLodData,createNpcGeometryLodController} from './npc-geometry-lod-v010.js';
 import {consolidateActorSkeletons} from './actor-skeletons-v012.js';
 import {publicAssetUrl} from './asset-url.js';
+import {createNpcWorldMatrixCache} from './npc-world-matrices-v019.js';
 
 const MUSCLES = ['chest','back','shoulders','biceps','triceps','forearms','glutes','quads','hamstrings','calves','core','hipFlexors','adductors'];
 const NAME = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+// Shared verbatim by both PBR shader paths. Background mode removes only the
+// zero-weight muscle overlay; hair tint/gray and all standard maps stay intact.
+const HAIR_GRAY_UNIFORMS='uniform float uFormHairGray;uniform vec3 uFormHairColor;';
+const HAIR_GRAY_FRAGMENT='float formHairDetail=dot(diffuseColor.rgb,vec3(0.2126,0.7152,0.0722));\ndiffuseColor.rgb=mix(diffuseColor.rgb,uFormHairColor*(0.73+0.27*formHairDetail),uFormHairGray);';
 
 /** A real, weighted human asset. The controller rotates the asset's bones;
  * it never stretches limb bones or substitutes a geometric mannequin. */
@@ -48,6 +53,9 @@ export function createSkinnedCharacterFromModel({THREE,scene,model,metadata=null
   const group = new THREE.Group(); group.name='realistic-athlete';
   let conservativeCulling=false;
   const ownedGeometries=new Set(),ownedMaterials=new Set(),ownedTextures=new Set();
+  const materialBindings=[],backgroundFactories=new WeakMap(),backgroundVariants=new Map();
+  let backgroundMaterialMode=false,backgroundMaterialActive=false,materialModeSwitches=0;
+  let worldMatrixCache=null;
   const UP=new THREE.Vector3(0,1,0),FORWARD=new THREE.Vector3(0,0,1);
   const qIdentity=new THREE.Quaternion();
   if(sharedResources){sharedResources.instances++;sharedResources.materials??=new Set();}
@@ -323,19 +331,47 @@ export function createSkinnedCharacterFromModel({THREE,scene,model,metadata=null
           shader.vertexShader=shader.vertexShader.replace('#include <common>',`#include <common>\nattribute vec4 formMuscleA;\nattribute vec4 formMuscleB;\nattribute vec4 formMuscleC;\nattribute vec4 formMuscleD;\nattribute float formMuscleSide;\nvarying vec4 vFormMuscleA;\nvarying vec4 vFormMuscleB;\nvarying vec4 vFormMuscleC;\nvarying vec4 vFormMuscleD;\nvarying float vFormMuscleSide;`)
             .replace('#include <begin_vertex>',`#include <begin_vertex>\nvFormMuscleA=formMuscleA;vFormMuscleB=formMuscleB;vFormMuscleC=formMuscleC;vFormMuscleD=formMuscleD;vFormMuscleSide=formMuscleSide;`);
           shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec4 vFormMuscleA;\nvarying vec4 vFormMuscleB;\nvarying vec4 vFormMuscleC;\nvarying vec4 vFormMuscleD;\nvarying float vFormMuscleSide;\nuniform vec4 uFormPrimaryA;uniform vec4 uFormPrimaryB;uniform vec4 uFormPrimaryC;uniform vec4 uFormPrimaryD;\nuniform vec4 uFormSecondaryA;uniform vec4 uFormSecondaryB;uniform vec4 uFormSecondaryC;uniform vec4 uFormSecondaryD;\nuniform vec3 uFormPrimaryColor;uniform vec3 uFormSecondaryColor;uniform float uFormOverlay;uniform float uFormPrimarySide;uniform float uFormSecondarySide;`)
-            .replace('#include <color_fragment>',`#include <color_fragment>\nfloat formMainSide=abs(uFormPrimarySide)<0.5?1.0:smoothstep(-0.008,0.025,vFormMuscleSide*uFormPrimarySide);\nfloat formAssistSide=abs(uFormSecondarySide)<0.5?1.0:smoothstep(-0.008,0.025,vFormMuscleSide*uFormSecondarySide);\nfloat formMain=clamp(dot(vFormMuscleA,uFormPrimaryA)+dot(vFormMuscleB,uFormPrimaryB)+dot(vFormMuscleC,uFormPrimaryC)+dot(vFormMuscleD,uFormPrimaryD),0.0,1.0)*uFormOverlay*formMainSide;\nfloat formAssist=clamp(dot(vFormMuscleA,uFormSecondaryA)+dot(vFormMuscleB,uFormSecondaryB)+dot(vFormMuscleC,uFormSecondaryC)+dot(vFormMuscleD,uFormSecondaryD),0.0,1.0)*(1.0-formMain)*uFormOverlay*formAssistSide;\ndiffuseColor.rgb=mix(diffuseColor.rgb,mix(diffuseColor.rgb*uFormPrimaryColor*1.5,uFormPrimaryColor,0.62),formMain*0.84);\ndiffuseColor.rgb=mix(diffuseColor.rgb,mix(diffuseColor.rgb*uFormSecondaryColor*1.5,uFormSecondaryColor,0.62),formAssist*0.82);\nfloat formHairDetail=dot(diffuseColor.rgb,vec3(0.2126,0.7152,0.0722));\ndiffuseColor.rgb=mix(diffuseColor.rgb,uFormHairColor*(0.73+0.27*formHairDetail),uFormHairGray);`);
-          shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float uFormHairGray;uniform vec3 uFormHairColor;');
+            .replace('#include <color_fragment>',`#include <color_fragment>\nfloat formMainSide=abs(uFormPrimarySide)<0.5?1.0:smoothstep(-0.008,0.025,vFormMuscleSide*uFormPrimarySide);\nfloat formAssistSide=abs(uFormSecondarySide)<0.5?1.0:smoothstep(-0.008,0.025,vFormMuscleSide*uFormSecondarySide);\nfloat formMain=clamp(dot(vFormMuscleA,uFormPrimaryA)+dot(vFormMuscleB,uFormPrimaryB)+dot(vFormMuscleC,uFormPrimaryC)+dot(vFormMuscleD,uFormPrimaryD),0.0,1.0)*uFormOverlay*formMainSide;\nfloat formAssist=clamp(dot(vFormMuscleA,uFormSecondaryA)+dot(vFormMuscleB,uFormSecondaryB)+dot(vFormMuscleC,uFormSecondaryC)+dot(vFormMuscleD,uFormSecondaryD),0.0,1.0)*(1.0-formMain)*uFormOverlay*formAssistSide;\ndiffuseColor.rgb=mix(diffuseColor.rgb,mix(diffuseColor.rgb*uFormPrimaryColor*1.5,uFormPrimaryColor,0.62),formMain*0.84);\ndiffuseColor.rgb=mix(diffuseColor.rgb,mix(diffuseColor.rgb*uFormSecondaryColor*1.5,uFormSecondaryColor,0.62),formAssist*0.82);\n${HAIR_GRAY_FRAGMENT}`);
+          shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>\n${HAIR_GRAY_UNIFORMS}`);
         };
         material.customProgramCacheKey=()=>`form-real-human-muscle-mask-v4`;
+        backgroundFactories.set(material,()=>{
+          const background=ownMaterial(material.clone());
+          background.onBeforeCompile=shader=>{
+            Object.assign(shader.uniforms,hairUniforms);
+            shader.fragmentShader=shader.fragmentShader
+              .replace('#include <common>',`#include <common>\n${HAIR_GRAY_UNIFORMS}`)
+              .replace('#include <color_fragment>',`#include <color_fragment>\n${HAIR_GRAY_FRAGMENT}`);
+          };
+          background.customProgramCacheKey=()=>`form-real-human-background-pbr-v019`;
+          return background;
+        });
       }
       return material;
     });
     mesh.material=Array.isArray(mesh.material)?patched:patched[0];mesh.castShadow=mesh.receiveShadow=true;
+    materialBindings.push({mesh,full:mesh.material,background:null});
     mesh.frustumCulled=false;
   }
   const sourceGeometries=meshList.map(mesh=>mesh.geometry);
   meshList.forEach(addMuscleMask);
+  function backgroundFor(full){
+    if(!backgroundFactories.has(full))return full;
+    if(!backgroundVariants.has(full))backgroundVariants.set(full,backgroundFactories.get(full)());
+    return backgroundVariants.get(full);
+  }
+  function syncMaterialMode(){
+    if(group.userData.disposed)return;
+    const wanted=backgroundMaterialMode&&!overlayEnabled;
+    if(wanted===backgroundMaterialActive)return;
+    for(const binding of materialBindings){
+      if(wanted&&binding.background===null)binding.background=Array.isArray(binding.full)?binding.full.map(backgroundFor):backgroundFor(binding.full);
+      binding.mesh.material=wanted?binding.background:binding.full;
+    }
+    backgroundMaterialActive=wanted;materialModeSwitches++;worldMatrixCache?.invalidate();
+  }
   const geometryLod=createNpcGeometryLodController({THREE,meshList,sourceGeometries,lodState,sharedResources,ownedGeometries,allowed:geometryLodAllowed});
+  worldMatrixCache=createNpcWorldMatrixCache({model,isEligible:()=>backgroundMaterialActive});
   function updateCullingCentre(centre){
     for(const mesh of meshList){
       if(!mesh.boundingSphere)continue;
@@ -372,6 +408,8 @@ export function createSkinnedCharacterFromModel({THREE,scene,model,metadata=null
   const contacts={hands:[],feet:[],shoulders:[],elbows:[],wrists:[],hips:[],knees:[],ankles:[]};
   const toArray=v=>v.toArray();
   function pose(p={}) {
+    worldMatrixCache.beginPose();let poseComplete=false;
+    try {
     poseMatricesCurrent=false;
     maxReachError=0;
     for(const bone of boneList){const r=rest.get(bone);bone.position.copy(r.position);bone.quaternion.copy(r.quaternion);bone.scale.copy(r.scale);}
@@ -469,6 +507,8 @@ export function createSkinnedCharacterFromModel({THREE,scene,model,metadata=null
       if(p.feet?.[index])maxReachError=Math.max(maxReachError,new THREE.Vector3().fromArray(contacts.feet[index]).distanceTo(read(p.feet[index])));
     }
     } finally { poseMatricesCurrent=false; }
+    poseComplete=true;
+    } finally { worldMatrixCache.endPose(poseComplete); }
   }
   function updateUniforms(keys,prefix) {
     const values=new Array(16).fill(0);for(const key of keys){const index=MUSCLES.indexOf(key);if(index>=0)values[index]=1;}
@@ -494,6 +534,7 @@ export function createSkinnedCharacterFromModel({THREE,scene,model,metadata=null
   };
   const info={kind:'skinned-human',modelName:model.name||'MakeHuman athlete',source:sourceAsset,metadata,metrics,skinnedMeshCount:meshList.length,boneCount:boneList.length,animationClipCount:animations.length,modelUrl:publicAssetUrl('models/athlete/athlete.glb'),appearance:{bodyProfile:appearance.bodyProfile||'default',age:appearance.age||null,grayHair:appearance.grayHair||0}};
   function getSurfaceSamples({stride=64,parts=null}={}) {
+    return worldMatrixCache.forceDiagnostic(()=>{
     group.updateMatrixWorld(true);for(const skeleton of uniqueSkeletons)skeleton.update();
     const samples=[],point=new THREE.Vector3();
     for(const mesh of meshList){
@@ -505,19 +546,26 @@ export function createSkinnedCharacterFromModel({THREE,scene,model,metadata=null
       }
     }
     return samples;
+    });
   }
   return {
     group,pose,setMuscleHighlights,
     getMuscleHighlights(){return{primary:[...primaryKeys],secondary:[...secondaryKeys]};},
-    setMuscleOverlayEnabled(value){overlayEnabled=!!value;uniformSet.uFormOverlay.value=overlayEnabled?1:0;},
+    setMuscleOverlayEnabled(value){overlayEnabled=!!value;uniformSet.uFormOverlay.value=overlayEnabled?1:0;syncMaterialMode();},
     getMuscleOverlayEnabled(){return overlayEnabled;},
-    getContactPoints(){return{...Object.fromEntries(Object.entries(contacts).map(([key,value])=>[key,value.map(point=>[...point])])),maxReachError};},
+    setBackgroundMaterialMode(value=true){if(group.userData.disposed)return false;backgroundMaterialMode=!!value;syncMaterialMode();return backgroundMaterialActive;},
+    getMaterialDiagnostics(){return{backgroundModeRequested:backgroundMaterialMode,backgroundActive:backgroundMaterialActive,overlayEnabled,meshCount:materialBindings.length,fullMaterialCount:materialBindings.reduce((sum,binding)=>sum+(Array.isArray(binding.full)?binding.full.length:1),0),backgroundMaterialCount:backgroundVariants.size,switches:materialModeSwitches,shader:backgroundMaterialActive?'background-pbr':'muscle-overlay-pbr',worldMatrices:worldMatrixCache.getDiagnostics()};},
+    getContactPoints(){return worldMatrixCache.forceDiagnostic(()=>{group.updateMatrixWorld(true);return{...Object.fromEntries(Object.entries(contacts).map(([key,value])=>[key,value.map(point=>[...point])])),maxReachError};});},
     getAssetInfo(){return info;},getSurfaceSamples,
     getSkeletonDiagnostics(){return{meshCount:skeletonState.meshCount,originalSkeletonCount:skeletonState.originalSkeletonCount,uniqueSkeletonCount:uniqueSkeletons.length,mergedSkeletonCount:skeletonState.mergedSkeletonCount,boneMatrixFloats:uniqueSkeletons.reduce((sum,skeleton)=>sum+skeleton.boneMatrices.length,0),allocatedBoneTextures:uniqueSkeletons.filter(skeleton=>skeleton.boneTexture!==null).length};},
+    invalidateWorldMatrices:worldMatrixCache.invalidate,
+    setWorldMatrixCacheEnabled:worldMatrixCache.setEnabled,
+    getWorldMatrixCacheDiagnostics:worldMatrixCache.getDiagnostics,
     setGeometryLod:geometryLod.setLevel,
     getGeometryLodDiagnostics:geometryLod.getDiagnostics,
     getGpuResourceProtection(){return{geometries:[...new Set([...(sharedResources?.geometries||[]),...ownedGeometries])],materials:[...new Set([...(sharedResources?.materials||[]),...ownedMaterials])],textures:[...new Set([...(sharedResources?.textures||[]),...ownedTextures])],roots:[group]};},
     setConservativeCulling(enabled=true){
+      return worldMatrixCache.forceDiagnostic(()=>{
       conservativeCulling=!!enabled;
       group.updateMatrixWorld(true);
       for(const mesh of meshList){
@@ -526,15 +574,16 @@ export function createSkinnedCharacterFromModel({THREE,scene,model,metadata=null
         mesh.boundingSphere=new THREE.Sphere(centre,1.30/Math.max(.00001,Math.min(Math.abs(scale.x),Math.abs(scale.y),Math.abs(scale.z))));
         mesh.frustumCulled=!!enabled;
       }
+      });
     },
-    getHandDiagnostics(){return sides.map(side=>{
+    getHandDiagnostics(){return worldMatrixCache.forceDiagnostic(()=>{group.updateMatrixWorld(true);return sides.map(side=>{
       const q=quaternionOf(side.hand),advance=side.handAdvanceLocal.clone().applyQuaternion(q).normalize(),across=side.handAcrossLocal.clone().applyQuaternion(q).normalize();
       const palmNormal=new THREE.Vector3().crossVectors(advance,across).normalize().multiplyScalar(side.sign);
       const forearm=positionOf(side.hand).sub(positionOf(side.lowerArm)).normalize();
       return{anatomicalSide:side.anatomical,advance:advance.toArray(),across:across.toArray(),palmNormal:palmNormal.toArray(),wristBendRadians:Math.acos(THREE.MathUtils.clamp(advance.dot(forearm),-1,1)),fingerCount:side.fingers.length};
-    });},
+    });});},
     dispose(){
-      if(group.userData.disposed)return;group.userData.disposed=true;group.removeFromParent();
+      if(group.userData.disposed)return;group.userData.disposed=true;worldMatrixCache.dispose();group.removeFromParent();
       for(const geometry of ownedGeometries)geometry.dispose();for(const material of ownedMaterials){sharedResources?.materials.delete(material);material.dispose();}
       for(const skeleton of new Set(meshList.map(mesh=>mesh.skeleton)))skeleton.dispose();
       for(const texture of ownedTextures){texture.dispose();texture.source?.data?.close?.();}

@@ -1,4 +1,5 @@
-import {gymLayout} from './gym-layout.js';
+import {gymLayout,floorHeightAt} from './gym-layout.js';
+import {createFloorTrainerAnchors,trainerActorForCoach,trainerLocationForCoach} from './trainer-layout-v019.js';
 import {measurementCanvasKey} from './canvas-updates-v012.js';
 import {publicAssetUrl} from './asset-url.js';
 
@@ -9,7 +10,7 @@ export const coachRoster=[
   ['陳映彤','女性肌力'],['李佳穎','活動度'],['劉芷晴','伸展放鬆'],['吳沛蓉','核心穩定'],
   ['黃承恩','體能訓練'],['許雅涵','下肢訓練'],['鄭冠宇','動作練習'],['謝宜庭','初學入門'],
   ['何奕翔','運動習慣'],['蘇品澄','團體課程'],['蔡彥廷','上肢訓練'],['郭思妤','功能訓練'],
-].map(([name,specialty],index)=>({id:`coach-${index+1}`,name,specialty,portraitIndex:index,portraitRow:Math.floor(index/4),portraitCol:index%4,fictional:true}));
+].map(([name,specialty],index)=>({id:`coach-${index+1}`,name,specialty,portraitIndex:index,portraitRow:Math.floor(index/4),portraitCol:index%4,fictional:true,actorId:trainerActorForCoach(`coach-${index+1}`),location:trainerLocationForCoach(`coach-${index+1}`)}));
 
 export const receptionSceneAnchors={
   receptionist:{position:[-4.2,.05,17.45],rotation:0,role:'receptionist',hands:[[-.25,1.17,.47],[.25,1.17,.47]]},
@@ -23,6 +24,7 @@ export const receptionSceneAnchors={
     {position:[-29,.056,26.8],rotation:Math.PI,role:'student'},
     {position:[-19,.056,26.8],rotation:Math.PI,role:'student'},
   ],
+  floorTrainers:createFloorTrainerAnchors(floorHeightAt),
 };
 
 // Actor-local fixture dimensions mirror the real counter/chair geometry below
@@ -139,6 +141,9 @@ export function createReceptionScenes({THREE,scene,materials,geometries,extraMat
     collider(anchor.position[0],anchor.position[2],.72,.72);
   }
   receptionSceneAnchors.conversation.forEach(chair);
+  // Keep players and A* routes outside each coach's planted-foot gesture bay.
+  // These are people-sized obstacles, not changes to the room/furniture plan.
+  for(const anchor of receptionSceneAnchors.floorTrainers)collider(anchor.position[0],anchor.position[2],1.4,1.4);
   cylinder(scene,5.2,.67,13.3,.39,.055,materials.wood,24);cylinder(scene,5.2,.35,13.3,.055,.64,materials.steel,12);collider(5.2,13.3,.8,.8);
   box(scene,5.15,.71,13.28,.32,.025,.23,mat.charcoal);
   cylinder(scene,5.35,.77,13.2,.065,.15,materials.cream,12);

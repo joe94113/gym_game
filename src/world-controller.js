@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import {createCameraPanelLayout} from './camera-panel-layout-v019.js';
+import {createSceneDistanceBudget} from './scene-distance-v019.js';
 import {activities,activityById,catalogActivities} from './activity-catalog.js';
 import {buildLocomotionPose,buildMovementPose} from './locomotion.js';
 import {createGymCrowd} from './crowd.js';
@@ -16,6 +18,7 @@ import {createPerformanceCapture} from './performance-capture-v015.js';
 import {motionSourceInfo,motionCoverage} from './motion-sources-v018.js';
 const clamp=THREE.MathUtils.clamp;
 export async function createWorldController({scene,renderer,camera,canvas,character,machineMap,exerciseRig,architecture,groupClasses,batcher,flatTransparency,colliders,geometries,extraMaterials,textures,materials,environmentTarget,mesh,onNearbyChange,onZoneChange,onPoseProgress,onReady,onTransition,onAssetProgress=()=>{},onActivityChange=()=>{}}) {
+  const panelLayout=createCameraPanelLayout({document,environment:window});
   const floorHeight=floorHeightAt;
   const bounds=GYM_LAYOUT.bounds,spawn=GYM_LAYOUT.spawn;
   const neutral=character.getAssetInfo().metrics.neutral;
@@ -32,6 +35,7 @@ export async function createWorldController({scene,renderer,camera,canvas,charac
   let inspectionView=null;
   const captureReview=createPoseReview({renderer,scene,character,runtime:exerciseRig,batcher});
   const renderQuality=createRenderQuality({renderer});
+  const sceneDistance=createSceneDistanceBudget({scene,camera});
   const performanceCapture=createPerformanceCapture({getContext:()=>({quality:renderQuality.diagnostics(),framebuffer:[canvas.width,canvas.height],viewport:[window.innerWidth,window.innerHeight],browser:navigator.userAgent,position:character.group.position.toArray(),activity:playerActivity.getState().exerciseId||null}),onComplete:status=>window.dispatchEvent(new CustomEvent('form-performance-complete',{detail:status}))});
   let runBlend=0,movementBlend=0,currentMoveSpeed=0,cameraOffsetY=0;
   const touchMovement={x:0,y:0,running:false},viewPointers=new Map();let pinchDistance=null;
@@ -103,6 +107,16 @@ export async function createWorldController({scene,renderer,camera,canvas,charac
   const findPath=navigation.findPath;
   const crowd=createGymCrowd({THREE,scene,character,machines:machineMap,activities,floorHeight,findPath,blocked});
   const socialCrowd=createSocialCrowd({THREE,scene,character,anchors:architecture.getSceneAnchors?.()||{},floorHeight,groupClasses});
+  let materialDeviceTier=null;
+  function applyNpcMaterialBudget(){
+    const tier=renderQuality.deviceTier;if(tier===materialDeviceTier)return;
+    materialDeviceTier=tier;
+    // The mobile path has no MSAA and preserves the full shader's pixels.
+    // Keep the original desktop material, including its MSAA interpolation.
+    crowd.setBackgroundMaterialMode?.(tier==='mobile');
+    socialCrowd.setBackgroundMaterialMode?.(tier==='mobile');
+  }
+  applyNpcMaterialBudget();
   const roomResources=createRoomResourceManager({
     scene,
     rooms:{classroom:architecture.roomZones.getRoot('classroom'),bathroom:architecture.roomZones.getRoot('bathroom')},
@@ -113,7 +127,7 @@ export async function createWorldController({scene,renderer,camera,canvas,charac
   architecture.roomZones.setResourceManager(roomResources);
   let npcLodEnabled=true;
   function updateNpcView(){
-    const context={cameraPosition:camera.position,playerPosition:character.group.position,quality:renderQuality.active};
+    const context={camera,cameraPosition:camera.position,playerPosition:character.group.position,quality:renderQuality.active};
     crowd.setViewContext?.(context);socialCrowd.setViewContext?.(context);
   }
   function updateRoute() {
@@ -163,19 +177,20 @@ export async function createWorldController({scene,renderer,camera,canvas,charac
     machine?.group.traverse(object=>{if(object.userData.plateSide && object.visible){let visible=true;for(let parent=object.parent;parent&&parent!==machine.group;parent=parent.parent)if(!parent.visible)visible=false;if(visible)visiblePlates[object.userData.plateSide]++;}});
     return {kgPerSide:machine?.getPlateLoad?.()??null,visiblePlates};
   }
-  function update(delta,renderFrame=true) {
+  function update(delta,renderFrame=true,{deferAmbient=false}={}) {
     const cpuStart=performance.now();
+    sceneDistance.update({deviceTier:renderQuality.deviceTier,preference:renderQuality.preference,reduced:renderQuality.mobileReduced});
     const dt = clamp(delta || 0, 0, 0.05); elapsed += dt; routeAge += dt;
     const roomActivity=architecture.updateRoomState?.({dt,playerPosition:character.group.position,camera,cameraPosition:camera.position,cameraTarget:inspectionView?.target||cameraFocus,activeStationId:playerActivity.getState().stationId});
     if(roomActivity){groupClasses?.setRoomActivity?.(roomActivity.classroom);socialCrowd.setClassRoomActivity?.(roomActivity.classroom);}
     architecture.update(elapsed,dt);
-    crowd.update(dt,pendingStart?null:activityById(activeId)?.stationId,{viewerPosition:character.group.position,quality:renderQuality.active});
+    crowd.update(dt,pendingStart?null:activityById(activeId)?.stationId,{viewerPosition:character.group.position,quality:renderQuality.active,deferPose:deferAmbient});
 
     if(transitionRemaining>0){transitionRemaining=Math.max(0,transitionRemaining-dt);onTransition(Math.min(1,transitionRemaining/.28));}
     if(playerActivity.isActive()){playerActivity.update(dt);syncActivity();}
     const followingCourse=activityById(activeId)?.facilityKind==='groupClass'&&['exercising','completed'].includes(lifecycle),classPhase=followingCourse?playerActivity.getState().phase:null;
     groupClasses?.update(dt,{phase:classPhase,active:followingCourse});
-    socialCrowd.update(dt,{classPhase});
+    socialCrowd.update(dt,{classPhase,deferPose:deferAmbient});
     if(!playerActivity.isActive()){
       let forward = 0, sideways = 0;
       if (enabled) { forward = (keys.has('w') || keys.has('arrowup') ? 1 : 0) - (keys.has('s') || keys.has('arrowdown') ? 1 : 0); sideways = (keys.has('d') || keys.has('arrowright') ? 1 : 0) - (keys.has('a') || keys.has('arrowleft') ? 1 : 0); }
@@ -208,10 +223,7 @@ export async function createWorldController({scene,renderer,camera,canvas,charac
       if (targetId && (routeAge > 2 || (routeAge > 0.45 && lastRoutePosition.distanceTo(p) > 1.2))) updateRoute();
     }
     if (targetId) { arrow.position.y = 2.65 + Math.sin(elapsed * 2.8) * 0.12; targetRing.scale.setScalar(1 + Math.sin(elapsed * 2) * 0.04); }
-    const mobileLayout=document.body.classList.contains('has-mobile-controls'),panel=activeId&&(window.innerWidth>650||mobileLayout)?document.querySelector('.station-panel'):null,rect=panel?.getBoundingClientRect();
-    const sidePanel=rect&&(!mobileLayout||rect.top<window.innerHeight*.25&&rect.width<window.innerWidth*.6);
-    const nextOffset=sidePanel?(window.innerWidth-rect.left)/2:0,headerBottom=mobileLayout?document.querySelector('.topbar')?.getBoundingClientRect().bottom||0:0;
-    const nextOffsetY=rect&&mobileLayout&&!sidePanel?Math.max(0,window.innerHeight/2-(headerBottom+rect.top)/2):0;
+    const {offsetX:nextOffset,offsetY:nextOffsetY}=panelLayout.read(activeId);
     if (Math.abs(cameraOffset-nextOffset)>.5||Math.abs(cameraOffsetY-nextOffsetY)>.5) {
       cameraOffset = nextOffset;cameraOffsetY=nextOffsetY;
       if (cameraOffset||cameraOffsetY) camera.setViewOffset(window.innerWidth, window.innerHeight, cameraOffset, cameraOffsetY, window.innerWidth, window.innerHeight);
@@ -238,6 +250,8 @@ export async function createWorldController({scene,renderer,camera,canvas,charac
   const horizontal = Math.cos(pitch) * distance;
   camera.position.set(spawn.x+Math.sin(yaw)*horizontal,1.1+Math.sin(pitch)*distance,spawn.z+Math.cos(yaw)*horizontal);
   camera.lookAt(cameraFocus);
+  sceneDistance.update({deviceTier:renderQuality.deviceTier,preference:renderQuality.preference,reduced:renderQuality.mobileReduced});
+  updateNpcView();
   onAssetProgress('正在準備場館畫面…');
   await renderer.compileAsync(scene,camera);
   renderer.render(scene, camera); onReady();
@@ -247,6 +261,9 @@ export async function createWorldController({scene,renderer,camera,canvas,charac
     setTouchMovement(value={}){const x=Number.isFinite(value.x)?value.x:0,y=Number.isFinite(value.y)?value.y:0,length=Math.hypot(x,y),scale=length>1?1/length:1;touchMovement.x=enabled?x*scale:0;touchMovement.y=enabled?y*scale:0;touchMovement.running=enabled&&!!value.running;},
     setViewEnabled(value){viewEnabled=!!value;if(!viewEnabled)resetViewGesture();},
     getTouchDiagnostics(){return{...touchMovement,pointers:viewPointers.size};},
+    setBackgroundMaterialMode(value=true){if(!import.meta.env.DEV)return false;crowd.setBackgroundMaterialMode?.(value);socialCrowd.setBackgroundMaterialMode?.(value);return true;},
+    getNpcMaterialDiagnostics(){return{player:character.getMaterialDiagnostics?.()||null,crowd:crowd.getMaterialDiagnostics?.()||null,social:socialCrowd.getMaterialDiagnostics?.()||null};},
+    getSocialUpdateDiagnostics(){return socialCrowd.getUpdateDiagnostics?.()||null;},
     getMotionSource(id=activeId){return motionSourceInfo(id);},
     getMotionCoverage(){return motionCoverage(catalogActivities).map(row=>({...row,transitions:exerciseRig.getCapturedTransitionCoverage?.(row.id)||row.transitions}));},
     getTransitionMotionSource(id=activeId){return id?exerciseRig.getCapturedTransitionCoverage?.(id)||null:null;},
@@ -303,8 +320,8 @@ export async function createWorldController({scene,renderer,camera,canvas,charac
     getEquipmentSettings(id){return exerciseRig.getEquipmentSettings(id);},
     setEquipmentSettings(id,settings){if(playerActivity.isActive())return{ok:false,reason:'請先放回器材並離開，再更換設定。'};return exerciseRig.setEquipmentSettings(id,settings);},
     captureMovementReview(time=0,runAmount=1,movementAmount=1,view='front',size=420){if(!import.meta.env.DEV||playerActivity.isActive())return null;const pose=buildMovementPose(character.getAssetInfo().metrics,time,runAmount,movementAmount);character.pose(pose);return captureReview(null,view,size,pose);},
-    getPerformanceDiagnostics(){return{...renderQuality.diagnostics(),running:runBlend>.5&&currentMoveSpeed>0,runBlend,movingSpeed:currentMoveSpeed};},
-    getFrameWorkDiagnostics(){return{canvas:architecture.getDiagnostics().canvasUpdates,skeleton:character.getSkeletonDiagnostics?.()||null,navigation:navigation.getDiagnostics()};},
+    getPerformanceDiagnostics(){return{...renderQuality.diagnostics(),...sceneDistance.diagnostics(),running:runBlend>.5&&currentMoveSpeed>0,runBlend,movingSpeed:currentMoveSpeed};},
+    getFrameWorkDiagnostics(){return{canvas:architecture.getDiagnostics().canvasUpdates,panelLayout:panelLayout.getDiagnostics(),npcPose:crowd.getUpdateDiagnostics?.()||null,social:socialCrowd.getUpdateDiagnostics?.()||null,skeleton:character.getSkeletonDiagnostics?.()||null,navigation:navigation.getDiagnostics()};},
     recordFrameTiming(milliseconds){renderQuality.recordFrame(milliseconds);performanceCapture.record(milliseconds);},
     startPerformanceCheck(seconds=20){return performanceCapture.start(seconds);},
     stopPerformanceCheck(reason){performanceCapture.cancel(reason);},
@@ -318,11 +335,11 @@ export async function createWorldController({scene,renderer,camera,canvas,charac
     setPlateLoad(id,kg){const machine=machineMap.get(id);if(!machine?.setPlateLoad||![5,10,20].includes(Number(kg)))return false;machine.setPlateLoad(Number(kg));return true;},
     getPlateLoad(id){return machineMap.get(id)?.getPlateLoad?.();},
     getPlateState:plateState,
-    resize() {resetTouch();resetViewGesture();camera.aspect = window.innerWidth / window.innerHeight; camera.clearViewOffset(); cameraOffset = -1;cameraOffsetY=0; camera.updateProjectionMatrix(); renderQuality.resize(); },
+    resize() {resetTouch();resetViewGesture();camera.aspect = window.innerWidth / window.innerHeight; camera.clearViewOffset(); cameraOffset = -1;cameraOffsetY=0; camera.updateProjectionMatrix(); renderQuality.resize();applyNpcMaterialBudget(); },
     dispose() {
       window.removeEventListener('keydown', keyDown); window.removeEventListener('keyup', keyUp); window.removeEventListener('blur', blur);
       document.removeEventListener('visibilitychange',visibilityChange);canvas.removeEventListener('pointerdown', pointerDown); canvas.removeEventListener('pointermove', pointerMove); canvas.removeEventListener('pointerup', pointerUp); canvas.removeEventListener('pointercancel', pointerUp);canvas.removeEventListener('lostpointercapture',pointerUp); canvas.removeEventListener('wheel', wheel);
-      roomResources.dispose();environmentTarget.dispose();
+      panelLayout.dispose();roomResources.dispose();environmentTarget.dispose();
       batcher?.dispose();exerciseRig.end();socialCrowd.dispose();crowd.dispose();architecture.dispose?.();character.dispose();
       geometries.forEach(g => g.dispose()); textures.forEach(t => t.dispose()); extraMaterials.forEach(m => m.dispose()); Object.values(materials).forEach(m => m.dispose()); renderer.dispose();
     },

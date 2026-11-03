@@ -5,7 +5,7 @@ export function createEquipmentBatcher({THREE,scene,machines,cellSize=12,enabled
  if(!THREE||!scene||!machines)throw new Error('Equipment batching requires THREE, scene and machines');
  const proxies=new THREE.Group();proxies.name='equipment-instance-cells';proxies.userData.equipmentBatchProxy=true;scene.add(proxies);
  const records=[],batches=[],roots=new Map(),cells=new Map(),geometryKeys=new Map(),geometryBuckets=new Map(),geometryStates=new WeakMap(),matrix=new THREE.Matrix4(),inverseScene=new THREE.Matrix4(),projection=new THREE.Matrix4(),frustum=new THREE.Frustum(),sphere=new THREE.Sphere();
- let active=!!enabled,disposed=false,updates=0,lastCpuMs=0,lastVisible=0,lastCulled=0,lastOriginals=0,lastInstanced=0,lastLiveProxies=0,lastMatrixUpdates=0,lastBoundsUpdates=0,matrixUpdateMarks=0,boundsRecomputations=0,fallbacks=0,sourceOrdinal=0,geometryOrdinal=0;
+ let active=!!enabled,disposed=false,updates=0,lastCpuMs=0,lastVisible=0,lastCulled=0,lastOriginals=0,lastInstanced=0,lastLiveProxies=0,lastMatrixUpdates=0,lastBoundsUpdates=0,matrixUpdateMarks=0,boundsRecomputations=0,fallbacks=0,sourceOrdinal=0,geometryOrdinal=0,cellBoundsBuilds=0,sourceBoundsBuilds=0,lastCellBoundsBuilds=0,lastSourceBoundsBuilds=0;
  const now=()=>globalThis.performance?.now?.()||0;
  const bytesEqual=(a,b)=>{if(a.byteLength!==b.byteLength)return false;const x=new Uint8Array(a.buffer,a.byteOffset,a.byteLength),y=new Uint8Array(b.buffer,b.byteOffset,b.byteLength);for(let i=0;i<x.length;i++)if(x[i]!==y[i])return false;return true;};
  function geometrySignature(g){
@@ -48,26 +48,41 @@ export function createEquipmentBatcher({THREE,scene,machines,cellSize=12,enabled
  }
  function underRoot(record){for(let p=record.object;p;p=p.parent){if(!p.visible)return false;if(p===record.info.root){for(let a=p.parent;a;a=a.parent){if(!a.visible)return false;if(a===scene)return true;}return false;}}return false;}
  function fallback(record){if(record.fallback)return;record.fallback=true;record.object.layers.mask=record.mask;fallbacks++;}
+ function refreshSourceBounds(record){
+  const o=record.object,e=o.matrixWorld.elements;let changed=!record.boundsMatrix;
+  if(!changed)for(let i=0;i<16;i++)if(e[i]!==record.boundsMatrix[i]){changed=true;break;}
+  if(!o.geometry.boundingSphere)o.geometry.computeBoundingSphere();const b=o.geometry.boundingSphere;
+  const shape=record.boundsShape;if(!shape||shape[0]!==b.center.x||shape[1]!==b.center.y||shape[2]!==b.center.z||shape[3]!==b.radius)changed=true;
+  if(changed){record.boundsMatrix??=new Float64Array(16);record.boundsMatrix.set(e);record.boundsShape=[b.center.x,b.center.y,b.center.z,b.radius];record.worldSphere??=new THREE.Sphere();record.worldSphere.copy(b).applyMatrix4(o.matrixWorld);record.positiveDeterminant=o.matrixWorld.determinant()>0;if(record.batch)record.batch.cell.boundsReady=false;sourceBoundsBuilds++;lastSourceBoundsBuilds++;}
+  return changed;
+ }
  function renderRoutes(batch,singleton=null){for(const record of batch.entries){record.drawOriginal=record===singleton;record.object.layers.mask=!active||record.fallback||record.info.suspended||record.drawOriginal?record.mask:0;}}
  function update({camera=null,shadows=false,matricesReady=false}={}){
   if(disposed)return;if(!active){for(const batch of batches)batch.mesh.visible=false;return;}
-  const start=now();if(!matricesReady)scene.updateMatrixWorld(true);inverseScene.copy(scene.matrixWorld).invert();if(camera){camera.updateWorldMatrix(true,false);projection.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);frustum.setFromProjectionMatrix(projection,camera.coordinateSystem);}
+  const start=now();lastCellBoundsBuilds=0;lastSourceBoundsBuilds=0;if(!matricesReady)scene.updateMatrixWorld(true);inverseScene.copy(scene.matrixWorld).invert();if(camera){camera.updateWorldMatrix(true,false);projection.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);frustum.setFromProjectionMatrix(projection,camera.coordinateSystem);}
   let visible=0,culled=0,originals=0,instanced=0,liveProxies=0,matrixUpdates=0,boundsUpdates=0;
   // Exact current cell bounds, not a guessed movement radius: moving handles
   // can never escape a stale coarse bound. Only spheres/visibility are checked
   // here; offscreen cells skip all per-instance matrix packing and uploads.
   const coarse=!!camera&&!shadows;
   if(coarse)for(const cell of cells.values()){
-   cell.sphere.makeEmpty();for(const record of cell.entries){const o=record.object;record.sceneVisible=false;if(record.fallback)continue;if(o.geometry!==record.geometry||o.material!==record.material||!geometryUnchanged(o.geometry)||o.parent!==record.parent){fallback(record);continue;}
-    if(record.info.suspended||!underRoot(record)||!o.material.visible||(record.mask&camera.layers.mask)===0)continue;record.sceneVisible=true;if(!o.geometry.boundingSphere)o.geometry.computeBoundingSphere();sphere.copy(o.geometry.boundingSphere).applyMatrix4(o.matrixWorld);cell.sphere.union(sphere);
-   }cell.inView=!cell.sphere.isEmpty()&&frustum.intersectsSphere(cell.sphere);
+   let dirty=cell.boundsReady!==true;
+   for(const record of cell.entries){const o=record.object;let visible=false;
+    if(!record.fallback){if(o.geometry!==record.geometry||o.material!==record.material||!geometryUnchanged(o.geometry)||o.parent!==record.parent)fallback(record);
+     else visible=!record.info.suspended&&underRoot(record)&&o.material.visible&&(record.mask&camera.layers.mask)!==0;}
+    if(record.sceneVisible!==visible){record.sceneVisible=visible;dirty=true;}
+    if(visible&&refreshSourceBounds(record))dirty=true;
+   }
+   if(dirty){cell.sphere.makeEmpty();for(const record of cell.entries)if(record.sceneVisible)cell.sphere.union(record.worldSphere);cell.boundsReady=true;cellBoundsBuilds++;lastCellBoundsBuilds++;}
+   cell.inView=!cell.sphere.isEmpty()&&frustum.intersectsSphere(cell.sphere);
   }
   for(const batch of batches){let index=0;batch.activeEntries.length=0;
    if(coarse&&!batch.cell.inView){batch.mesh.count=0;batch.mesh.visible=false;for(const record of batch.entries)if(record.sceneVisible)culled++;renderRoutes(batch);continue;}
    for(const record of batch.entries){const o=record.object;if(record.fallback)continue;
-    if(o.geometry!==record.geometry||o.material!==record.material||!geometryUnchanged(o.geometry)||o.parent!==record.parent||o.matrixWorld.determinant()<=0){fallback(record);continue;}
+    if(o.geometry!==record.geometry||o.material!==record.material||!geometryUnchanged(o.geometry)||o.parent!==record.parent){fallback(record);continue;}
+    if(!coarse)refreshSourceBounds(record);if(record.positiveDeterminant===false){fallback(record);continue;}
     if(coarse?!record.sceneVisible:record.info.suspended||!underRoot(record)||!o.material.visible||camera&&(record.mask&camera.layers.mask)===0)continue;
-    if(camera&&!shadows&&o.frustumCulled){if(!o.geometry.boundingSphere)o.geometry.computeBoundingSphere();sphere.copy(o.geometry.boundingSphere).applyMatrix4(o.matrixWorld);if(!frustum.intersectsSphere(sphere)){culled++;continue;}}
+    if(camera&&!shadows&&o.frustumCulled){if(!frustum.intersectsSphere(record.worldSphere)){culled++;continue;}}
     matrix.multiplyMatrices(inverseScene,o.matrixWorld);matrix.toArray(batch.staging,index++*16);batch.activeEntries.push(record);
    }
    // A single visible source saves no draw call. Keep its original shader,
@@ -95,7 +110,7 @@ export function createEquipmentBatcher({THREE,scene,machines,cellSize=12,enabled
  update();
  return{
   update,setEnabled,suspendRoots,
-  getDiagnostics(){return{enabled:active,cellSize,cellCount:cells.size,sourceCount:records.length,proxyCount:batches.length,potentialSavedCalls:records.length-batches.length,visibleInstances:lastVisible,visibleOriginals:lastOriginals,instancedVisibleCount:lastInstanced,liveProxyCount:lastLiveProxies,visibleSavedCalls:lastInstanced-lastLiveProxies,frustumCulledInstances:lastCulled,matrixUpdatesLastFrame:lastMatrixUpdates,boundsUpdatesLastFrame:lastBoundsUpdates,matrixUpdateMarks,boundsRecomputations,fallbacks,updates,updateCpuMs:lastCpuMs,geometryGroups:geometryOrdinal,rootCount:roots.size};},
+  getDiagnostics(){return{enabled:active,cellSize,cellCount:cells.size,sourceCount:records.length,proxyCount:batches.length,potentialSavedCalls:records.length-batches.length,visibleInstances:lastVisible,visibleOriginals:lastOriginals,instancedVisibleCount:lastInstanced,liveProxyCount:lastLiveProxies,visibleSavedCalls:lastInstanced-lastLiveProxies,frustumCulledInstances:lastCulled,matrixUpdatesLastFrame:lastMatrixUpdates,boundsUpdatesLastFrame:lastBoundsUpdates,matrixUpdateMarks,boundsRecomputations,cellBoundsBuilds,sourceBoundsBuilds,cellBoundsBuildsLastFrame:lastCellBoundsBuilds,sourceBoundsBuildsLastFrame:lastSourceBoundsBuilds,fallbacks,updates,updateCpuMs:lastCpuMs,geometryGroups:geometryOrdinal,rootCount:roots.size};},
   // Debug-only immutable descriptions for CPU equivalence qualification.
   getInspectionRecords(){return records.map(record=>{const instanceIndex=record.batch.mesh.visible?record.batch.activeEntries.indexOf(record):-1;return{source:record.object,root:record.info.root,proxy:record.batch.mesh,instanceIndex,renderMode:!active||record.fallback||record.info.suspended||record.drawOriginal?'original':instanceIndex>=0?'instance':'culled',visibleInScene:underRoot(record)&&record.object.material.visible,originalLayerMask:record.mask,fallback:record.fallback};});},
   dispose(){if(disposed)return;setEnabled(false);disposed=true;if(scene.onBeforeRender===renderHook)scene.onBeforeRender=beforeRender;for(const batch of batches)batch.mesh.dispose();proxies.removeFromParent();},

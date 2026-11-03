@@ -46,7 +46,7 @@ export function buildRackSquatExercisePose({THREE,metrics,smith=false,t=0}){
 
 /** Rack setup is an explicit forward sequence. Reversing it for reracking is
  * safe because the hook takes the load before hands open or the back leaves. */
-export function createRackSquatLifecycle({THREE,machine,metrics}){
+export function createRackSquatLifecycle({THREE,machine,metrics,naturalPreparation=true}){
   const V=p=>new THREE.Vector3(...p),UP=new THREE.Vector3(0,1,0),smith=machine.type==='smithSquat',setup=machine.getRackSetup(),ready=copy(setup.readyPose);
   const restTorso=V(metrics.neutral.shoulder).sub(V(metrics.neutral.hip)),restHead=V(metrics.neutral.head).sub(V(metrics.neutral.hip)),axis=restTorso.clone().normalize();
   const rack=setup.rackBarPosition,readyBar=setup.readyBarPosition,rackHipZ=rack[2]-(readyBar[2]-ready.hip[2]),rackLift=readyBar[1]-rack[1],gate=[0,0,-1.65];
@@ -84,16 +84,16 @@ export function createRackSquatLifecycle({THREE,machine,metrics}){
   function sample(direction,u){
     const phase=direction==='exit'?1-clamp(u):clamp(u),seconds=phase*duration;let index=1,start=0;
     for(;index<nodes.length-1&&seconds>start+nodes[index].seconds;index++)start+=nodes[index].seconds;
-    const a=nodes[index-1],b=nodes[index],raw=clamp((seconds-start)/b.seconds),t=b.walk?raw:ease(raw),pose={};
+    const a=nodes[index-1],b=nodes[index],raw=clamp((seconds-start)/b.seconds),pace=b.walk&&naturalPreparation?ease(raw):raw,t=b.walk?pace:ease(raw),pose={};
     for(const k of ['hip','shoulder','head'])pose[k]=mix(a.pose[k],b.pose[k],t);
     for(const k of ['hands','feet','footDirections','footNormals','elbowHints','kneeHints'])pose[k]=[0,1].map(i=>mix(a.pose[k]?.[i]||b.pose[k][i],b.pose[k][i],t));
     pose.headPitch=(a.pose.headPitch||0)+((b.pose.headPitch||0)-(a.pose.headPitch||0))*t;
     let feetContact=[0,1].map(i=>V(a.pose.feet[i]).distanceTo(V(b.pose.feet[i]))<1e-8||raw===0||raw===1);
-    if(b.walk){const distance=Math.abs(b.pose.hip[2]-a.pose.hip[2]),count=Math.max(2,Math.ceil(distance/.18/2)*2),step=Math.min(count-1,Math.floor(raw*count)),within=raw===1?1:raw*count-step,side=step%2;for(let i=0;i<2;i++){const completed=i===0?Math.floor((step+1)/2):Math.floor(step/2),progress=(completed+(side===i?ease(within):0))/(count/2);pose.feet[i]=mix(a.pose.feet[i],b.pose.feet[i],clamp(progress));if(side===i)pose.feet[i][1]+=Math.sin(within*Math.PI)*(b.lift||.065);}feetContact=[true,true];feetContact[side]=within<1e-8||within>1-1e-8;}
+    if(b.walk){const distance=Math.abs(b.pose.hip[2]-a.pose.hip[2]),count=Math.max(2,Math.ceil(distance/.18/2)*2),step=Math.min(count-1,Math.floor(pace*count)),within=pace===1?1:pace*count-step,side=step%2;for(let i=0;i<2;i++){const completed=i===0?Math.floor((step+1)/2):Math.floor(step/2),progress=(completed+(side===i?ease(within):0))/(count/2);pose.feet[i]=mix(a.pose.feet[i],b.pose.feet[i],clamp(progress));if(side===i)pose.feet[i][1]+=Math.sin(within*Math.PI)*(b.lift||.065);}feetContact=[true,true];feetContact[side]=within<1e-8||within>1-1e-8;}
     if(b.step!==undefined){pose.feet[b.step][1]+=Math.sin(raw*Math.PI)*b.lift;feetContact[b.step]=raw===0||raw===1;}
-    if(b.walk&&!b.support){const lower=.025*Math.sin(raw*Math.PI);for(const k of ['hip','shoulder','head'])pose[k][1]-=lower;}
+    if(b.walk&&!b.support){const lower=.025*Math.sin(pace*Math.PI);for(const k of ['hip','shoulder','head'])pose[k][1]-=lower;}
     const bar=mix(a.bar,b.bar,t),grip=a.grip+(b.grip-a.grip)*t;
-    if(b.walk&&b.support){const lower=.009*Math.sin(raw*Math.PI);for(const k of ['hip','shoulder','head'])pose[k][1]-=lower;bar[1]-=lower;}
+    if(b.walk&&b.support){const lower=.009*Math.sin(pace*Math.PI);for(const k of ['hip','shoulder','head'])pose[k][1]-=lower;bar[1]-=lower;}
     if(index<=2){pose.gripping=false;pose.handGripping=[false,false];pose.handGripStrength=[0,0];pose.relaxedHands=true;pose.handNormals=[[1,0,0],[-1,0,0]];}
     else{
       if(a.alreadyCalibrated||b.alreadyCalibrated){const clean=node=>{const p=copy(node.pose);if(node.alreadyCalibrated)p.hands=[[-.41,node.bar[1],node.bar[2]],[.41,node.bar[1],node.bar[2]]];return p;};pose.hands=clean(a).hands.map((p,i)=>mix(p,clean(b).hands[i],t));}

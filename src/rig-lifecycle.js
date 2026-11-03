@@ -5,6 +5,7 @@ import {buildLocomotionPose} from './locomotion.js';
 import {adaptDumbbellGrip,prepareDumbbellRawPose,dumbbellContactOffsets} from './dumbbell-grip.js';
 import {buildDumbbellLifecycleNodes} from './dumbbell-lifecycle-paths.js';
 import {planCapturedTransition,capturedTransitionProgress} from './captured-transition-v018.js';
+import {preparationFootLift} from './preparation-motion-v019.js';
 
 const V=p=>new THREE.Vector3(...p),A=v=>v.toArray(),copy=p=>structuredClone(p);
 const mix=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t),add=(a,b)=>a.map((v,i)=>v+b[i]);
@@ -88,7 +89,7 @@ const directionMix=(a,b,t)=>{const q=new THREE.Quaternion().setFromUnitVectors(V
 /** Authored, reversible movement into and out of the 22 custom exercises.
  * Poses rotate the same fixed-length human bones used by the exercise loops.
  * Equipment has explicit parked / held ownership; release never removes it. */
-export function createRigLifecycle({metrics,getStage,rig,definitions,machines=new Map(),geometries=new Set(),extraMaterials=new Set(),capturedTransitionTiming=true}){
+export function createRigLifecycle({metrics,getStage,rig,definitions,machines=new Map(),geometries=new Set(),extraMaterials=new Set(),capturedTransitionTiming=true,naturalPreparation=true}){
   const records=new Map(),defs=new Map(definitions.map(d=>[d.id,d]));
   const n=metrics.neutral,torso=metrics.torsoLength,restTorso=V(n.shoulder).sub(V(n.hip)),restAxis=restTorso.clone().normalize(),headSpan=n.head[1]-n.shoulder[1];
   const mats={frame:new THREE.MeshStandardMaterial({color:'#293a31',metalness:.55,roughness:.42}),pad:new THREE.MeshStandardMaterial({color:'#48604c',roughness:.88}),chrome:new THREE.MeshStandardMaterial({color:'#acb9b0',metalness:.86,roughness:.25})};Object.values(mats).forEach(m=>extraMaterials.add(m));
@@ -118,6 +119,19 @@ export function createRigLifecycle({metrics,getStage,rig,definitions,machines=ne
     return pose;
   }
   function floorAt(record,x,z){const mat=record.mat;if(mat&&Math.abs(x-mat.position[0])<=mat.size[0]/2&&Math.abs(z-mat.position[2])<=mat.size[2]/2)return mat.position[1]+mat.size[1]/2;return 0;}
+  function settleLegReach(record,pose,offset){
+    const q=bodyQ(pose),margin=.0005;let drop=0;
+    for(let side=0;side<2;side++){
+      const leg=metrics.legs[side],root=V(leg.hipOffset).applyQuaternion(q).add(V(pose.hip)),ankle=V(pose.feet[side]).sub(V(leg.footContactOffset).applyQuaternion(footQuat(pose.footDirections[side],pose.footNormals[side]))),dx=root.x-ankle.x,dz=root.z-ankle.z,length=leg.upper+leg.lower-.001;
+      const deficit=root.y-ankle.y-Math.sqrt(Math.max(0,length*length-dx*dx-dz*dz));
+      drop+=deficit<=-margin?0:deficit>=margin?deficit:(deficit+margin)**2/(4*margin);
+    }
+    if(drop>1e-10){
+      const calibrated=adaptDumbbellGrip({id:record.id,metrics,raw:pose,mask:record.weightHands,lifecycle:true});pose=calibrated.pose;pose.dbPrecalibrated=true;pose.dbGearPose=move(calibrated.gearPose,offset);
+      for(const key of ['hip','shoulder','head'])pose[key][1]-=drop;pose.preparationLegSettle=drop;
+    }
+    return pose;
+  }
   function walking(record,a,b,u,heldPose=null){
     const t=smooth(u),offset=mix(a,b,t),distance=V(b).sub(V(a)).length(),steps=Math.max(2,Math.ceil(distance/.2/2)*2),step=Math.min(steps-1,Math.floor(t*steps)),p=t*steps-step,feet=[];
     let pose=heldPose?copy(heldPose):neutral();const floor=(floorAt(record,offset[0],offset[2])+floorAt(record,offset[0],offset[2]+.145))*.5;
@@ -125,9 +139,21 @@ export function createRigLifecycle({metrics,getStage,rig,definitions,machines=ne
     for(let side=0;side<2;side++){
       const previous=step<=side?0:Math.min(1,(Math.floor((step-1-side)/2)+1)*2/steps),next=Math.min(1,(Math.floor((step-side)/2)+1)*2/steps),swing=step%2===side;
       const from=add(mix(a,b,previous),[n.feet[side][0],0,n.feet[side][2]]),to=add(mix(a,b,next),[n.feet[side][0],0,n.feet[side][2]]),foot=swing?mix(from,to,smooth(p)):from;
-      foot[1]=.013+floorAt(record,foot[0],foot[2])+(swing?Math.sin(p*Math.PI)*.12:0);feet.push(foot.map((value,index)=>value-offset[index]));
+      const lift=naturalPreparation&&record.definition.stationId==='dumbbell-curl'?preparationFootLift(p):Math.sin(p*Math.PI);
+      foot[1]=.013+floorAt(record,foot[0],foot[2])+(swing?lift*.12:0);feet.push(foot.map((value,index)=>value-offset[index]));
     }
-    pose.feet=feet;pose.footDirections=(record.stage.weights||record.stage.configurationKey==='straight-bar')?copy((heldPose||neutral()).footDirections):[[0,0,1],[0,0,1]];pose.footNormals=[[0,1,0],[0,1,0]];pose.kneeHints=[[0,0,1],[0,0,1]];return{pose,offset};
+    pose.feet=feet;pose.footDirections=(record.stage.weights||record.stage.configurationKey==='straight-bar')?copy((heldPose||neutral()).footDirections):[[0,0,1],[0,0,1]];pose.footNormals=[[0,1,0],[0,1,0]];pose.kneeHints=[[0,0,1],[0,0,1]];
+    if(naturalPreparation&&record.definition.stationId==='dumbbell-curl'){
+      // A planted shoe must stay reachable when the other leg swings. The
+      // old pelvis track occasionally overextended the trailing leg. Settle
+      // the torso by the measured leg-length deficit instead of stretching
+      // a bone or letting the sole float. The compact ramp anticipates the
+      // constraint smoothly and is exactly zero at the original endpoints.
+      // Keep the already calibrated palm/shaft frames while the legs bend.
+      // dbGearPose is in rig space; the outer pose is still frame-local.
+      pose=settleLegReach(record,pose,offset);
+    }
+    return{pose,offset};
   }
   function makeNode(pose,offset,stage,duration,extra={}){return{pose,offset,stage,duration,...extra};}
   function append(nodes,pose,offset,stage,duration,extra={}){nodes.push(makeNode(pose,offset,stage,extra.walk?duration*1.35:duration,extra));}
@@ -156,7 +182,7 @@ export function createRigLifecycle({metrics,getStage,rig,definitions,machines=ne
     stage.staticVolumes.push({id:'lifecycle-dumbbell-tray',shape:'box',position:[0,.705,1.40],size:[1.12,.07,.50],allowedBodyParts:[]},...[-1,1].map(sign=>({id:`lifecycle-tray-post-${sign}`,shape:'box',position:[sign*.58,.36,1.36],size:[.065,.72,.065],allowedBodyParts:[]})));
   }
   function dumbbellNodes(record){
-    rack(record);return buildDumbbellLifecycleNodes({record,metrics,neutral,torsoPose,gripPose,move,append});
+    rack(record);return buildDumbbellLifecycleNodes({record,metrics,neutral,torsoPose,gripPose,move,append,naturalPreparation});
   }
   function turfNodes(record){
     const id=record.definition.id,final=record.exercisePose,nodes=record.nodes,h=record.mat.position[1]+record.mat.size[1]/2;
@@ -239,7 +265,8 @@ export function createRigLifecycle({metrics,getStage,rig,definitions,machines=ne
     const time=THREE.MathUtils.clamp(u,0,1)*record.duration,nodes=record.nodes;let index=1;while(index<nodes.length-1&&nodes[index].time<time)index++;
     const a=nodes[index-1],b=nodes[index],raw=b.duration?(time-a.time)/b.duration:1,profile=b.capturedTiming?.[direction],captured=capturedTransitionTiming?capturedTransitionProgress(profile,raw,{reversePath:direction==='exit'}):null,t=captured??smooth(raw);let pose,offset;
     if(b.walk){const walk=walking(record,a.offset,b.offset,raw,a.held||a.gear==='held'?a.pose:null);pose=walk.pose;offset=walk.offset;}
-    else{const baseA=toBase(a),baseB=toBase(b);offset=mix(a.offset,b.offset,t);pose=move(record.stage.weights?dumbbellBlend(baseA,baseB,t,record):blend(baseA,baseB,t),offset.map(v=>-v));if(b.stepFeet){const moving=[0,1].filter(side=>V(baseA.feet[side]).distanceTo(V(baseB.feet[side]))>.06);for(const side of moving){const step=moving.length===2?THREE.MathUtils.clamp(raw*2-side,0,1):raw;pose.feet[side]=mix(baseA.feet[side],baseB.feet[side],smooth(step)).map((v,i)=>v-offset[i]);pose.feet[side][1]+=Math.sin(Math.PI*step)*.13;const fq=footQuat(baseA.footDirections?.[side],baseA.footNormals?.[side]).slerp(footQuat(baseB.footDirections?.[side],baseB.footNormals?.[side]),smooth(step));pose.footDirections[side]=A(Z.clone().applyQuaternion(fq));pose.footNormals[side]=A(UP.clone().applyQuaternion(fq));}}}
+    else{const baseA=toBase(a),baseB=toBase(b);offset=mix(a.offset,b.offset,t);pose=move(record.stage.weights?dumbbellBlend(baseA,baseB,t,record):blend(baseA,baseB,t),offset.map(v=>-v));if(b.stepFeet){const moving=[0,1].filter(side=>V(baseA.feet[side]).distanceTo(V(baseB.feet[side]))>.06);for(const side of moving){const step=moving.length===2?THREE.MathUtils.clamp(raw*2-side,0,1):raw;pose.feet[side]=mix(baseA.feet[side],baseB.feet[side],smooth(step)).map((v,i)=>v-offset[i]);pose.feet[side][1]+=(naturalPreparation&&record.definition.stationId==='dumbbell-curl'?preparationFootLift(step):Math.sin(Math.PI*step))*.13;const fq=footQuat(baseA.footDirections?.[side],baseA.footNormals?.[side]).slerp(footQuat(baseB.footDirections?.[side],baseB.footNormals?.[side]),smooth(step));pose.footDirections[side]=A(Z.clone().applyQuaternion(fq));pose.footNormals[side]=A(UP.clone().applyQuaternion(fq));}}}
+    if(b.stepFeet&&naturalPreparation&&record.definition.stationId==='dumbbell-curl')pose=settleLegReach(record,pose,offset);
     if(record.stage.configurationKey==='straight-bar'&&b.stepFeet){const drop=.035*Math.sin(raw*Math.PI);for(const key of ['hip','shoulder','head'])pose[key][1]-=drop;for(const key of ['hands','elbows'])if(pose[key])for(const point of pose[key])point[1]-=drop;}
     if(record.stage.adaptHandPose){pose.dbGripWeight=(a.pose.dbGripWeight||0)+((b.pose.dbGripWeight||0)-(a.pose.dbGripWeight||0))*t;pose.dbNaturalGrip=(a.pose.dbNaturalGrip||0)+((b.pose.dbNaturalGrip||0)-(a.pose.dbNaturalGrip||0))*t;}
     if(time<=.000001){pose=copy(nodes[0].pose);offset=copy(nodes[0].offset);}if(time>=record.duration-.000001){pose=copy(nodes.at(-1).pose);offset=copy(nodes.at(-1).offset);}

@@ -7,6 +7,7 @@ import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 
 const files=['src/inertial-curl-v018.js','src/paced-reference-v018.js','src/imu-curl-data-v018.js','src/exercise-rig.js','src/extended-rig.js','src/cable-stages-v011.js','src/additional-equipment.js','src/skinned-character.js','src/dumbbell-grip.js','src/hand-contact-frame.js','src/free-dumbbell-shaft.js','src/rig-lifecycle.js','src/equipment-calibration-v013.js','src/collision-validation.js','scripts/mocap-fixture-v018.mjs','scripts/qualify-inertial-curl-v018.mjs','public/models/athlete/athlete.glb','public/models/athlete/rig.json'];
+files.push('src/npc-world-matrices-v019.js');
 const sha=path=>createHash('sha256').update(readFileSync(path)).digest('hex'),distance=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
 
 export function equivalentAuthoredPhase(id,effort){

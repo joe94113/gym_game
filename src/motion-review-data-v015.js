@@ -1,4 +1,4 @@
-export const REVIEW_SOURCE_VERSION='0.18.0';
+export const REVIEW_SOURCE_VERSION='0.19.0';
 export const REVIEW_FORMAT_VERSION=3;
 export const REVIEW_DIRECTIONS=['enter','loop','exit'];
 export const REVIEW_VIEWS=['front','side','back'];
@@ -12,7 +12,7 @@ const object=(value,path)=>{if(!value||typeof value!=='object'||Array.isArray(va
 const text=(value,path,max,{required=false}={})=>{if(typeof value!=='string'||value.length>max||(required&&!value.trim()))failure(path,`請填${required?'非空白、':''}${max} 字以內的文字`);return value;};
 const unit=(value,path,{nullable=true}={})=>{if(nullable&&(value===undefined||value===null))return null;if(typeof value!=='number'||!Number.isFinite(value)||value<0||value>1)failure(path,'必須是 0～1 的有限數字');return value;};
 const date=(value,path)=>{text(value,path,40,{required:true});if(!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(value)||!Number.isFinite(Date.parse(value))||new Date(value).toISOString()!==value)failure(path,'必須是有效 ISO 日期時間');return value;};
-const sourceVersion=(value,path)=>{if(typeof value==='string'&&value.length<32&&(value==='legacy-v013-unversioned'||/^0\.(?:13|14|15|16|17|18)\.\d+$/.test(value)))return value;failure(path,'不支援的來源版本，請使用 0.13～0.18 版工作台匯出檔');};
+const sourceVersion=(value,path)=>{if(typeof value==='string'&&value.length<32&&(value==='legacy-v013-unversioned'||/^0\.(?:13|14|15|16|17|18|19)\.\d+$/.test(value)))return value;failure(path,'不支援的來源版本，請使用 0.13～0.19 版工作台匯出檔');};
 
 export function validateReviewPNG(value,path='image'){
   if(value===undefined||value===null||value==='')return null;

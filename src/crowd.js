@@ -1,3 +1,4 @@
+import {createNpcAnimationView} from './npc-animation-view-v019.js';
 import { buildLocomotionPose } from './locomotion.js';
 import { createMachineLifecycle } from './machine-lifecycle.js';
 import {selectNpcGeometryLod,summarizeNpcGeometryLod} from './npc-geometry-lod-v010.js';
@@ -47,10 +48,11 @@ export function sampleStationExitPose(metrics,type,startPose,phase) {
 export function createGymCrowd({THREE,scene,character,machines,activities=[],floorHeight=()=>0,findPath=null,blocked=()=>false}) {
   const metrics=character.getAssetInfo().metrics;
   const actors=[];
-  let clock=0,quality='clear',forceFullPose=false,viewContext={},currentActiveStationId=null,geometryLodEnabled=true;
+  const animationView=createNpcAnimationView(THREE),viewCentre=new THREE.Vector3(),viewAxis=new THREE.Vector3(0,1,0);
+  let clock=0,quality='clear',forceFullPose=false,viewContext={},currentActiveStationId=null,geometryLodEnabled=true,deferPoses=false;
   function updateGeometryLod(actor){
     const stable=actor.state==='exercising'&&actor.stage==='exercise'||actor.state==='free'&&actor.stage==='idle';
-    actor.body.setGeometryLod?.(selectNpcGeometryLod({position:actor.body.group.position,...viewContext,previousLevel:actor.body.getGeometryLodDiagnostics?.().level||0,forceFull:!geometryLodEnabled||!stable||forceFullPose||actor.stationId===currentActiveStationId}));
+    const wanted=selectNpcGeometryLod({position:actor.body.group.position,...viewContext,previousLevel:actor.geometryLevel||0,forceFull:!geometryLodEnabled||!stable||forceFullPose||actor.stationId===currentActiveStationId});if(wanted!==(actor.geometryLevel||0))actor.geometryLevel=actor.body.setGeometryLod?.(wanted)||0;
   }
   const vec=point=>new THREE.Vector3(...point);
   const localToWorld=(actor,point)=>vec(point).applyAxisAngle(new THREE.Vector3(0,1,0),actor.rotation).add(actor.origin);
@@ -62,25 +64,36 @@ export function createGymCrowd({THREE,scene,character,machines,activities=[],flo
     if(actor.machine.type==='treadmill'){pose.handNormals=[[1,0,0],[-1,0,0]];pose.relaxedHands=true;}
     return pose;
   };
-  const poseActor=(actor,pose)=>{actor.body.pose(pose);actor.poseUpdates++;actor.lastPoseClock=clock;};
+  const applyBodyPose=(actor,pose,poseClock)=>{actor.body.pose(pose);actor.poseUpdates++;actor.lastPoseClock=poseClock;actor.pendingPose=null;};
+  const poseActor=(actor,pose)=>{
+    actor.lastPose=pose;
+    // Main-RAF catch-up steps still sample every mechanism and contact pose.
+    // Retain the exact scheduled snapshot; only redundant skeleton solves wait.
+    if(deferPoses){actor.pendingPose=structuredClone(pose);actor.pendingPoseClock=clock;actor.deferredPoseUpdates=(actor.deferredPoseUpdates||0)+1;return;}
+    applyBodyPose(actor,pose,clock);
+  };
+  function flushPendingPoses(){for(const actor of actors)if(actor.pendingPose){applyBodyPose(actor,actor.pendingPose,actor.pendingPoseClock);actor.flushedPoseUpdates=(actor.flushedPoseUpdates||0)+1;}}
   function poseDue(actor,dt,options){
     const viewer=options.viewerPosition;
     const unthrottled=options.forceFullPose||options.quality==='clear'||!viewer;
     const x=Array.isArray(viewer)?viewer[0]:viewer?.x,z=Array.isArray(viewer)?viewer[2]:viewer?.z;
     if(unthrottled||!Number.isFinite(x)||!Number.isFinite(z)){
-      actor.culled=false;actor.body.group.visible=true;actor.poseAccumulator=0;actor.poseHz=0;return true;
+      actor.culled=false;actor.viewDeferred=false;actor.body.group.visible=true;actor.poseAccumulator=0;actor.poseHz=0;return true;
     }
     const distance=Math.hypot(actor.body.group.position.x-x,actor.body.group.position.z-z);
     const flow=options.quality==='flow',hideDistance=flow?34:40,wasCulled=actor.culled;
     actor.culled=distance>(wasCulled?hideDistance-3:hideDistance);actor.body.group.visible=!actor.culled;
     actor.poseHz=distance<(flow?16:24)?30:20;
     if(actor.culled){actor.skippedPoseUpdates++;return false;}
-    actor.poseAccumulator+=dt;
+    if(deferView(actor)){actor.viewDeferred=true;actor.viewSkippedPoseUpdates=(actor.viewSkippedPoseUpdates||0)+1;actor.skippedPoseUpdates++;actor.poseAccumulator=0;return false;}
+    actor.viewDeferred=false;actor.poseAccumulator+=dt;
     const interval=1/actor.poseHz;
     if(!wasCulled&&actor.poseAccumulator+1e-9<interval){actor.skippedPoseUpdates++;return false;}
     actor.poseAccumulator%=interval;return true;
   }
 
+  function deferView(actor){const p=actor.lastPose,h=p?.hip||[0,.9,0],s=p?.shoulder||[0,1.4,0];viewCentre.set((h[0]+s[0])/2,(h[1]+s[1])/2,(h[2]+s[2])/2).applyAxisAngle(viewAxis,actor.body.group.rotation.y).add(actor.body.group.position);return animationView.defer({position:actor.body.group.position,center:viewCentre,forced:forceFullPose||actor.stationId===currentActiveStationId||actor.state!=='exercising'&&actor.stage!=='idle'});}
+  function restoreView(actor){if(actor.stationId===currentActiveStationId)return;if(!actor.viewDeferred||actor.culled||deferView(actor))return;actor.viewDeferred=false;actor.viewRestores=(actor.viewRestores||0)+1;actor.poseAccumulator=0;if(actor.state==='exercising'){const cycle=actor.elapsed/actor.duration;actor.contactPose=sampleActor(actor,cycle%1,cycle);poseActor(actor,actor.contactPose);}else if(actor.stage==='idle')poseActor(actor,buildLocomotionPose(metrics,clock,0));}
   for(const stationId of [...NPC_STATIONS,...SENIOR_STATIONS]){
     const machine=machines.get(stationId);
     if(!machine?.sampleActivity||!machine?.getSetup)continue;
@@ -88,7 +101,7 @@ export function createGymCrowd({THREE,scene,character,machines,activities=[],flo
     const seniorIndex=SENIOR_STATIONS.indexOf(stationId),senior=seniorIndex>=0,feminine=senior&&seniorIndex%2===0;
     const appearance=senior?{shirt:SENIOR_SHIRTS[seniorIndex],bodyProfile:feminine?'feminine':'default',age:62+seniorIndex*2,grayHair:.82+(seniorIndex%2)*.12,hair:seniorIndex%2?'#b7b6ae':'#c6c2b8'}:{shirt:SHIRTS[index%SHIRTS.length]};
     const body=character.createClone({scene,appearance});
-    body.group.name=`gym-member-${index+1}`;body.setMuscleOverlayEnabled(false);body.setMuscleHighlights();
+    body.group.name=`gym-member-${index+1}`;body.setMuscleOverlayEnabled(false);body.setMuscleHighlights();body.setBackgroundMaterialMode?.(true);
     const origin=vec(setup.origin),rotation=setup.rotation||0;
     body.group.position.copy(origin);body.group.rotation.y=rotation;
     body.setConservativeCulling?.(true);
@@ -151,6 +164,7 @@ export function createGymCrowd({THREE,scene,character,machines,activities=[],flo
     actor.path=[destination];actor.destination=destination.clone();actor.stage='walk';actor.stageTime=0;
   }
   function update(dt,activeStationId=null,options={}){
+    deferPoses=!!options.deferPose;
     dt=Math.min(.05,Math.max(0,dt));clock+=dt;quality=options.quality||'balanced';forceFullPose=!!options.forceFullPose;currentActiveStationId=activeStationId;
     for(const actor of actors){
       updateGeometryLod(actor);
@@ -208,16 +222,20 @@ export function createGymCrowd({THREE,scene,character,machines,activities=[],flo
         }
       }else poseActor(actor,buildLocomotionPose(metrics,clock,0));
     }
+    if(!deferPoses)flushPendingPoses();
   }
   return{
     update,requestHandoff,getOccupancy,
-    setViewContext(context={}){viewContext=context;actors.forEach(updateGeometryLod);},
+    setViewContext(context={}){viewContext=context;animationView.setContext(context);for(const actor of actors){updateGeometryLod(actor);restoreView(actor);}},
     setGeometryLodEnabled(value=true){geometryLodEnabled=!!value;actors.forEach(updateGeometryLod);return geometryLodEnabled;},
+    setBackgroundMaterialMode(value=true){for(const actor of actors)actor.body.setBackgroundMaterialMode?.(value);return!!value;},
+    getMaterialDiagnostics(){const entries=actors.map(actor=>({id:actor.id,...actor.body.getMaterialDiagnostics?.()}));return{count:entries.length,backgroundActive:entries.filter(actor=>actor.backgroundActive).length,actors:entries};},
     getGeometryLodDiagnostics(){return summarizeNpcGeometryLod(actors,geometryLodEnabled);},
+    getUpdateDiagnostics(){return{count:actors.length,poseUpdates:actors.reduce((n,a)=>n+a.poseUpdates,0),viewSkipped:actors.reduce((n,a)=>n+(a.viewSkippedPoseUpdates||0),0),viewRestores:actors.reduce((n,a)=>n+(a.viewRestores||0),0),deferred:actors.filter(a=>a.viewDeferred).length,deferredPoseUpdates:actors.reduce((n,a)=>n+(a.deferredPoseUpdates||0),0),flushedPoseUpdates:actors.reduce((n,a)=>n+(a.flushedPoseUpdates||0),0),pendingPoses:actors.filter(a=>a.pendingPose).length};},
     getDiagnostics(){return{
       count:actors.length,
       quality,forceFullPose,
-      actors:actors.map(actor=>({id:actor.id,stationId:actor.stationId,state:actor.state,stage:actor.stage,position:actor.body.group.position.toArray(),overlayEnabled:actor.body.getMuscleOverlayEnabled(),modelKind:actor.body.getAssetInfo().kind,contactError:actor.body.getContactPoints().maxReachError,ageGroup:actor.ageGroup,role:actor.role,genderPresentation:actor.genderPresentation,appearance:actor.body.getAssetInfo().appearance,elapsed:actor.elapsed,lastSampledCycle:actor.lastSampledCycle,poseUpdates:actor.poseUpdates,skippedPoseUpdates:actor.skippedPoseUpdates,poseHz:actor.poseHz,poseAgeSeconds:clock-actor.lastPoseClock,culled:actor.culled,visible:actor.body.group.visible,geometryLod:actor.body.getGeometryLodDiagnostics?.()||null})),
+      actors:actors.map(actor=>({id:actor.id,stationId:actor.stationId,state:actor.state,stage:actor.stage,position:actor.body.group.position.toArray(),overlayEnabled:actor.body.getMuscleOverlayEnabled(),materialMode:actor.body.getMaterialDiagnostics?.()||null,modelKind:actor.body.getAssetInfo().kind,contactError:actor.body.getContactPoints().maxReachError,ageGroup:actor.ageGroup,role:actor.role,genderPresentation:actor.genderPresentation,appearance:actor.body.getAssetInfo().appearance,elapsed:actor.elapsed,lastSampledCycle:actor.lastSampledCycle,poseUpdates:actor.poseUpdates,skippedPoseUpdates:actor.skippedPoseUpdates,poseHz:actor.poseHz,poseAgeSeconds:clock-actor.lastPoseClock,viewDeferred:!!actor.viewDeferred,viewSkipped:actor.viewSkippedPoseUpdates||0,viewRestores:actor.viewRestores||0,culled:actor.culled,visible:actor.body.group.visible,geometryLod:actor.body.getGeometryLodDiagnostics?.()||null})),
     };},
     dispose(){actors.forEach(actor=>actor.body.dispose());actors.length=0;},
   };

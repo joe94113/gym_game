@@ -1,7 +1,7 @@
 const copy=p=>structuredClone(p),add=(a,b)=>a.map((v,i)=>v+b[i]);
 
 /** Only the eight free-weight DB activities use these rack/carry/bench paths. */
-export function buildDumbbellLifecycleNodes({record,metrics,neutral,torsoPose,gripPose,move,append}){
+export function buildDumbbellLifecycleNodes({record,metrics,neutral,torsoPose,gripPose,move,append,naturalPreparation=true}){
   const final=record.exercisePose,one=record.stage.weightKind==='single',goblet=record.stage.weightKind==='goblet',offset=[0,0,.80],nodes=record.nodes;
   const storage=goblet?[[-.10,1.105,1.36],[.10,1.105,1.36]]:[[-.34,.86,1.34],[.34,.86,1.34]],directions=goblet?[[0,0,1],[0,0,1]]:[[1,0,0],[-1,0,0]];
   record.storage={hands:copy(storage),handDirections:directions,feet:copy(metrics.neutral.feet)};record.weightHands=goblet?[true,true]:one?[false,true]:[true,true];
@@ -16,7 +16,7 @@ export function buildDumbbellLifecycleNodes({record,metrics,neutral,torsoPose,gr
   const approach=reach(local.map((p,i)=>record.weightHands[i]?add(p,goblet?[0,0,-.24]:[0,.16,-.08]):p)),touch=reach(local),grasp=reach(local,1);
   if(!goblet){approach.handAdvances=[null,null];grasp.dbNaturalGrip=1;}
   put(approach,offset,'屈髖伸手',1.0,{held:false});put(touch,offset,'掌心對準握把',.7,{held:false});put(grasp,offset,'握穩啞鈴',.5,{held:true});
-  if(!goblet){const aligned=copy(grasp);aligned.dbNaturalGrip=1;put(aligned,offset,'提鈴前調整手腕',.45,{held:true});}
+  if(!goblet){const aligned=copy(grasp);aligned.dbNaturalGrip=1;put(aligned,offset,'提鈴前調整手腕',naturalPreparation?.18:.45,{held:true});}
   const lifted=reach(local.map((p,i)=>record.weightHands[i]?add(p,[0,goblet?.12:.07,0]):p),1);lifted.dbNaturalGrip=1;if(goblet){const upper=torsoPose([0,.90,-.03],.30);for(const k of ['hip','shoulder','head'])lifted[k]=upper[k];}put(lifted,offset,'抬離啞鈴架',.8,{held:true});
   const retracted=copy(lifted);if(!goblet)retracted.dbFreeShaftWeight=1;retracted.hip=[0,.89,-.03];const upper=torsoPose(retracted.hip,.35);retracted.shoulder=upper.shoulder;retracted.head=upper.head;retracted.hands=retracted.hands.map((p,i)=>record.weightHands[i]?add(p,[0,goblet?.075:.025,goblet?-.08:-.16]):p);put(retracted,offset,'先把啞鈴移離架面',.9,{held:true});
   const carry=held(gripPose(neutral(),goblet?[[-.10,1.30,.34],[.10,1.30,.34]]:[[-.35,.84,.08],[.35,.84,.08]],[[0,0,1],[0,0,1]],1,[[0,-1,0],[0,-1,0]]));carry.elbowHints=goblet?[[-.15,-1,.1],[.15,-1,.1]]:[[-.65,-1,.1],[.65,-1,.1]];if(goblet)carry.handAdvances=[[1,0,0],[-1,0,0]];if(one){carry.handGripping=[false,true];carry.handGripStrength=[0,1];carry.hands[0]=neutral().hands[0];carry.elbowHints[0]=[-.5,-1,.2];}

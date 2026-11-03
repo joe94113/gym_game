@@ -25,7 +25,7 @@ test('all three cable actions use the existing station and retain separate learn
 });
 
 test('resource inventory reads only constructed roots and does not build every movement',()=>{
-  const fresh=createActivityRig({THREE,scene:new THREE.Scene(),characterMetrics:metrics});
+  const fresh=createActivityRig({THREE,scene:new THREE.Scene(),characterMetrics:metrics,naturalPreparation:false});
   assert.deepEqual(fresh.getInventoryRoots(),[]);
   fresh.getSetup(CABLE_IDS_V011[0]);const roots=fresh.getInventoryRoots();
   assert.equal(roots.length,1);assert.equal(fresh.getInventoryRoots()[0],roots[0]);
@@ -69,9 +69,10 @@ test('release retraces the held and parked equipment path without teleporting or
 });
 
 test('legacy loops stay exact outside calibrated grips and the two explicitly retimed paths',()=>{
-  // Historical hashes describe the authored poses and original clock. Current
-  // captured defaults are verified separately by the v018 source qualifiers.
-  const previous=JSON.parse(readFileSync(new URL('./fixtures/legacy-rig-v011.json',import.meta.url))),hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex'),candidate=createActivityRig({THREE,scene:new THREE.Scene(),characterMetrics:metrics,capturedPose:false,capturedTransitionTiming:false});
+  // Historical hashes describe the authored poses and original clock. Captured
+  // defaults and v019 contact/settling paths have separate strict qualifiers;
+  // this explicit diagnostic opt-out retains every original hash assertion.
+  const previous=JSON.parse(readFileSync(new URL('./fixtures/legacy-rig-v011.json',import.meta.url))),hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex'),candidate=createActivityRig({THREE,scene:new THREE.Scene(),characterMetrics:metrics,capturedPose:false,capturedTransitionTiming:false,naturalPreparation:false});
   const protectedFixture=JSON.parse(readFileSync(new URL('./fixtures/legacy-grip-protected-v013.json',import.meta.url)));
   assert.equal(createHash('sha256').update(readFileSync(new URL('./fixtures/legacy-rig-v011.json',import.meta.url))).digest('hex'),protectedFixture.originalFixture.sha256,'the original full-hash fixture has not been rewritten');
   assert.deepEqual(protectedFixture.phases,previous.phases);

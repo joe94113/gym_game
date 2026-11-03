@@ -17,7 +17,9 @@ test('櫃台、內勤教練與坐談人物都有真人模型，教練牆有十�
     const world=window.__FORM__.world,{coachRoster}=await import('/src/reception-scenes.js');
     return{social:world.getSocialDiagnostics(),facilities:world.getFacilityDiagnostics(),coaches:coachRoster};
   });
-  expect(result.social.count).toBe(7);expect(result.social.poseHz).toBe(15);
+  expect(result.social.count).toBe(20);expect(result.social.coachCount).toBe(16);expect(result.social.poseHz).toBe(15);
+  expect(new Set(result.social.actors.filter(actor=>actor.coachId).map(actor=>actor.coachId)).size).toBe(16);
+  for(const coach of result.coaches)expect(result.social.actors.find(actor=>actor.id===coach.actorId)?.coachId).toBe(coach.id);
   for(const role of ['receptionist','trainer-desk','coach','student','class-instructor'])expect(result.social.actors.some(actor=>actor.role===role)).toBe(true);
   expect(result.social.actors.filter(actor=>actor.seated)).toHaveLength(2);
   for(const actor of result.social.actors){expect(actor.modelKind).toBe('skinned-human');expect(actor.contactError).toBeLessThan(.015);expect(actor.overlayEnabled).toBe(false);expect(actor.selfCollisions).toEqual([]);expect(actor.collisions).toEqual([]);if(['receptionist','trainer-desk','coach','student'].includes(actor.role))expect(actor.testedPairs).toBeGreaterThan(0);}

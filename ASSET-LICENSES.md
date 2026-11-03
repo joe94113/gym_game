@@ -4,6 +4,18 @@
 
 0.15 新增 CMU `79_93` 的兩次站姿啞鈴肩推，以及 `13_29` 的兩次徒手深蹲時序。前者為實際持啞鈴拍攝；後者未持鈴，只將量測的膝屈伸節奏改編至既有杯式深蹲路徑。原始來源、畫格、SHA、衍生方式與授權分別見 `public/motions/cmu-exercise-v015.json`、`public/motions/cmu-squat-v015.json` 及[器材節奏說明](docs/captured-equipment-v015.md)。不宣稱兩者都是負重全身動捕或已經真人教練簽核，原始影片不隨網站發布。
 
+0.17 將上述兩個 CMU 動作的一部分關節方向與骨盆、軀幹資料改編到既有角色，來源與變換見 `public/motions/cmu-fullbody-v017.json`。0.18 另從 `143_18`、`115_06`、`143_10` 和 `79_93` 取得部分起坐、物件升降與已持鈴升降的量測節奏；來源畫格、雜湊與反向改編記錄見 `public/motions/cmu-transitions-v018.json`。拿放的身體姿勢、手腳接點與器材路徑仍由本專案編排，來源沒有拍到的手指或完整器材操作不另稱真人動捕。這些 CMU 衍生資料沿用上方官方 FAQ 條件與下方必須保留的致謝。
+
+0.18 加入的其他真人量測資料如下。公開網站保留精簡衍生資料與來源清單，沒有散布原始研究影片；資料授權與工具程式授權分別判定。
+
+| 資料 | 作者與來源 | 資料授權 | 本專案使用與修改 |
+| --- | --- | --- | --- |
+| SAME-Limb | Dongxu Tang、Shih Ying-Lei、Zhuoyi Ren、Jianting Liao、Yitian Shao；[資料 DOI](https://doi.org/10.57967/hf/9950)、[作者資料庫](https://huggingface.co/datasets/Tdongxu/A_Synchronized_Lower_Limb_AMG_sEMG_and_Mocap) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)；原始授權文件的雜湊記於 `public/motions/same-limb-v018.json` | 選取下肢光學標記與關節角度，平滑、依初始人體座標與標記路徑正規化、裁切完整重複、重採樣與量化；遊戲依動作採骨盆微幅修正或節奏參考，不從未提供的上肢重建全身。未用 EMG／AMG 訊號控制肌群顏色。 |
+| UI-PRMD | A. Vakanski、D. Paul、R. Baker、H.-p. Jun；[作者資料頁](https://www.idahofallshighered.org/vakanski/ui-prmd.html)、[作者存檔與 README](https://zenodo.org/records/23104965)、[論文 DOI](https://doi.org/10.3390/data3010002) | 資料依作者頁與資料 README 明列的 [Open Data Commons PDDL 1.0](https://opendatacommons.org/licenses/pddl/1-0/)；不是以論文授權代替資料授權 | 選取六段完整右臂 Vicon 紀錄，五畫格平滑、由實際標記建立人體座標及肢段方向、121 點重採樣與量化；遊戲目前採右臂外展參考並鏡射到左側，是未負重單側復健動作的改編，不是實拍雙手負重側平舉。來源及證據見 `public/motions/ui-prmd-v018.json`。 |
+| Weight Lifting Exercises monitored with Inertial Measurement Units | Velloso, E. & Ugulino, W.（2013）；[UCI 官方資料頁](https://archive.ics.uci.edu/dataset/273/weight+lifting+exercises+monitored+with+inertial+measurement+units)、[資料 DOI](https://doi.org/10.24432/C5WK63) | UCI 官方資料集明列 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | 從官方 4,024 列示例選取正確 A 類的兩次實際彎舉，移除視窗統計列、展開前臂感測器 roll 通道、依原時間戳重採樣與量化。只改編量測節奏；感測器 roll 不是臨床手肘角度，也不是完整骨架。來源、裁切列與雜湊見 `public/motions/uci-curl-v018.json`。 |
+
+上述資料的使用範圍、實際接入的動作與尚未接入的素材，另見[真人動作覆蓋說明](docs/captured-motion-v018.md)。紅橘標色依動作資料表顯示主要、輔助與伸展目標，並非這些研究受試者的肌肉出力量測。
+
 The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.
 
 「肌動基地」的向量圖示 `public/brand-mark.svg` 為本專案原創，以 M 字形、槓鈴和動態標記組合，沒有使用連鎖健身房的商標。

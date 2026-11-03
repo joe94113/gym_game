@@ -20,6 +20,9 @@ export function createRenderQuality({renderer,environment=globalThis}){
   apply();
   return{
     get active(){return active;},
+    get preference(){return preference;},
+    get deviceTier(){return device.deviceTier;},
+    get mobileReduced(){return device.deviceTier==='mobile'&&preference==='auto'&&autoLow;},
     setPreference(value){if(!['auto','flow','clear'].includes(value))return false;preference=value;autoLow=software;samples=0;longFrameShare=0;pressureFrames=0;autoReason=software?'software':null;try{environment.localStorage?.setItem('form.graphics-quality.v1',value);}catch{}apply();return true;},
     recordFrame(ms){if(!Number.isFinite(ms)||ms<1||ms>250)return;frameMs=frameMs?frameMs*.95+ms*.05:ms;samples++;if(preference==='auto'&&!autoLow){longFrameShare=longFrameShare*.95+(ms>33.5?.05:0);const pressure=frameMs>21||(frameMs>18&&longFrameShare>.1);pressureFrames=pressure?pressureFrames+1:Math.max(0,pressureFrames-2);if(samples>90&&pressureFrames>=12){autoLow=true;autoReason=frameMs>21?'sustained-frame-time':'long-frames';apply();}}},
     observe(cpu,render){cpuMs=cpuMs?cpuMs*.95+cpu*.05:cpu;if(Number.isFinite(render))renderMs=renderMs?renderMs*.95+render*.05:render;},
