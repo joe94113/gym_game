@@ -16,7 +16,7 @@
 
 最後來源完成 324 項 Node、20 項原生瀏覽器整合、兩項桌面／觸控拖曳複驗及三種建置。相同 Intel UHD 630 的手機能力模擬下，一般負載三情境 p95 均為 13.5ms；CPU4 壓力模擬走動 40.0 → 26.7ms、臥推 53.4 → 40.1ms。一般負載走動回呼成本增加 18.14%，其餘限制、31 位 NPC 的負載與畫距／像素預算，見[完整驗收與效能表](docs/release-v019.md)。真機流暢度、發熱與耗電仍待測。
 
-公開版驗收分成唯讀 HTTP／SEO／資產檢查，以及使用正式頁面按鈕、鍵盤與觸控模擬的正常播放檢查。改版前公開站已通過 778 項 HTTP 檢查和桌面／手機模擬共 44 項核心操作；0.19 的最終效能已列出，部署後結果仍待補入[公開驗收摘要](docs/release-v019.md)，未完成處會明示待驗。可分別執行 `node scripts/qualify-public-v019.mjs --base=https://joe94113.github.io/gym_game/ --expected-version=0.19.0` 與 `node scripts/verify-public-play-v019.mjs --base=https://joe94113.github.io/gym_game/`；後者預設做桌面及手機模擬的核心流程，`--suite=extended` 增加團課預覽、音訊、衛浴與指南連結，`--suite=full-course` 才實際等完一堂課。HTTP 成功、跳段預覽和手機模擬各有不同範圍，不能互相代替，也不代表真人審查已完成。完整原始報告存於本機忽略的 `artifacts/`，公開摘要隨程式庫提供。
+公開版驗收分成唯讀 HTTP／SEO／資產檢查，以及使用正式頁面按鈕、鍵盤與觸控模擬的正常播放檢查。0.19 已部署至 GitHub Pages，實際公開站通過 781 項 HTTP／SEO／資產檢查、桌面／手機模擬共 44 項核心操作，以及桌面 51 項延伸操作；51 項包含核心流程，沒有當成額外項目重複加總。本機靜態正式產物也完成 44 項核心檢查，來源、部署與結果見[公開驗收摘要](docs/release-v019.md)。可分別執行 `node scripts/qualify-public-v019.mjs --base=https://joe94113.github.io/gym_game/ --expected-version=0.19.0` 與 `node scripts/verify-public-play-v019.mjs --base=https://joe94113.github.io/gym_game/`；後者預設做桌面及手機模擬的核心流程，`--suite=extended` 增加團課三階段預覽、音樂／語音獨立控制、衛浴與指南連結，`--suite=full-course` 才實際等完一堂課。這次公開檢查沒有自然等完一整堂課；HTTP 成功、跳段預覽和手機模擬各有不同範圍，不能互相代替，也不代表真人審查已完成。完整原始報告存於本機忽略的 `artifacts/`，公開摘要隨程式庫提供。
 
 ## 0.17 真人動作資料改編（歷史紀錄）
 
