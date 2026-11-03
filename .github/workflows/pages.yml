@@ -1,0 +1,52 @@
+name: Build and deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Configure Pages and resolve actual public URL
+        id: pages
+        uses: actions/configure-pages@v5
+      - run: npm ci
+      - name: Verify deployment and data modes
+        run: node --test tests/site-seo-v014.test.mjs tests/asset-url-v014.test.mjs tests/local-journal-client.test.mjs
+      - name: Build static game and readable guides
+        run: npm run build:pages
+        env:
+          VITE_SITE_URL: ${{ vars.SITE_URL || steps.pages.outputs.base_url }}
+          VITE_ACCOUNT_MODE: local
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy built files
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,4 @@
+.mocap-source-note{display:grid;gap:5px;margin:0 0 16px;padding:12px 14px;border:1px solid #afc79b;border-radius:10px;background:#eef4e5;color:#425b3a;font-size:14px;line-height:1.65}
+.mocap-source-note strong{font-size:14px;color:#334c2c}
+.mocap-source-note a{width:fit-content;color:#425d35;text-underline-offset:3px}
+.motion-data-credits small{display:block;margin-top:5px;font-size:13px;line-height:1.65;overflow-wrap:anywhere}

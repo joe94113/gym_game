@@ -1,0 +1,141 @@
+{
+  "format": "form-npc-index-lod-v010",
+  "binary": "indices.bin",
+  "componentType": "uint16",
+  "binaryBytes": 469296,
+  "binarySha256": "958c717fff8e36b448948418fc0dfc0cff7c4c5404f478d784bdaf5970d5cbba",
+  "source": "../athlete.glb",
+  "sourceSha256": "6d69811af9db9eb6247357c242f91682a33a69fe83c7679a5c6572f4bfc0d912",
+  "generatedWith": "Three.js bundled meshoptimizer 1.1, MIT",
+  "constraints": "Index-only; union of all head/hand/foot and muscle/side-boundary triangles in four appearance variants; LockBorder; normal/UV and six actual skinned pose attribute errors. Full source attributes and weights unchanged.",
+  "meshes": [
+    {
+      "name": "Athlete_CompressionShorts_export",
+      "vertices": 3191,
+      "originalIndices": 18144,
+      "fingerprint": "b6098966",
+      "levels": [
+        {
+          "offset": 0,
+          "count": 11790
+        },
+        {
+          "offset": 23580,
+          "count": 7386
+        }
+      ]
+    },
+    {
+      "name": "Athlete_Eyebrows_export",
+      "vertices": 124,
+      "originalIndices": 576,
+      "fingerprint": "2bfcfb66",
+      "levels": [
+        {
+          "offset": 38352,
+          "count": 576
+        },
+        {
+          "offset": 39504,
+          "count": 576
+        }
+      ]
+    },
+    {
+      "name": "Athlete_Eyelashes_export",
+      "vertices": 250,
+      "originalIndices": 1104,
+      "fingerprint": "b29a5f3f",
+      "levels": [
+        {
+          "offset": 40656,
+          "count": 1104
+        },
+        {
+          "offset": 42864,
+          "count": 1104
+        }
+      ]
+    },
+    {
+      "name": "Athlete_Eyes_export",
+      "vertices": 96,
+      "originalIndices": 516,
+      "fingerprint": "b88e4a64",
+      "levels": [
+        {
+          "offset": 45072,
+          "count": 516
+        },
+        {
+          "offset": 46104,
+          "count": 516
+        }
+      ]
+    },
+    {
+      "name": "Athlete_Hair_export",
+      "vertices": 3050,
+      "originalIndices": 11034,
+      "fingerprint": "9c22a05d",
+      "levels": [
+        {
+          "offset": 47136,
+          "count": 11034
+        },
+        {
+          "offset": 69204,
+          "count": 11034
+        }
+      ]
+    },
+    {
+      "name": "Athlete_Shoes_export",
+      "vertices": 1878,
+      "originalIndices": 8376,
+      "fingerprint": "dd5b5dc1",
+      "levels": [
+        {
+          "offset": 91272,
+          "count": 8376
+        },
+        {
+          "offset": 108024,
+          "count": 8376
+        }
+      ]
+    },
+    {
+      "name": "Athlete_Top_export",
+      "vertices": 12122,
+      "originalIndices": 60477,
+      "fingerprint": "52014cc1",
+      "levels": [
+        {
+          "offset": 124776,
+          "count": 39309
+        },
+        {
+          "offset": 203394,
+          "count": 24189
+        }
+      ]
+    },
+    {
+      "name": "FORM_Athlete_Body_export",
+      "vertices": 12285,
+      "originalIndices": 68328,
+      "fingerprint": "2e92ea63",
+      "levels": [
+        {
+          "offset": 251772,
+          "count": 54402
+        },
+        {
+          "offset": 360576,
+          "count": 54360
+        }
+      ]
+    }
+  ]
+}

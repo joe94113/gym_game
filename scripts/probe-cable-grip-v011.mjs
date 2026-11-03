@@ -1,0 +1,5 @@
+import {THREE,rig,character} from './dumbbell-test-helpers.mjs';
+const id='cable-straight-arm-pulldown',m=rig.getLifecycle(id),V=p=>new THREE.Vector3(...p),a=[1,0,0],center=[-.32,1.22,.5];
+function depth(samples,delta){let max=0;for(const s of samples){const d=s.position.map((v,i)=>v+delta[i]-center[i]),t=d[0],r=Math.hypot(d[1],d[2]);max=Math.max(max,Math.min(.016-r,.08-Math.abs(t)));}return max;}
+for(const p of [.62,.63,.65,.675,.6959]){const f=rig.sampleLifecycle(id,'enter',p);character.pose(f.pose);const samples=character.getSurfaceSamples({stride:1,parts:['leftHand']}),axis=V(f.pose.handDirections[0]),advance=V(f.pose.handAdvances[0]),normal=new THREE.Vector3().crossVectors(advance,axis).multiplyScalar(-1).normalize();let best;for(let u=-.06;u<.0601;u+=.002)for(let v=-.06;v<.0601;v+=.002){const delta=normal.clone().multiplyScalar(u).addScaledVector(advance,v).toArray(),d=depth(samples,delta);if(d>.0008)continue;const score=u*u+v*v;if(!best||score<best.score)best={u,v,d,score,delta};}console.log({p,strength:f.pose.handGripStrength[0],depth:depth(samples,[0,0,0]),normal:normal.toArray(),advance:advance.toArray(),best});}
+character.dispose();

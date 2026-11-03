@@ -1,0 +1,10 @@
+import {THREE,scene,character,metrics,rig} from './dumbbell-test-helpers.mjs';
+import {createEquipmentSystem} from '../src/equipment.js';
+import {createAdditionalEquipment,ADDITIONAL_EQUIPMENT_TYPES} from '../src/additional-equipment.js';
+import {stations} from '../src/data.js';
+globalThis.document={createElement:()=>({width:128,height:64,getContext:()=>({fillStyle:'',font:'',textAlign:'',fillText(){}})})};
+const materials=Object.fromEntries(['graphite','steel','chrome','black','accent'].map(key=>[key,new THREE.MeshStandardMaterial()]));
+const options={THREE,scene,stations:stations.filter(s=>!['stretchZone','facility'].includes(s.type)&&!ADDITIONAL_EQUIPMENT_TYPES.has(s.type)),materials,characterMetrics:metrics,geometries:new Set(),extraMaterials:new Set(),textures:new Set(),collider(){}};
+const machines=createEquipmentSystem(options).machines;
+for(const [id,machine]of createAdditionalEquipment({...options,stations}).machines)machines.set(id,machine);
+export{THREE,scene,character,metrics,rig,machines};

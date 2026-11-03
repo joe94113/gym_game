@@ -1,0 +1,786 @@
+{
+  "schemaVersion": 1,
+  "source": "CMU Graphics Lab Motion Capture Database",
+  "termsURL": "https://mocap.cs.cmu.edu/faqs.php",
+  "terms": "Motion capture data may be copied, modified, or redistributed without permission. CMU does not guarantee quality or classification.",
+  "attribution": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.",
+  "landmarkNames": [
+    "root",
+    "lhipjoint",
+    "lfemur",
+    "ltibia",
+    "lfoot",
+    "ltoes",
+    "rhipjoint",
+    "rfemur",
+    "rtibia",
+    "rfoot",
+    "rtoes",
+    "lowerback",
+    "upperback",
+    "thorax",
+    "lowerneck",
+    "upperneck",
+    "head",
+    "lclavicle",
+    "lhumerus",
+    "lradius",
+    "lwrist",
+    "lhand",
+    "rclavicle",
+    "rhumerus",
+    "rradius",
+    "rwrist",
+    "rhand"
+  ],
+  "excludedRuntimeLandmarks": [
+    "lfingers",
+    "rfingers",
+    "lthumb",
+    "rthumb"
+  ],
+  "aliases": {
+    "pelvis": "root",
+    "leftHip": "lhipjoint",
+    "rightHip": "rhipjoint",
+    "leftKnee": "lfemur",
+    "rightKnee": "rfemur",
+    "leftAnkle": "ltibia",
+    "rightAnkle": "rtibia",
+    "leftForefoot": "lfoot",
+    "rightForefoot": "rfoot",
+    "leftToe": "ltoes",
+    "rightToe": "rtoes",
+    "waist": "lowerback",
+    "upperSpine": "upperback",
+    "chest": "thorax",
+    "neck": "lowerneck",
+    "head": "head",
+    "leftShoulder": "lclavicle",
+    "rightShoulder": "rclavicle",
+    "leftElbow": "lhumerus",
+    "rightElbow": "rhumerus",
+    "leftWrist": "lradius",
+    "rightWrist": "rradius",
+    "leftHand": "lhand",
+    "rightHand": "rhand"
+  },
+  "layout": "First 3 channels are source root offset from the smoothed crop start, then xyz per landmarkNames. Values are metres. Packed payload is Int16LE at 0.0001 metres per unit, stored in the generated module.",
+  "quantizationMetres": 0.0001,
+  "module": {
+    "path": "src/captured-fullbody-data-v017.js",
+    "sha256": "4fd2231b65cc1e20e77a5b1f4aed5a0ba53fab97ef1b71e4d4e7f819a2098f05",
+    "bytes": 115085
+  },
+  "importerHashes": {
+    "scripts/cmu-fullbody-v017.mjs": "c1278c6145179623d498ff97c419822f0c365cbbdba5c7747799294b9fb989eb",
+    "scripts/import-fullbody-v017.mjs": "56ef8218d6ce6925ed83994b9ebf0f11e25279aeff67fda5c07e0afe92622767"
+  },
+  "sources": [
+    {
+      "id": "cmu-79-93",
+      "subject": "79",
+      "motion": "79_93",
+      "fps": 60,
+      "sourceExercise": "Standing dumbbell shoulder press",
+      "exerciseId": "dumbbell-shoulder-press",
+      "loadInSource": "Two handheld dumbbells; source load mass is unknown.",
+      "crops": [
+        {
+          "id": "shoulder-press-a",
+          "firstFrame": 213,
+          "lastFrame": 559,
+          "sourceDurationSeconds": 5.766666666666667,
+          "fps": 60,
+          "sampleCount": 121,
+          "stride": 84,
+          "seamMaxDistance": 0.20584272704888593,
+          "filter": {
+            "movingAverageRadius": 2,
+            "resampling": "linear in source time, inclusive endpoints",
+            "loopCorrection": "none; runtime must blend constrained loop/rest seams"
+          },
+          "rest": [
+            -0.013086,
+            -0.014162,
+            0.037089,
+            0,
+            0,
+            0,
+            -0.080895,
+            -0.109524,
+            0.043459,
+            -0.093468,
+            -0.474542,
+            -0.146992,
+            -0.125566,
+            -0.902321,
+            -0.078547,
+            -0.151658,
+            -0.941867,
+            0.015188,
+            -0.163997,
+            -0.926974,
+            0.063681,
+            0.093667,
+            -0.095015,
+            0.043468,
+            0.114373,
+            -0.469208,
+            -0.142624,
+            0.150057,
+            -0.906204,
+            -0.121387,
+            0.195399,
+            -0.92966,
+            -0.011517,
+            0.216379,
+            -0.916079,
+            0.04331,
+            -0.003875,
+            0.103856,
+            0.014632,
+            -0.009071,
+            0.206758,
+            0.030705,
+            -0.015976,
+            0.311324,
+            0.028772,
+            -0.022152,
+            0.392886,
+            -0.028717,
+            -0.027905,
+            0.469389,
+            -0.090702,
+            -0.02917,
+            0.561596,
+            -0.128627,
+            -0.21605,
+            0.386285,
+            0.020451,
+            -0.333249,
+            0.148426,
+            -0.024312,
+            -0.34012,
+            0.305229,
+            0.100033,
+            -0.343556,
+            0.38363,
+            0.162205,
+            -0.314083,
+            0.404959,
+            0.154806,
+            0.164765,
+            0.412253,
+            0.052547,
+            0.27028,
+            0.192899,
+            -0.017274,
+            0.282786,
+            0.356474,
+            0.110627,
+            0.28904,
+            0.438262,
+            0.174577,
+            0.295944,
+            0.458586,
+            0.161288
+          ],
+          "maxQuantizationErrorMetres": 0.00004999580738084073,
+          "samplesSHA256": "24e93b5006011d037b08e5de6cf85873dee927192ece3c8f0d46ce2cdaeb4247",
+          "packedSHA256": "cf6258b87286c6f1d606054ef11ebb568777716aa61c28348cbf56bcc0f39801"
+        },
+        {
+          "id": "shoulder-press-b",
+          "firstFrame": 559,
+          "lastFrame": 836,
+          "sourceDurationSeconds": 4.616666666666666,
+          "fps": 60,
+          "sampleCount": 121,
+          "stride": 84,
+          "seamMaxDistance": 0.10354958102752101,
+          "filter": {
+            "movingAverageRadius": 2,
+            "resampling": "linear in source time, inclusive endpoints",
+            "loopCorrection": "none; runtime must blend constrained loop/rest seams"
+          },
+          "rest": [
+            0.007572,
+            0.01255,
+            0.018479,
+            0,
+            0,
+            0,
+            -0.081217,
+            -0.110523,
+            0.040197,
+            -0.096598,
+            -0.471756,
+            -0.158952,
+            -0.113165,
+            -0.902572,
+            -0.146075,
+            -0.140249,
+            -0.938798,
+            -0.051455,
+            -0.153367,
+            -0.92705,
+            -0.002276,
+            0.093398,
+            -0.096697,
+            0.040185,
+            0.125223,
+            -0.477708,
+            -0.125542,
+            0.164884,
+            -0.908353,
+            -0.171686,
+            0.195448,
+            -0.933712,
+            -0.058396,
+            0.208752,
+            -0.924548,
+            -0.001252,
+            -0.008229,
+            0.104672,
+            -0.001882,
+            -0.017932,
+            0.209031,
+            -0.005973,
+            -0.026735,
+            0.313171,
+            -0.020866,
+            -0.032993,
+            0.388304,
+            -0.089097,
+            -0.039901,
+            0.461981,
+            -0.156383,
+            -0.043785,
+            0.553688,
+            -0.197781,
+            -0.227901,
+            0.382389,
+            -0.041747,
+            -0.306651,
+            0.133467,
+            -0.105949,
+            -0.360484,
+            0.282319,
+            0.018412,
+            -0.387401,
+            0.356745,
+            0.080592,
+            -0.361827,
+            0.382921,
+            0.075951,
+            0.151583,
+            0.42123,
+            -0.006476,
+            0.262104,
+            0.203029,
+            -0.070598,
+            0.286359,
+            0.370775,
+            0.051345,
+            0.298487,
+            0.454649,
+            0.112316,
+            0.306949,
+            0.473875,
+            0.098138
+          ],
+          "maxQuantizationErrorMetres": 0.00004999685000001142,
+          "samplesSHA256": "bf5b92b0c17bd9dd66c410a719b4b5ea53cc89555cbc0b099806d3daeb5512ec",
+          "packedSHA256": "874262baa8fd56ba5935e088460067e634b0fe1dfa0cac21ed993ab5cb504bcf"
+        }
+      ],
+      "sourceURL": "https://mocap.cs.cmu.edu/subjects/79/79_93.amc",
+      "skeletonURL": "https://mocap.cs.cmu.edu/subjects/79/79.asf",
+      "catalogURL": "https://mocap.cs.cmu.edu/search.php?subjectnumber=79&trinum=93",
+      "sourceFrames": 1138,
+      "rawSourceHashes": {
+        ".local-tools/cmu-v015/79.asf": "aa7fb254b0e7b9155df59e0f0cf76cbe34c476c6f4b3f015e63d5ae170d2fe2d",
+        ".local-tools/cmu-v015/79_93.amc": "945bc0b9b13936581b0a71f775079f48d4bdbeec3fa6485dfcb5d4a2230927a4"
+      },
+      "bones": {
+        "lhipjoint": {
+          "parent": "root",
+          "lengthMetres": 0.14293822
+        },
+        "lfemur": {
+          "parent": "lhipjoint",
+          "lengthMetres": 0.4134533
+        },
+        "ltibia": {
+          "parent": "lfemur",
+          "lengthMetres": 0.43443821
+        },
+        "lfoot": {
+          "parent": "ltibia",
+          "lengthMetres": 0.1050544
+        },
+        "ltoes": {
+          "parent": "lfoot",
+          "lengthMetres": 0.05224543
+        },
+        "rhipjoint": {
+          "parent": "root",
+          "lengthMetres": 0.14033444
+        },
+        "rfemur": {
+          "parent": "rhipjoint",
+          "lengthMetres": 0.42009286
+        },
+        "rtibia": {
+          "parent": "rfemur",
+          "lengthMetres": 0.43903053
+        },
+        "rfoot": {
+          "parent": "rtibia",
+          "lengthMetres": 0.12120936
+        },
+        "rtoes": {
+          "parent": "rfoot",
+          "lengthMetres": 0.06042942
+        },
+        "lowerback": {
+          "parent": "root",
+          "lengthMetres": 0.10534057
+        },
+        "upperback": {
+          "parent": "lowerback",
+          "lengthMetres": 0.1051402
+        },
+        "thorax": {
+          "parent": "upperback",
+          "lengthMetres": 0.10556804
+        },
+        "lowerneck": {
+          "parent": "thorax",
+          "lengthMetres": 0.10201769
+        },
+        "upperneck": {
+          "parent": "lowerneck",
+          "lengthMetres": 0.10198439
+        },
+        "head": {
+          "parent": "upperneck",
+          "lengthMetres": 0.10336671
+        },
+        "lclavicle": {
+          "parent": "thorax",
+          "lengthMetres": 0.21390469
+        },
+        "lhumerus": {
+          "parent": "lclavicle",
+          "lengthMetres": 0.26985807
+        },
+        "lradius": {
+          "parent": "lhumerus",
+          "lengthMetres": 0.20241824
+        },
+        "lwrist": {
+          "parent": "lradius",
+          "lengthMetres": 0.10120884
+        },
+        "lhand": {
+          "parent": "lwrist",
+          "lengthMetres": 0.03724272
+        },
+        "lfingers": {
+          "parent": "lhand",
+          "lengthMetres": 0.03002602
+        },
+        "lthumb": {
+          "parent": "lwrist",
+          "lengthMetres": 0.04311153
+        },
+        "rclavicle": {
+          "parent": "thorax",
+          "lengthMetres": 0.20912497
+        },
+        "rhumerus": {
+          "parent": "rclavicle",
+          "lengthMetres": 0.25338645
+        },
+        "rradius": {
+          "parent": "rhumerus",
+          "lengthMetres": 0.20913231
+        },
+        "rwrist": {
+          "parent": "rradius",
+          "lengthMetres": 0.10456616
+        },
+        "rhand": {
+          "parent": "rwrist",
+          "lengthMetres": 0.02535123
+        },
+        "rfingers": {
+          "parent": "rhand",
+          "lengthMetres": 0.02043882
+        },
+        "rthumb": {
+          "parent": "rwrist",
+          "lengthMetres": 0.02934614
+        }
+      },
+      "coordinateConvention": "Source actor in metres; y up, root translation subtracted, root Euler-Y yaw removed, x reflected. ASF bone names are endpoints. Mirrored quaternions are [x,-y,-z,w]."
+    },
+    {
+      "id": "cmu-13-29",
+      "subject": "13",
+      "motion": "13_29",
+      "fps": 120,
+      "sourceExercise": "Unweighted squat",
+      "exerciseId": "dumbbell-goblet-squat",
+      "loadInSource": "Bodyweight only; no dumbbell. Adaptation is not a weighted goblet-squat capture.",
+      "crops": [
+        {
+          "id": "bodyweight-squat-a",
+          "firstFrame": 3792,
+          "lastFrame": 4143,
+          "sourceDurationSeconds": 2.925,
+          "fps": 120,
+          "sampleCount": 121,
+          "stride": 84,
+          "seamMaxDistance": 0.20112302584964564,
+          "filter": {
+            "movingAverageRadius": 2,
+            "resampling": "linear in source time, inclusive endpoints",
+            "loopCorrection": "none; runtime must blend constrained loop/rest seams"
+          },
+          "rest": [
+            -0.006658,
+            0.00258,
+            0.0106,
+            0,
+            0,
+            0,
+            -0.093173,
+            -0.106856,
+            0.026715,
+            -0.116523,
+            -0.530559,
+            0.093867,
+            -0.154794,
+            -0.962747,
+            -0.054473,
+            -0.199823,
+            -0.988968,
+            0.067939,
+            -0.218813,
+            -0.981006,
+            0.131275,
+            0.086568,
+            -0.114173,
+            0.026694,
+            0.075631,
+            -0.528526,
+            0.086279,
+            0.116104,
+            -0.957284,
+            -0.084438,
+            0.142892,
+            -1.001131,
+            0.042944,
+            0.153401,
+            -1.001157,
+            0.110054,
+            0.004147,
+            0.112842,
+            0.006025,
+            0.005953,
+            0.225308,
+            0.021675,
+            0.007393,
+            0.338953,
+            0.035492,
+            0.001134,
+            0.438192,
+            0.024699,
+            -0.003033,
+            0.538038,
+            0.016295,
+            0.000561,
+            0.638239,
+            0.020265,
+            -0.187795,
+            0.413996,
+            0.012346,
+            -0.330937,
+            0.152462,
+            -0.041961,
+            -0.447926,
+            0.176555,
+            0.119072,
+            -0.50642,
+            0.188602,
+            0.199588,
+            -0.535979,
+            0.18959,
+            0.214989,
+            0.175581,
+            0.41555,
+            0.039319,
+            0.338987,
+            0.116785,
+            0.075328,
+            0.378723,
+            0.276807,
+            0.195044,
+            0.398591,
+            0.356818,
+            0.254902,
+            0.409063,
+            0.386108,
+            0.2656
+          ],
+          "maxQuantizationErrorMetres": 0.000049999000000022775,
+          "samplesSHA256": "ab5ec61748cef1b970746d4d136055110e8e3e3d3cdcb955c8f25ce57db4dbd5",
+          "packedSHA256": "394972d4a56fdc0e3d165403642c812670fe08761e54c6fa76678e0c25ce0a9c"
+        },
+        {
+          "id": "bodyweight-squat-b",
+          "firstFrame": 4143,
+          "lastFrame": 4501,
+          "sourceDurationSeconds": 2.9833333333333334,
+          "fps": 120,
+          "sampleCount": 121,
+          "stride": 84,
+          "seamMaxDistance": 0.40498521313437214,
+          "filter": {
+            "movingAverageRadius": 2,
+            "resampling": "linear in source time, inclusive endpoints",
+            "loopCorrection": "none; runtime must blend constrained loop/rest seams"
+          },
+          "rest": [
+            0.008984,
+            0.002385,
+            -0.004901,
+            0,
+            0,
+            0,
+            -0.093518,
+            -0.107687,
+            0.021457,
+            -0.116799,
+            -0.53269,
+            0.079303,
+            -0.161974,
+            -0.969685,
+            -0.049829,
+            -0.199439,
+            -0.994893,
+            0.075046,
+            -0.215089,
+            -0.988211,
+            0.139333,
+            0.086185,
+            -0.115454,
+            0.021475,
+            0.074919,
+            -0.530789,
+            0.073512,
+            0.11949,
+            -0.961576,
+            -0.09116,
+            0.164434,
+            -0.98685,
+            0.036795,
+            0.183818,
+            -0.983128,
+            0.102351,
+            0.008274,
+            0.111139,
+            0.016265,
+            0.01672,
+            0.22051,
+            0.042649,
+            0.025433,
+            0.331683,
+            0.065263,
+            0.025001,
+            0.431083,
+            0.059512,
+            0.027875,
+            0.530346,
+            0.047248,
+            0.039342,
+            0.62985,
+            0.044736,
+            -0.165321,
+            0.418404,
+            0.059421,
+            -0.322229,
+            0.178274,
+            -0.027179,
+            -0.435883,
+            0.183115,
+            0.131846,
+            -0.49271,
+            0.185536,
+            0.211358,
+            -0.521994,
+            0.189974,
+            0.228399,
+            0.197316,
+            0.398042,
+            0.065428,
+            0.335074,
+            0.096369,
+            0.022093,
+            0.432322,
+            0.151605,
+            0.158201,
+            0.480946,
+            0.179223,
+            0.226255,
+            0.500224,
+            0.195998,
+            0.240659
+          ],
+          "maxQuantizationErrorMetres": 0.00004999793333326785,
+          "samplesSHA256": "a6a347fc75a2520bc7941b8d2dda96ff0b3c864168de417ecffec6ce3888359d",
+          "packedSHA256": "29e4ec7fde7e4da98e9a94bd1be06cc65a2575f9429e651a2d08e1fa0bc703e8"
+        }
+      ],
+      "sourceURL": "https://mocap.cs.cmu.edu/subjects/13/13_29.amc",
+      "skeletonURL": "https://mocap.cs.cmu.edu/subjects/13/13.asf",
+      "catalogURL": "https://mocap.cs.cmu.edu/search.php?subjectnumber=13&trinum=29",
+      "sourceFrames": 4592,
+      "rawSourceHashes": {
+        ".local-tools/cmu-v015/13.asf": "eb33390bcbccb739d7622bd583fd9be55020868f68689aa6f2060ad688df10dc",
+        ".local-tools/cmu-v015/13_29.amc": "b8ffec0ea28ea24acc46ac6f4775604378ab1120388c45477c7b436ded00c42c"
+      },
+      "bones": {
+        "lhipjoint": {
+          "parent": "root",
+          "lengthMetres": 0.14435272
+        },
+        "lfemur": {
+          "parent": "lhipjoint",
+          "lengthMetres": 0.42963366
+        },
+        "ltibia": {
+          "parent": "lfemur",
+          "lengthMetres": 0.45855072
+        },
+        "lfoot": {
+          "parent": "ltibia",
+          "lengthMetres": 0.13305084
+        },
+        "ltoes": {
+          "parent": "lfoot",
+          "lengthMetres": 0.06660049
+        },
+        "rhipjoint": {
+          "parent": "root",
+          "lengthMetres": 0.14581914
+        },
+        "rfemur": {
+          "parent": "rhipjoint",
+          "lengthMetres": 0.41890075
+        },
+        "rtibia": {
+          "parent": "rfemur",
+          "lengthMetres": 0.46334849
+        },
+        "rfoot": {
+          "parent": "rtibia",
+          "lengthMetres": 0.13862981
+        },
+        "rtoes": {
+          "parent": "rfoot",
+          "lengthMetres": 0.06848009
+        },
+        "lowerback": {
+          "parent": "root",
+          "lengthMetres": 0.11318409
+        },
+        "upperback": {
+          "parent": "lowerback",
+          "lengthMetres": 0.11365202
+        },
+        "thorax": {
+          "parent": "upperback",
+          "lengthMetres": 0.11454723
+        },
+        "lowerneck": {
+          "parent": "thorax",
+          "lengthMetres": 0.10005512
+        },
+        "upperneck": {
+          "parent": "lowerneck",
+          "lengthMetres": 0.10045474
+        },
+        "head": {
+          "parent": "upperneck",
+          "lengthMetres": 0.10061956
+        },
+        "lclavicle": {
+          "parent": "thorax",
+          "lengthMetres": 0.21071558
+        },
+        "lhumerus": {
+          "parent": "lclavicle",
+          "lengthMetres": 0.30490612
+        },
+        "lradius": {
+          "parent": "lhumerus",
+          "lengthMetres": 0.20803108
+        },
+        "lwrist": {
+          "parent": "lradius",
+          "lengthMetres": 0.10401526
+        },
+        "lhand": {
+          "parent": "lwrist",
+          "lengthMetres": 0.03485614
+        },
+        "lfingers": {
+          "parent": "lhand",
+          "lengthMetres": 0.02810188
+        },
+        "lthumb": {
+          "parent": "lwrist",
+          "lengthMetres": 0.04034886
+        },
+        "rclavicle": {
+          "parent": "thorax",
+          "lengthMetres": 0.18506101
+        },
+        "rhumerus": {
+          "parent": "rclavicle",
+          "lengthMetres": 0.34468929
+        },
+        "rradius": {
+          "parent": "rhumerus",
+          "lengthMetres": 0.20492268
+        },
+        "rwrist": {
+          "parent": "rradius",
+          "lengthMetres": 0.10246134
+        },
+        "rhand": {
+          "parent": "rwrist",
+          "lengthMetres": 0.03295498
+        },
+        "rfingers": {
+          "parent": "rhand",
+          "lengthMetres": 0.02656913
+        },
+        "rthumb": {
+          "parent": "rwrist",
+          "lengthMetres": 0.03814809
+        }
+      },
+      "coordinateConvention": "Source actor in metres; y up, root translation subtracted, root Euler-Y yaw removed, x reflected. ASF bone names are endpoints. Mirrored quaternions are [x,-y,-z,w]."
+    }
+  ],
+  "scope": "Four real captured repetitions with multi-joint full-body source landmarks. Runtime retargeting must preserve game bone lengths, enforce hand/foot/equipment contacts and blend loop/lifecycle seams. Source positions and source actor quaternions are reconstructed offline; the compact runtime payload contains source landmarks and root offsets, not finger capture or game-ready direct bone animation. Source fingers/thumbs are excluded and do not supply genuine finger capture. Squat source is unweighted.",
+  "professionalReview": {
+    "status": "pending",
+    "reviewer": null
+  }
+}

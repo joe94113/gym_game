@@ -1,0 +1,35 @@
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {createSkinnedCharacterFromModel} from '../src/skinned-character.js';
+import {createFloorProgram} from '../src/classes/floor-programs.js';
+import {transformBody,transformSurface} from '../src/lifecycle-frame.js';
+import {evaluateExerciseClearance,evaluateSurfaceClearance,evaluateSelfClearance} from '../src/collision-validation.js';
+import {createHash} from 'node:crypto';
+import {buildLocomotionPose} from '../src/locomotion.js';
+const source=readFileSync(new URL('../public/models/athlete/athlete.glb',import.meta.url));
+const jsonLength=source.readUInt32LE(12),json=JSON.parse(source.subarray(20,20+jsonLength).toString());
+for(const material of json.materials||[]){material.pbrMetallicRoughness={baseColorFactor:material.pbrMetallicRoughness?.baseColorFactor||[1,1,1,1]};delete material.normalTexture;delete material.occlusionTexture;delete material.emissiveTexture;delete material.extensions;}
+delete json.images;delete json.textures;delete json.samplers;
+let jsonBytes=Buffer.from(JSON.stringify(json));if(jsonBytes.length%4)jsonBytes=Buffer.concat([jsonBytes,Buffer.alloc(4-jsonBytes.length%4,32)]);
+const remaining=source.subarray(20+jsonLength),header=Buffer.alloc(20);header.writeUInt32LE(0x46546c67,0);header.writeUInt32LE(2,4);header.writeUInt32LE(20+jsonBytes.length+remaining.length,8);header.writeUInt32LE(jsonBytes.length,12);header.writeUInt32LE(0x4e4f534a,16);
+const binary=Buffer.concat([header,jsonBytes,remaining]),gltf=await new GLTFLoader().parseAsync(binary.buffer.slice(binary.byteOffset,binary.byteOffset+binary.byteLength),''),metadata=JSON.parse(readFileSync(new URL('../public/models/athlete/rig.json',import.meta.url)));
+
+const scene=new THREE.Scene(),character=createSkinnedCharacterFromModel({THREE,scene,model:gltf.scene,metadata}),metrics=character.getAssetInfo().metrics,results=[];
+const bar=createFloorProgram({THREE,kind:'barbell',metrics,group:new THREE.Group()}),mat=createFloorProgram({THREE,kind:'pilates',metrics,group:new THREE.Group()}),poses=[buildLocomotionPose(metrics,0,0),buildLocomotionPose(metrics,1.3,1),bar.sample(0),mat.sample(0)];
+for(const pose of poses){delete pose.handFingerFlex;delete pose.handThumbOpposition;}
+const hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
+function snapshot(pose,actor=character){actor.pose(pose);const bones={};actor.group.traverse(o=>{if(o.isBone)bones[o.name]=[...o.matrixWorld.elements];});const skin=actor.getSurfaceSamples({stride:17});return{bones,skin,boneHash:hash(bones),skinHash:hash(skin)};}
+const signatures=poses.map(p=>{const s=snapshot(p);return{boneHash:s.boneHash,skinHash:s.skinHash,bones:Object.keys(s.bones).length,skinVertices:s.skin.length};});
+// Reconstruct only the two-line pre-override branch in memory, leaving all
+// other production code identical. This comparison remains reproducible when
+// class choreography changes the four input poses after this API was added.
+const currentSource=readFileSync(new URL('../src/skinned-character.js',import.meta.url),'utf8'),previousSource=currentSource.replace(/        const fingerOverride=[^\r\n]+;\r?\n        const flex=[^\r\n]+;/,'        const flex=THREE.MathUtils.lerp(resting,closed,gripStrength);').replace(/^      if\(finger.finger==='thumb'&&finger.digit===1\)finger.oppositionAxis=[^\r\n]+;\r?\n/m,'').replace(/        const thumbOpposition=[^\r\n]+;\r?\n        if\(finger.finger==='thumb'&&finger.digit===1&&Number.isFinite\(thumbOpposition\)[^\r\n]+;\r?\n/,''),moduleSource=previousSource.replace(/from '([^']+)'/g,(_,specifier)=>`from '${import.meta.resolve(specifier)}'`),previousModule=await import(`data:text/javascript;base64,${Buffer.from(moduleSource).toString('base64')}`),priorGltf=await new GLTFLoader().parseAsync(binary.buffer.slice(binary.byteOffset,binary.byteOffset+binary.byteLength),''),previousCharacter=previousModule.createSkinnedCharacterFromModel({THREE,scene:new THREE.Scene(),model:priorGltf.scene,metadata}),previousSignatures=poses.map(p=>{const s=snapshot(p,previousCharacter);return{boneHash:s.boneHash,skinHash:s.skinHash,bones:Object.keys(s.bones).length,skinVertices:s.skin.length};});
+const defaultIdentical=JSON.stringify(signatures)===JSON.stringify(previousSignatures),reference=snapshot(poses[2]),override=structuredClone(poses[2]);override.handFingerFlex=[{thumb:[.1,.8,.4]},{}];const changed=snapshot(override),changedBones=Object.keys(reference.bones).filter(name=>reference.bones[name].some((v,i)=>Math.abs(v-changed.bones[name][i])>1e-12));
+const opposition=structuredClone(poses[2]);opposition.handThumbOpposition=[.9,0];const opposed=snapshot(opposition),oppositionChangedBones=Object.keys(reference.bones).filter(name=>reference.bones[name].some((v,i)=>Math.abs(v-opposed.bones[name][i])>1e-12)),zeroOpposition=structuredClone(poses[2]);zeroOpposition.handThumbOpposition=[0,0];const zero=snapshot(zeroOpposition),zeroOppositionIdentity=zero.boneHash===reference.boneHash&&zero.skinHash===reference.skinHash;
+const meshes=new Map();character.group.traverse(m=>{if(m.isSkinnedMesh)meshes.set(m.name,m);});let unaffectedSkinMaxDelta=0,oppositionUnaffectedSkinMaxDelta=0,thumbInfluencedVertices=0;
+for(let i=0;i<reference.skin.length;i++){const a=reference.skin[i],b=changed.skin[i],mesh=meshes.get(a.mesh),ids=mesh.geometry.getAttribute('skinIndex'),weights=mesh.geometry.getAttribute('skinWeight'),v=a.vertex,affected=[0,1,2,3].some(k=>weights.array[v*4+k]>.000001&&/^thumb_.*_r$/.test(mesh.skeleton.bones[ids.array[v*4+k]]?.name));if(affected)thumbInfluencedVertices++;else{unaffectedSkinMaxDelta=Math.max(unaffectedSkinMaxDelta,Math.hypot(...a.position.map((x,j)=>x-b.position[j])));oppositionUnaffectedSkinMaxDelta=Math.max(oppositionUnaffectedSkinMaxDelta,Math.hypot(...a.position.map((x,j)=>x-opposed.skin[i].position[j])));}}
+const invalid=structuredClone(poses[2]);invalid.handFingerFlex=[{thumb:[null,'bad',NaN]},{}];const fallback=snapshot(invalid),invalidFallsBack=fallback.boneHash===reference.boneHash&&fallback.skinHash===reference.skinHash;
+const report={defaultIdentical,defaultCases:signatures,previousCases:previousSignatures,currentSourceHash:hash(currentSource),previousSourceHash:hash(previousSource),changedBones,onlyRequestedThumbChain:changedBones.length>0&&changedBones.every(name=>/^thumb_.*_r$/.test(name)),unaffectedSkinMaxDelta,thumbInfluencedVertices,invalidFallsBack,oppositionChangedBones,oppositionOnlyRequestedThumbChain:oppositionChangedBones.length>0&&oppositionChangedBones.every(name=>/^thumb_.*_r$/.test(name)),oppositionUnaffectedSkinMaxDelta,zeroOppositionIdentity};writeFileSync('artifacts/hand-finger-flex-qualification.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));if(!defaultIdentical||!report.onlyRequestedThumbChain||unaffectedSkinMaxDelta>1e-10||!invalidFallsBack||!report.oppositionOnlyRequestedThumbChain||oppositionUnaffectedSkinMaxDelta>1e-10||!zeroOppositionIdentity)process.exitCode=1;
+
+

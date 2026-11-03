@@ -1,0 +1,13 @@
+import {createBenchFixtureV011} from './bench-fixture-v011.mjs';
+import {measureSeatSkinV011} from './bench-support-mesh-v011.mjs';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const fixture=await createBenchFixtureV011(),{rig,character}=fixture,id='dumbbell-bench-press',angles=(process.env.BENCH_ANGLES||Array.from({length:46},(_,i)=>i).join(',')).split(',').map(Number),results=[],files=['src/incline-bench.js','src/dumbbell-lifecycle-paths.js','src/extended-rig.js','src/rig-lifecycle.js','src/skinned-character.js','public/models/athlete/athlete.glb'],hash=p=>createHash('sha256').update(readFileSync(p)).digest('hex'),hashes=Object.fromEntries(files.map(p=>[p,hash(p)]));
+for(const angle of angles){
+ rig.end({keepVisible:false});rig.setEquipmentSettings(id,{benchAngle:angle});rig.prepare(id);const r={angle,samples:[]};
+ for(const phase of [0,.5,1]){character.pose(rig.sample(id,phase,phase));r.samples.push({mode:'loop',phase,...measureSeatSkinV011({...fixture,id})});}
+ const meta=rig.getLifecycle(id);let elapsed=0;for(const stage of meta.stages){elapsed+=stage.duration;if(stage.label==='啞鈴先穩放大腿上'){character.pose(rig.sampleLifecycle(id,'enter',elapsed/meta.entryDuration).pose);r.samples.push({mode:'seated',...measureSeatSkinV011({...fixture,id})});break;}}
+ r.deepestGap=Math.min(...r.samples.map(s=>s.deepestGap));r.maxSeatedSupportGap=Math.max(...r.samples.filter(s=>s.mode==='seated').map(s=>Math.abs(s.closestGap??Infinity)));r.maxLoopPelvisThighGap=Math.max(...r.samples.filter(s=>s.mode==='loop').map(s=>Math.abs(s.closestGap??Infinity)));r.pass=r.deepestGap>=-.006&&r.maxSeatedSupportGap<.006;results.push(r);console.log(JSON.stringify({angle,deepestGap:r.deepestGap,maxSeatedSupportGap:r.maxSeatedSupportGap,maxLoopPelvisThighGap:r.maxLoopPelvisThighGap,pass:r.pass}));
+}
+const changedSources=files.filter(p=>hash(p)!==hashes[p]),pass=results.every(r=>r.pass)&&!changedSources.length;
+writeFileSync(`artifacts/v011-bench-seat-contact-${process.env.DB_REPORT_LABEL||'all-final'}.json`,JSON.stringify({pass,hashes,changedSources,scope:'Actual rounded-pad triangle ray intersections with finite nearest/potentially penetrating pelvis and thigh skin candidates, three loop phases and supported seated stage per angle. Signed skin gap is independent of allowed contact exceptions. Seated support must be within 6mm; loop pelvis/thigh samples test penetration while torso/back support is verified separately in the all-angle back-pad report. A 6mm soft-cushion screen is distinct from the unchanged 1mm metal screen; no pressure or real load simulation.',results},null,2));character.dispose();if(!pass)process.exitCode=1;

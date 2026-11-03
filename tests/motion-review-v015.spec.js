@@ -1,0 +1,35 @@
+import {test,expect} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import {viteClientShim} from './vite-client-shim.js';
+
+test('審查包保留實際多向圖，可安全往返匯入與離線閱讀，關閉還原原動作',async({page})=>{
+ const errors=[];page.on('pageerror',error=>errors.push(error.message));
+ await page.addInitScript(()=>{window.requestAnimationFrame=()=>0;});
+ await page.route('**/@vite/client',route=>route.fulfill({body:viteClientShim,contentType:'text/javascript'}));
+ await page.goto('/');await page.waitForFunction(()=>window.__FORM__?.state.loaded,null,{timeout:120000,polling:100});
+ await page.evaluate(()=>{const app=window.__FORM__;app.openExercise('dumbbell-curl');if(!app.world.advanceUntilReady(180,false))throw Error('not ready');app.world.seekExercise(.27);app.world.setAnimationPaused(false);});
+ const original=await page.evaluate(()=>window.__FORM__.world.getActivityState());
+ await page.locator('.header-actions [data-action=help]').click();await page.locator('[data-action=motion-review]').click();
+ const dialog=page.locator('.motion-review-dialog');await expect(dialog).toBeVisible();
+ await dialog.locator('[data-review-direction]').selectOption('enter');
+ await dialog.locator('[data-review-phase]').evaluate(element=>{element.value='.35';element.dispatchEvent(new Event('change',{bubbles:true}));});
+ await dialog.locator('[data-review-view=front]').click();await dialog.locator('[data-review-view=back]').click();
+ await expect(dialog.locator('.review-evidence-matrix h3')).toHaveText('這個動作已拍 3／9 格');
+ await expect(dialog.locator('.review-evidence-empty')).toHaveCount(6);
+ await dialog.locator('[name=reviewer]').fill('測試填表人');await dialog.locator('[name=notes]').fill('側面準備動作需要再複核。');await dialog.locator('[name=status]').selectOption('needs-fix');
+ await dialog.locator('button[type=submit]').click();
+ let download=page.waitForEvent('download');await dialog.locator('[data-review-export]').click();const jsonFile=await download;
+ const bundle=JSON.parse(readFileSync(await jsonFile.path(),'utf8'));
+ expect(bundle.version).toBe(3);expect(bundle.sourceVersion).toBe(JSON.parse(readFileSync('package.json','utf8')).version);expect(bundle.records).toHaveLength(1);expect(bundle.evidence).toHaveLength(3);expect(bundle.records[0].professionalSignoff).toBe(false);expect(bundle.records[0].inspection).toEqual({direction:'enter',phase:.35});
+ expect(bundle.evidence.map(item=>item.view).sort()).toEqual(['back','front','side']);
+ expect(bundle.evidence.every(item=>item.image.startsWith('data:image/png;base64,'))).toBe(true);
+ download=page.waitForEvent('download');await dialog.locator('[data-review-html]').click();const htmlFile=await download,html=readFileSync(await htmlFile.path(),'utf8');
+ expect(html).toContain('填表人意見，不代表資格認證');expect(html).toContain('data:image/png;base64,');expect(html).not.toContain('<script');
+ const invalid=structuredClone(bundle);invalid.records[0].id='not-a-real-exercise';
+ await dialog.locator('[data-review-import]').setInputFiles({name:'bad-review.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});
+ await expect(dialog.locator('[role=status]')).toContainText('匯入未套用');expect(await page.evaluate(()=>window.__FORM__.review.getRecords().length)).toBe(1);
+ await dialog.locator('[data-review-import]').setInputFiles({name:'good-review.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(bundle))});
+ await expect(dialog.locator('[role=status]')).toContainText('已匯入 0 筆');expect(await page.evaluate(()=>window.__FORM__.review.getRecords().length)).toBe(1);
+ await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();
+ const restored=await page.evaluate(()=>window.__FORM__.world.getActivityState());expect(restored.phase).toBeCloseTo(original.phase,6);expect(restored.paused).toBe(original.paused);expect(errors).toEqual([]);
+});

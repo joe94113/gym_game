@@ -1,0 +1,26 @@
+{
+  "name": "form-gym-explorer",
+  "version": "0.18.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "build:pages": "node scripts/build-pages.mjs",
+    "test": "playwright test",
+    "test:features": "node --test tests/room-zones.test.mjs tests/equipment-batching.test.mjs tests/equipment-settings.test.mjs tests/training-plan.test.mjs tests/training-route.test.mjs tests/npc-geometry-lod-v010.test.mjs tests/dumbbell-wrist-v010.test.mjs tests/bench-angle-range-v011.test.mjs tests/room-gpu-resources-v011.test.mjs tests/cable-v011.test.mjs tests/actor-skeletons-v012.test.mjs tests/canvas-updates-v012.test.mjs tests/navigation-search-v012.test.mjs tests/path-queue-v013.test.mjs tests/training-journal-v013.test.mjs tests/equipment-calibration-v013.test.mjs tests/preparation-v013.test.mjs tests/account-api-v013.test.mjs tests/aerial-suspension-v013.test.mjs tests/performance-tools-v013.test.mjs",
+    "test:quality": "node --test tests/render-quality.test.mjs",
+    "test:courses": "node --test tests/course-timeline.test.mjs tests/course-runtime.test.mjs tests/course-audio.test.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "start": "node server/start.mjs",
+    "preview:mobile": "node scripts/mobile-preview-v016.mjs",
+    "test:mobile": "playwright test --config playwright.mobile-v016.config.js"
+  },
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5",
+    "@playwright/test": "^1.56.0"
+  }
+}

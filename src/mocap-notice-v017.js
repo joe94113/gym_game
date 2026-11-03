@@ -1,0 +1,8 @@
+import {inertialCurlInfo} from './inertial-curl-v018.js';
+import {lateralReferenceInfo} from './lateral-reference-v018.js';
+import {lowerBodyCaptureInfo} from './lower-body-capture-v018.js';
+const sources={
+  'dumbbell-shoulder-press':{text:'採用真人肩推動作資料，依人物比例與啞鈴握位調整。',url:'https://mocap.cs.cmu.edu/search.php?subjectnumber=79&trinum=93'},
+  'dumbbell-goblet-squat':{text:'依徒手深蹲動捕改編；手部配合杯式托鈴，來源拍攝沒有持啞鈴。',url:'https://mocap.cs.cmu.edu/search.php?subjectnumber=13&trinum=29'},
+};
+export function mocapNotice(id){const source=sources[id];if(source)return `<p class="mocap-source-note" data-mocap-source="${id}"><strong>真人資料改編</strong><span>${source.text}</span><a href="${source.url.replaceAll('&','&amp;')}" target="_blank" rel="noopener noreferrer">CMU 動作來源 ↗</a></p>`;const imu=inertialCurlInfo(id),upper=lateralReferenceInfo(id);if(imu||upper){const ref=imu||upper;return `<p class="mocap-source-note" data-mocap-source="${id}"><strong>${imu?'真人感測節奏參考':'真人手臂動作參考'}</strong><span>${imu?'參考真人啞鈴彎舉的感測節奏，活動範圍與握法依這個動作調整。':'參考無負重肩外展的右手動捕，左手以鏡射呈現；抬舉高度保留啞鈴示範的範圍。'}</span><a href="${ref.sourceURL}" target="_blank" rel="noopener noreferrer">${imu?'UCI':'UI-PRMD'} 資料來源 ↗</a></p>`;}const lower=lowerBodyCaptureInfo(id);if(!lower)return ''; return `<p class="mocap-source-note" data-mocap-source="${id}"><strong>${lower.kind==='measured-tempo'?'真人節奏參考':'真人下肢資料參考'}</strong><span>${lower.task==='heel_raise'?'參考站姿提踵的實測節奏，行程與踏板接點依器材校正。':lower.task==='deadlift'?'參考抬箱動作的下肢節奏與骨盆變化，示範保留硬舉的活動範圍與握法。':'節奏參考來自真人深蹲，站位與行程依這台器材校正。'}</span><a href="https://dongxutang918-afk.github.io/SAME-Limb/" target="_blank" rel="noopener noreferrer">SAME-Limb 資料來源 ↗</a></p>`;}

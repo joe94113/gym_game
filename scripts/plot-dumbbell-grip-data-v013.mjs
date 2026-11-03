@@ -1,0 +1,14 @@
+import {THREE,character,metrics,rig} from './dumbbell-test-helpers.mjs';
+import {writeFileSync,mkdirSync} from 'node:fs';
+const id='dumbbell-bench-press',base=rig.sample(id,.5,.5),side=0,suffix=metrics.arms[side].anatomicalSide;
+const center=rig.getVisualRoot(id).children.filter(o=>o.isGroup&&o.children.some(c=>c.geometry?.parameters?.radiusTop===.016))[side].position.clone();
+const axis=new THREE.Vector3(...base.handDirections[side]).normalize(),advance=new THREE.Vector3(...base.handAdvances[side]).normalize(),normal=new THREE.Vector3().crossVectors(advance,axis).multiplyScalar(-1).normalize(),fingers=['index','middle','ring','pinky','thumb'],meshes=new Map(),bones=new Map();
+character.group.traverse(o=>{if(o.isSkinnedMesh)meshes.set(o.name,o);if(o.isBone)bones.set(o.name,o);});
+const coords=p=>{const d=new THREE.Vector3(...p).sub(center);return[d.dot(axis),d.dot(advance),d.dot(normal)];};
+const precise=process.env.DB_PRECISE_AXES==='1';if(precise)base.handFingerBendAxes=metrics.arms.map(arm=>Object.fromEntries(fingers.filter(f=>f!=='thumb').map(f=>[f,arm.fingerBendAxes[f]])));
+const offset=[Number(process.env.DB_ADVANCE_SHIFT||0),Number(process.env.DB_NORMAL_SHIFT||0)];base.hands[0]=new THREE.Vector3(...base.hands[0]).addScaledVector(advance,offset[0]).addScaledVector(normal,offset[1]).toArray();
+if(process.env.DB_PROFILE)base.handFingerFlex[0]=JSON.parse(process.env.DB_PROFILE);
+character.pose(base);const points=character.getSurfaceSamples({stride:1,parts:['leftHand']}).map(sample=>{const mesh=meshes.get(sample.mesh),ids=mesh.geometry.getAttribute('skinIndex'),weights=mesh.geometry.getAttribute('skinWeight');let best=null,w=0;for(let k=0;k<4;k++){const name=mesh.skeleton.bones[ids.array[sample.vertex*4+k]]?.name,weight=weights.array[sample.vertex*4+k];if(weight>w){best=name;w=weight;}}return{point:coords(sample.position),bone:best,weight:w};});
+const joints=Object.fromEntries(fingers.map(f=>[f,[1,2,3].map(i=>coords(bones.get(`${f}_0${i}_${suffix}`).getWorldPosition(new THREE.Vector3()).toArray()))]));
+const hits=points.map(p=>({...p,depth:Math.min(.016-Math.hypot(p.point[1],p.point[2]),.19-Math.abs(p.point[0]))})).filter(p=>p.depth>0).sort((a,b)=>b.depth-a.depth);console.log(JSON.stringify(hits.slice(0,8)));
+mkdirSync('artifacts/dumbbell-fingers-v013',{recursive:true});writeFileSync(`artifacts/dumbbell-fingers-v013/plot-${process.env.DB_LABEL||'baseline'}.json`,JSON.stringify({points,joints,profile:base.handFingerFlex[0],offset,precise}));character.dispose();

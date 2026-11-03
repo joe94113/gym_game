@@ -1,0 +1,30 @@
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createSkinnedCharacterFromModel} from '../src/skinned-character.js';
+import {createEquipmentProgram} from '../src/classes/equipment-programs.js';
+import {solveHandContactFrame} from '../src/hand-contact-frame.js';
+import {evaluateExerciseClearance,evaluateSelfClearance,evaluateSurfaceClearance} from '../src/collision-validation.js';
+
+// Load the production human rig and skin without requesting a GPU or textures.
+const source=readFileSync(new URL('../public/models/athlete/athlete.glb',import.meta.url));
+const jsonLength=source.readUInt32LE(12),json=JSON.parse(source.subarray(20,20+jsonLength).toString());
+for(const material of json.materials||[]){material.pbrMetallicRoughness={baseColorFactor:material.pbrMetallicRoughness?.baseColorFactor||[1,1,1,1]};delete material.normalTexture;delete material.occlusionTexture;delete material.emissiveTexture;delete material.extensions;}
+delete json.images;delete json.textures;delete json.samplers;
+let bytes=Buffer.from(JSON.stringify(json));if(bytes.length%4)bytes=Buffer.concat([bytes,Buffer.alloc(4-bytes.length%4,32)]);
+const remainder=source.subarray(20+jsonLength),header=Buffer.alloc(20);header.writeUInt32LE(0x46546c67,0);header.writeUInt32LE(2,4);header.writeUInt32LE(20+bytes.length+remainder.length,8);header.writeUInt32LE(bytes.length,12);header.writeUInt32LE(0x4e4f534a,16);
+const binary=Buffer.concat([header,bytes,remainder]),gltf=await new GLTFLoader().parseAsync(binary.buffer.slice(binary.byteOffset,binary.byteOffset+binary.byteLength),'');
+const metadata=JSON.parse(readFileSync(new URL('../public/models/athlete/rig.json',import.meta.url))),scene=new THREE.Scene();
+const character=createSkinnedCharacterFromModel({THREE,scene,model:gltf.scene,metadata}),metrics=character.getAssetInfo().metrics;
+globalThis.document={createElement:()=>({width:128,height:64,getContext:()=>({fillStyle:'',font:'',textAlign:'',fillText(){}})})};
+const materials={};for(const key of ['graphite','steel','chrome','black','accent'])materials[key]=new THREE.MeshStandardMaterial();
+
+const V=p=>new THREE.Vector3(...p),Y=new THREE.Vector3(0,1,0),results=[];
+function grips(group,kind){group.updateMatrixWorld(true);const inverse=group.matrixWorld.clone().invert(),out=[];group.traverse(o=>{const p=o.geometry?.parameters;if(!o.isMesh||o.geometry.type!=='CylinderGeometry'||Math.abs(p.radiusTop-.016)>1e-7)return;const transform=new THREE.Matrix4().multiplyMatrices(inverse,o.matrixWorld),a=V([0,-p.height/2,0]).applyMatrix4(transform),b=V([0,p.height/2,0]).applyMatrix4(transform);out.push({center:a.clone().add(b).multiplyScalar(.5).toArray(),axis:b.clone().sub(a).normalize().toArray(),halfLength:a.distanceTo(b)/2,radius:p.radiusTop});});return out.sort((a,b)=>a.center[0]-b.center[0]);}
+function measure(samples,cylinder){const axis=V(cylinder.axis),center=V(cylinder.center);let count=0,maxDepth=0,minGap=Infinity;for(const sample of samples){const p=V(sample.position).sub(center),along=p.dot(axis);if(Math.abs(along)>cylinder.halfLength)continue;const radial=p.addScaledVector(axis,-along).length(),depth=Math.min(cylinder.radius-radial,cylinder.halfLength-Math.abs(along));minGap=Math.min(minGap,radial-cylinder.radius);maxDepth=Math.max(maxDepth,depth);if(depth>.001)count++;}return{count,maxDepth,minGap:Number.isFinite(minGap)?minGap:null};}
+function capDepth(samples,cylinder){let deepest=0;for(const sign of [-1,1]){const center=V(cylinder.center).addScaledVector(V(cylinder.axis),sign*.11);for(const sample of samples)deepest=Math.max(deepest,.018-V(sample.position).distanceTo(center));}return deepest;}
+const phaseCount=Number(process.env.FORM_PHASE_COUNT||101),envelopes=process.env.FORM_ENVELOPE_SWEEP==='1'?[0,.25,.5,.75,1]:[1];
+for(const kind of ['cycle','trx']){if(process.env.FORM_KIND&&kind!==process.env.FORM_KIND)continue;const group=new THREE.Group();scene.add(group);const program=createEquipmentProgram({kind,metrics,group,materials,geometries:new Set(),extraMaterials:new Set()});for(const motionId of [...(process.env.FORM_LIFE_ONLY?[]:program.getCourseMotionIds()),'enter','exit']){const life=['enter','exit'].includes(motionId),r={kind,motionId,samples:0,maxDepth:0,maxCapDepth:0,maxVertexCount:0,minGap:null,maxNearContactGap:0,worst:null};for(let index=0;index<phaseCount*(life?1:envelopes.length);index++){const phase=(index%phaseCount)/(phaseCount-1),envelope=envelopes[Math.floor(index/phaseCount)]??1,frame=life?program.sampleLifecycle(motionId,phase):{pose:program.sampleCourse({motionId,repPhase:phase,cycleTurns:phase,phase,envelope,intensity:1}),offset:[0,0,0],rotation:0,contacts:{hands:[true,true]}},pose=frame.pose;character.pose(pose);const cylinders=grips(group,kind);for(let i=0;i<2;i++){const points=character.getSurfaceSamples({stride:1,parts:[i?'rightHand':'leftHand']}).map(s=>({...s,position:V(s.position).applyAxisAngle(Y,frame.rotation||0).add(V(frame.offset)).toArray()})),m=measure(points,cylinders[i]);r.samples+=points.length;r.minGap=Math.min(r.minGap??Infinity,m.minGap??Infinity);if(kind==='cycle')r.maxCapDepth=Math.max(r.maxCapDepth,capDepth(points,cylinders[i]));if(frame.contacts?.hands?.[i])r.maxNearContactGap=Math.max(r.maxNearContactGap,m.minGap??0);if(m.maxDepth>r.maxDepth){r.maxDepth=m.maxDepth;r.maxVertexCount=m.count;r.worst={phase,side:i,...m,cylinder:cylinders[i],frame};}}}results.push(r);console.log(JSON.stringify({...r,worst:r.worst?{phase:r.worst.phase,side:r.worst.side,stage:r.worst.frame.stage}:null}));}}
+const pass=results.every(r=>r.maxDepth<=.001&&r.maxCapDepth<=.001);writeFileSync(`artifacts/${process.env.FORM_REPORT_NAME||'equipment-hard-grip-qualification.json'}`,JSON.stringify({pass,phaseCount,envelopes,scope:'Read actual rendered finite grip cylinders and cycle endcap spheres; all hand-tagged skin vertices stride1. No box or whole-hand contact exemption.',results},null,2));if(!pass)process.exitCode=1;
+
+

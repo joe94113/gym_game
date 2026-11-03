@@ -1,0 +1,9 @@
+// Monotone C1 scalar references, bounded to keep sparse sensor bursts from
+// producing a sudden joint/attachment velocity on an authored safe path.
+const clamp=x=>Math.max(0,Math.min(1,x));
+export function referenceCurve(input){const values=Float64Array.from(input),slopes=new Float64Array(values.length);for(let i=1;i<values.length-1;i++){const a=values[i]-values[i-1],b=values[i+1]-values[i];slopes[i]=a*b>0?2*a*b/(a+b):0;}return{values,slopes};}
+export function evaluateReference({values,slopes},p){p=clamp(p);if(p===0)return values[0];if(p===1)return values.at(-1);const at=p*(values.length-1),i=Math.min(values.length-2,Math.floor(at)),t=at-i,t2=t*t,t3=t2*t;return clamp((2*t3-3*t2+1)*values[i]+(t3-2*t2+t)*slopes[i]+(-2*t3+3*t2)*values[i+1]+(t3-t2)*slopes[i+1]);}
+function pacedBranch(input,blend){const a=[...input],step=1.8/(a.length-1);a[0]=0;a[a.length-1]=1;for(let i=1;i<a.length;i++)a[i]=Math.min(a[i],a[i-1]+step);a[a.length-1]=1;for(let i=a.length-2;i>=0;i--)a[i]=Math.max(a[i],a[i+1]-step);return referenceCurve(a.map((v,i)=>{const t=i/(a.length-1);return blend*v+(1-blend)*t*t*(3-2*t);}));}
+export function preparePacedReference(progress,{blend=.35}={}){const raw=referenceCurve(progress),peak=progress.indexOf(Math.max(...progress))/(progress.length-1);return{peak,out:pacedBranch(Array.from({length:61},(_,i)=>evaluateReference(raw,peak*i/60)),blend),back:pacedBranch(Array.from({length:61},(_,i)=>1-evaluateReference(raw,peak+(1-peak)*i/60)),blend),raw};}
+export function pacedReferenceEffort(record,phase){const p=clamp(phase);return p<.44?evaluateReference(record.out,p/.44):1-evaluateReference(record.back,(p-.44)/.56);}
+export function sourcePhaseAtEffort(record,phase,effort){let low=phase<.44?0:record.peak,high=phase<.44?record.peak:1;for(let i=0;i<24;i++){const mid=(low+high)/2,v=evaluateReference(record.raw,mid);if(phase<.44?v<effort:v>effort)low=mid;else high=mid;}return(low+high)/2;}

@@ -1,0 +1,67 @@
+{
+  "source": "Only the unchanged fields of the original v0.10 full-hash fixture; never a recapture of the new grip.",
+  "originalFixture": {
+    "path": "tests/fixtures/legacy-rig-v011.json",
+    "sha256": "37404e53817ad1cdc297171b0b257eaae1b38ee3b3ea02cf47c9ccba06b97102"
+  },
+  "phases": [
+    0,
+    0.17,
+    0.43,
+    0.71,
+    1
+  ],
+  "archivedSourceHashes": {
+    "src/extended-rig.js": "22c6902fe858eb974c79cad122db7f27efd89514c1f6ff5c6f88ded0d0fa22ef",
+    "src/dumbbell-grip.js": "624608a449c0feb0c085161b8ee07edf35a12b15e04c0a1bb69452f55658589b",
+    "src/rig-lifecycle.js": "174ffadd17e41568442279278f70a2e5f8c0f5076e4755ce1de5caee931d1afe",
+    "src/skinned-character.js": "1f115cd5081dcfa78e77cd1ca38f3fb535adc441955f6b01d42c555dc97f3980"
+  },
+  "motions": {
+    "dumbbell-curl": {
+      "protectedLoop": "989ebf7d343386a59a0a81ca8b5f02835765bd49e799550e6b897137754ab747",
+      "originalHandProfile": "e85ce15a39391541a91ff168e74e0e81504e5d0b25d49e24b63b03bd38e4a553",
+      "physicalLoops": "b970fceca36027a486ebf11d386a7dbd578d3521c41c7ea7a32b7aa7c0525a15",
+      "protectedLifecycle": "d5088d9972ca144dd805b263879b515232b76438e0588b3778832b2b2695c86b"
+    },
+    "dumbbell-bench-press": {
+      "protectedLoop": "5d2fa43358d7c002c9c76c4a17e1534ca025f2cef49a1617dbcacdfc7955acc8",
+      "originalHandProfile": "e85ce15a39391541a91ff168e74e0e81504e5d0b25d49e24b63b03bd38e4a553",
+      "physicalLoops": "523d96314db96ed06429f46e5da6de5773ba379e4de9b4da282f1b0140943dbc"
+    },
+    "dumbbell-hammer-curl": {
+      "protectedLoop": "de76d1b2408dc258fe8ee99718b0fb372c149535ba0012ed17fa0301e3e249c5",
+      "originalHandProfile": "e85ce15a39391541a91ff168e74e0e81504e5d0b25d49e24b63b03bd38e4a553",
+      "physicalLoops": "f5c6214ec6cd13b56fa811dae2a622cbf493c0ea7326c583e622837beabd8bc3",
+      "protectedLifecycle": "cc47f27ec8d9fdd91b8ba16f5b433e67e0f83c8aa58cfefdfeef1b7f8cf5fb0c"
+    },
+    "dumbbell-shoulder-press": {
+      "protectedLoop": "2904a87f64aac884cfe93b112428974c9f0752a36373b70e3e373470aa2b3545",
+      "originalHandProfile": "e85ce15a39391541a91ff168e74e0e81504e5d0b25d49e24b63b03bd38e4a553",
+      "physicalLoops": "560517f4e49a6e3b3eabb308f0087c3db9818fe84aaf3edb7d4bc57cac6066bb",
+      "protectedLifecycle": "6d8740957dee3c51649193d49bea41d0409cd9419bc84acd2887bdd46c871ae0"
+    },
+    "dumbbell-lateral-raise": {
+      "protectedLoop": "3bdd2dabb2a45071721f1385f799ed35b2fa76aa4e800b5743d0911d60a2abb3",
+      "originalHandProfile": "e85ce15a39391541a91ff168e74e0e81504e5d0b25d49e24b63b03bd38e4a553",
+      "physicalLoops": "5273c670f4dfd387c6df38736294d578179dccd00a806c0f435b46b68f0dfae5",
+      "protectedLifecycle": "cc47f27ec8d9fdd91b8ba16f5b433e67e0f83c8aa58cfefdfeef1b7f8cf5fb0c"
+    },
+    "dumbbell-single-arm-row": {
+      "protectedLoop": "3746990a4a3f7ca79d92c943a68b6a1e0e8de2ce897352e12d2872bd3d74adac",
+      "originalHandProfile": "034ad739d45b795af49044de8812d09623b5ce241fc603e8d3867c2992aba893",
+      "physicalLoops": "b42d73240e364cea0c003f591482eab84e2b534dd9d91a467c6b5533cf9906fa",
+      "protectedLifecycle": "ed2f9d2a59448c7897beda34884e68d6ba7229db5d82441e9b80c45da72bf925"
+    },
+    "dumbbell-romanian-deadlift": {
+      "protectedLoop": "c1f9adadccc15d1b9a865e3929ce41be401498205056f3814092c73cf7277c77",
+      "originalHandProfile": "e85ce15a39391541a91ff168e74e0e81504e5d0b25d49e24b63b03bd38e4a553",
+      "physicalLoops": "f02ceb28b4891ad8d170144c333882c675689fde32ac64df81542e97fb8753f4",
+      "protectedLifecycle": "367145495724dbc82f3c80fb9c3b0f2f125ddc80019db5e218424ec99f01c956"
+    }
+  },
+  "bench30": {
+    "protectedLoop": "c41a7607ad1ec4f9d8fa2700122184b622dcc5235bbbfc71c76253ae3cbd40a3",
+    "physicalLoops": "0f51c7455ee42fea1c8a9ef14982d6544850b4905176f29df1eb113e217e40c5"
+  }
+}

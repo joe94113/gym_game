@@ -1,0 +1,792 @@
+{
+  "version": 3,
+  "brand": "肌動基地",
+  "sourceVersion": "0.15.0",
+  "generatedAt": "2026-10-29T06:30:07.367Z",
+  "professionalSignoff": false,
+  "scope": "填表人意見與實際擷取畫面，不代表資格認證或所有姿勢皆安全。",
+  "records": [],
+  "evidence": [],
+  "checklist": [
+    {
+      "id": "dumbbell-curl",
+      "name": "站姿啞鈴彎舉",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Mayo Clinic｜Biceps curl",
+        "url": "https://www.mayoclinic.org/healthy-lifestyle/fitness/multimedia/biceps-curl/vid-20084675"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "dumbbell-bench-press",
+      "name": "平板啞鈴臥推",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Dumbbell chest press",
+        "url": "https://www.acefitness.org/resources/everyone/blog/3714/beginner-strength-training-workout/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "rope-pushdown",
+      "name": "高位繩索三頭下壓",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Triceps pushdowns",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/185/triceps-pushdowns/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "single-arm-cable-row",
+      "name": "單手滑輪划船",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Single arm row",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/337/single-arm-row/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "kneeling-hip-flexor-stretch",
+      "name": "跪姿髖屈肌伸展",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Kneeling hip-flexor stretch",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/142/kneeling-hip-flexor-stretch/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "dumbbell-hammer-curl",
+      "name": "啞鈴槌式彎舉",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Hammer curl",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/10/hammer-curl/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "dumbbell-shoulder-press",
+      "name": "站姿啞鈴肩推",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Dumbbell shoulder press",
+        "url": "https://www.acefitness.org/resources/pros/expert-articles/9074/smart-shoulder-solutions-an-evidence-based-approach-to-training-the-deltoids/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "dumbbell-lateral-raise",
+      "name": "啞鈴側平舉",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜側平舉（啞鈴變式參考）",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/354/single-arm-lateral-raise/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "dumbbell-single-arm-row",
+      "name": "單手啞鈴划船",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜單手划船（站姿支撐變式參考）",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/126/single-arm-row/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "dumbbell-goblet-squat",
+      "name": "啞鈴杯式深蹲",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Goblet squat",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/362/goblet-squat/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "dumbbell-romanian-deadlift",
+      "name": "啞鈴羅馬尼亞硬舉",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Romanian deadlift",
+        "url": "https://www.acefitness.org/continuing-education/certified/may-2025/8865/the-ace-do-it-better-series-the-romanian-deadlift/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "standing-hamstring-stretch",
+      "name": "站姿腿後側伸展",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "NHS CUH｜站姿腿後側伸展",
+        "url": "https://www.cuh.nhs.uk/patient-information/stretches-for-the-hip/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "seated-glute-stretch",
+      "name": "坐姿臀部伸展",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜坐姿臀部伸展（變式參考）",
+        "url": "https://www.acefitness.org/resources/everyone/blog/5681/3-stretches-for-opening-up-tight-hips/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "standing-chest-shoulder-stretch",
+      "name": "站姿胸肩伸展",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜站姿胸部伸展（變式參考）",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/209/standing-chest-stretch/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "standing-calf-stretch",
+      "name": "扶桿小腿伸展",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Health and Wellbeing Queensland｜小腿伸展",
+        "url": "https://hw.qld.gov.au/physical-activity/standing-calf-stretch/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "standing-thoracic-rotation",
+      "name": "站姿胸椎轉動",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜胸椎轉動（站姿變式參考）",
+        "url": "https://www.acefitness.org/resources/pros/expert-articles/5412/how-to-increase-upper-body-stability-and-mobility/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "cable-straight-bar-curl",
+      "name": "滑輪彎舉・直桿",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜彎舉（直桿變式參考）",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/322/standing-bicep-curl/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "cable-ez-bar-curl",
+      "name": "滑輪彎舉・EZ 桿",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜彎舉（EZ 桿變式參考）",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/322/standing-bicep-curl/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "cable-v-bar-row",
+      "name": "滑輪划船・V 把",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "NASM｜窄握划船（站姿 V 把變式參考）",
+        "url": "https://www.nasm.org/resource-center/exercise-library/seated-machine-row-close-grip"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "cable-rope-face-pull",
+      "name": "繩索面拉",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "NASM｜Face pull",
+        "url": "https://www.nasm.org/resource-center/exercise-library/face-pull"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "cable-single-arm-lateral-raise",
+      "name": "單手滑輪側平舉",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜單手滑輪側平舉（高度變式參考）",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/354/single-arm-lateral-raise/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "cable-ankle-kickback",
+      "name": "腳踝帶髖後踢",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Single-leg cable extension",
+        "url": "https://www.acefitness.org/resources/pros/expert-articles/6355/8-butt-toning-moves/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "cable-rope-hammer-curl",
+      "name": "繩索槌式彎舉",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Gold’s Gym BC｜繩索槌式彎舉",
+        "url": "https://goldsgymbc.ca/wp-content/uploads/2023/09/GGBC-4-Day-Machine-Focused.pdf"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "cable-straight-arm-pulldown",
+      "name": "直桿直臂下拉",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Catalyst Athletics｜Straight-arm pulldown",
+        "url": "https://www.catalystathletics.com/exercise/907/Straight-Arm-Pulldown/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "cable-rope-crunch",
+      "name": "站姿繩索捲腹",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Standing crunch",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/331/standing-crunch/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-chest-press",
+      "name": "坐姿胸推機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "NASM｜Chest Press Machine",
+        "url": "https://www.nasm.org/resource-center/exercise-library/chest-press-machine"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-lat-pulldown",
+      "name": "高位下拉機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "NASM｜Lat Pulldown 動作與肌群",
+        "url": "https://www.nasm.org/resource-center/blog/training/the-biomechanics-of-the-lat-pulldown-muscles-grip-and-form"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-seated-row",
+      "name": "坐姿划船機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "NASM｜Seated Machine Row",
+        "url": "https://www.nasm.org/resource-center/exercise-library/seated-machine-row-close-grip"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-leg-press",
+      "name": "槓片式腿推機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "NASM｜Leg Press",
+        "url": "https://www.nasm.org/resource-center/exercise-library/leg-press"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-leg-extension",
+      "name": "坐姿腿伸展機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Mayo Clinic｜Knee Extension",
+        "url": "https://www.mayoclinic.org/healthy-lifestyle/fitness/multimedia/knee-extension/vid-20084686"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-shoulder-press",
+      "name": "坐姿肩推機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Seated Shoulder Press",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/186/seated-shoulder-press/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-cable-fly",
+      "name": "D 形手把夾胸",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Standing Chest Fly",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/160/standing-chest-fly/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-squat-rack",
+      "name": "深蹲架",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "ACE｜Back Squat",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/11/back-squat/"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-bench-press",
+      "name": "槓鈴臥推",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "NASM｜Barbell Bench Press",
+        "url": "https://www.nasm.org/resource-center/exercise-library/barbell-bench-press"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-treadmill",
+      "name": "跑步機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜跑步機啟停與安全",
+        "url": "https://support.lifefitness.com/hc/en-us/articles/42814152246039-Life-Fitness-Atmos-Treadmill-How-to-Use-Your-SL-Console-Guided-Tour"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-bike",
+      "name": "室內健身車",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Concept2｜健身車座墊與握把設定",
+        "url": "https://www.concept2.com/training/articles/setting-up-the-bikeerg"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-plate-incline-press",
+      "name": "槓片式上斜胸推機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜槓片式上斜胸推",
+        "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/life-fitness-incline-press"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-plate-high-row",
+      "name": "槓片式高位划船機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜槓片式高位划船",
+        "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/life-fitness-high-row"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-plate-shoulder-press",
+      "name": "槓片式肩推機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜槓片式肩推",
+        "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/life-fitness-shoulder-press"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-hack-squat",
+      "name": "槓片式哈克深蹲機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Hammer Strength｜Hack Squat 機構與肌群",
+        "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/hack-squat"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-hip-thrust",
+      "name": "槓片式臀推機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Hammer Strength｜Glute Drive 臀推機",
+        "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/hammer-strength-plate-loaded-glute-drive"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-calf-raise",
+      "name": "槓片式坐姿提踵機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Hammer Strength｜坐姿提踵機",
+        "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/plate-loaded-seated-calf-raise"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-smith-squat",
+      "name": "史密斯深蹲架",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Hammer Strength｜垂直導軌史密斯機",
+        "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/plate-loaded/plate-loaded-vertical-smith-machine"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-leg-curl",
+      "name": "坐姿腿彎舉機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Insignia 坐姿腿彎舉機",
+        "url": "https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/insignia-series-seated-leg-curl"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-pec-deck",
+      "name": "蝴蝶機夾胸",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Pectoral Fly／Rear Deltoid",
+        "url": "https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/insignia-series-pectoral-fly-rear-deltoid"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-lateral-raise",
+      "name": "坐姿側平舉機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Insignia 側平舉機",
+        "url": "https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/insignia-series-lateral-raise"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-elliptical",
+      "name": "橢圓交叉訓練機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Integrity+ 橢圓交叉訓練機",
+        "url": "https://www.lifefitness.com/en-us/catalog/cardio/ellipticals/integrity-cardio-elliptical-cross-trainer"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-rower",
+      "name": "划船測功儀",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Concept2｜划船動作順序",
+        "url": "https://www.concept2.com/training/rowing-technique"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-stair-climber",
+      "name": "階梯機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜PowerMill Climber",
+        "url": "https://www.lifefitness.com/en-us/catalog/cardio/stair-climbers-stepper-machines/powermill-climber"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-assisted-pullup",
+      "name": "輔助引體向上機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Assist Dip Chin",
+        "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/selectorized/insignia-series-assist-dip-chin"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-assisted-dip",
+      "name": "輔助雙槓撐體機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Assist Dip Chin",
+        "url": "https://www.lifefitness.com/en-gb/catalog/strength-training/selectorized/insignia-series-assist-dip-chin"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-hip-abduction",
+      "name": "髖外展機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Insignia Hip Abduction",
+        "url": "https://www.lifefitness.com.au/commercial/hip-abduction-sslc-hab"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-hip-adduction",
+      "name": "髖內收機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Insignia Hip Adduction",
+        "url": "https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/insignia-series-hip-adduction"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-back-extension",
+      "name": "45° 背伸展椅",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Back Extension Bench",
+        "url": "https://shop.lifefitness.com/products/signature-series-back-extension"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-preacher-curl",
+      "name": "槓片式牧師彎舉機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Life Fitness｜Insignia Biceps Curl（器械變式參考）",
+        "url": "https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/insignia-series-biceps-curl"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-lying-chest-press",
+      "name": "槓片式平躺胸推機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Hammer Strength｜Iso-Lateral Bench Press",
+        "url": "https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-bench-press"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-decline-chest-press",
+      "name": "槓片式下斜胸推機",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Hammer Strength｜Iso-Lateral Decline Chest Press",
+        "url": "https://shop.lifefitness.com/products/hammer-strength-plate-loaded-iso-lateral-decline-chest-press"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "machine-reverse-fly",
+      "name": "蝴蝶機反向飛鳥",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Matrix Taiwan｜蝴蝶夾胸／反向飛鳥使用說明",
+        "url": "https://images-direct.jhtassets.com/bcffcda4f10cb26cbe70fe30908df1431ee6e478/original/named/UltraPecFlyRearDelt%2BIntelligentTrainingItc20%2B66306%2B85967%2Bzht%2Btw%2B.pdf"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "group-class",
+      "name": "全身活動課",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "World Gym｜團體課程介紹（課程形式參考）",
+        "url": "https://www.worldgymtaiwan.com/aerobics-class"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "class-dance",
+      "name": "有氧舞蹈",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "World Gym｜舞動有氧（課程形式參考）",
+        "url": "https://www.worldgymtaiwan.com/aerobics-class/cardio-sculpt/cardio-fat-burning/dance-aerobics"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "class-cycle",
+      "name": "飛輪課",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "World Gym｜飛輪心率課程（課程形式參考）",
+        "url": "https://www.worldgymtaiwan.com/aerobics-class/indoor-cycling/indoor-cycling"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "class-trx",
+      "name": "TRX 懸吊訓練",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "TRX｜Suspension Trainer Quick Start",
+        "url": "https://www.trxtraining.com/pages/quickstart-suspension-trainer"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "class-barbell",
+      "name": "槓鈴肌力訓練",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Les Mills｜BODYPUMP（槓鈴團課形式參考）",
+        "url": "https://www.lesmills.com/workouts/bodypump"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "class-aerial",
+      "name": "空中瑜珈",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "Aerial Essentials｜雙點吊布形式與設備參考",
+        "url": "https://www.aerialessentials.com/pages/faq"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    },
+    {
+      "id": "class-pilates",
+      "name": "墊上皮拉提斯",
+      "status": "pending",
+      "currentVersion": false,
+      "source": {
+        "label": "World Gym｜皮拉提斯（課程形式參考）",
+        "url": "https://www.worldgymtaiwan.com/aerobics-class/static-stretching/wellness-fitness/pilates"
+      },
+      "latestReviewer": "",
+      "latestAt": null
+    }
+  ]
+}

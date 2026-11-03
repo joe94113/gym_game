@@ -1,0 +1,124 @@
+{
+  "source": "frozen v0.10.0 before v0.11 work",
+  "exception": "Only flat-bench lifecycle seating height may improve; its loop remains exact.",
+  "phases": [
+    0,
+    0.17,
+    0.43,
+    0.71,
+    1
+  ],
+  "modelSha256": "6d69811af9db9eb6247357c242f91682a33a69fe83c7679a5c6572f4bfc0d912",
+  "motions": {
+    "dumbbell-curl": {
+      "loop": "14e81f3de2fb8a322c1d74b8817de4a6f5e350bdb165ebbea6ba5244f7ab0e78",
+      "metadata": "cf4547f5dd23260116cb78c0cf11126ee1bbfe1b67d1c07967eeb365f93780ae",
+      "lifecycle": "93da036c1442ea1848aa1f6e5f49b1fb73de3115a2b760b69e7deafcd9f1176a"
+    },
+    "dumbbell-bench-press": {
+      "loop": "aba62fd84d335622675b58c087cc328fe8192c1253bbd75bd0abf54ccf7a7b2d",
+      "metadata": "3fd99216fed08810dafa600ac061ac0dd0cb01d846ad5cea9556aba5b9080ffd"
+    },
+    "rope-pushdown": {
+      "loop": "eee893ac6f1c7bee5d65cf19a9fff6eaca8ccf51d012534e6ca18025081eeb53",
+      "metadata": "a4d7b163caa63078096cc4d79aa8d0bc403969753ffe6e314aa2bf77c20b883b",
+      "lifecycle": "113de6c815cfaeb29e64d5359f5bb260952dcb07a2d0b69fd6b7af600672d83e"
+    },
+    "single-arm-cable-row": {
+      "loop": "4633ed9b5af7b0c3458fc4258d278cf288e4de5b404b5c666aeff4fe52ae4fff",
+      "metadata": "f7f5521bb0343fb9e258b8ec71722479c6471d9f0dbf3bb68ae8f64494d4ebff",
+      "lifecycle": "b441169ca7b94599f37103d7c62ac1508ca7a5a915569e0e4217ac3be72eedb1"
+    },
+    "kneeling-hip-flexor-stretch": {
+      "loop": "e4544f307467c13bbc113ed6f577b45edb835c2f5ffcaf4c980505e9f2741b01",
+      "metadata": "97cadf95c256ebb312c97b7ce8601ca507aa20df86f4a0553d418f3e87f3404e",
+      "lifecycle": "60396127bbf612409ec05ea79acf2988b00bbd99348ed5ba86b8338d5d5fe3ae"
+    },
+    "dumbbell-hammer-curl": {
+      "loop": "41c6e8c94446ee8255917b38c9c1bf1ce01e60d632348b869fac08244145cf90",
+      "metadata": "d4cad36f9cceb74461164352cc1970aa1b58da3c6e982893f8f41c72948fe8b1",
+      "lifecycle": "f245365771bd59556a65a3bf698639ef93ef91087e0d5c425737454541d4a075"
+    },
+    "dumbbell-shoulder-press": {
+      "loop": "0b6d5fbc9d2195d88da7034f86eb4a3f9b6bddacccb08426b5e9c54a8d680363",
+      "metadata": "976bb28ed0e263db7c997c419674ea55a7f7c3b591aafbecd5fc2314a2b8388e",
+      "lifecycle": "25a1562ab2c01be9f4d8dc254d23bc65c32f3405d7a83c5fc5a30480c2cb53af"
+    },
+    "dumbbell-lateral-raise": {
+      "loop": "2ded6be3476a0e0da8722584c96b17e0cb0edfce647e31ba645189b6b8770995",
+      "metadata": "d4cad36f9cceb74461164352cc1970aa1b58da3c6e982893f8f41c72948fe8b1",
+      "lifecycle": "b4df8c0bc2b04b2beab2c7aa81835ae16d25337380d220d0ac677aaecf7c95ec"
+    },
+    "dumbbell-single-arm-row": {
+      "loop": "04a75d138bb4d3d0dd3738ac5bc2b04fb28023d9fb74c04cdf83f9ec1eb88519",
+      "metadata": "7865daabb0c05cee9cfb329aab82fb3635a28e1fb01ceae3069ffd4e5a474170",
+      "lifecycle": "3f3b7a77572b0a07b355be52f61ff2c5d89b518c16442ff1d8ddf9cc3125a040"
+    },
+    "dumbbell-goblet-squat": {
+      "loop": "0f3eb6f4103db301788ddd0b6561c3427a8c1cb3b5c149127463193049826e4b",
+      "metadata": "82d1f900e5eb803e0bf0a89a1f2752b7799975df5311d9eef5780fce68ae185b",
+      "lifecycle": "531b2ad238461273965eea6bcd1907207d5d21c3b7abc2feeba96ccd84222836"
+    },
+    "dumbbell-romanian-deadlift": {
+      "loop": "e34c74b7d8369383799e03e24f9e5c2469677745ba9c6ee56968cfeb49992b22",
+      "metadata": "4d5a4f0a5c7dcdbdaf77eff71c1aecc1e0c1e86f85fa6111b44024fe2ea7a620",
+      "lifecycle": "be5e33df1274b87b2e46bcdcd1409f1d86345a673ce28dc27e3c0224aff6cb77"
+    },
+    "standing-hamstring-stretch": {
+      "loop": "5e4baf98eb4be41c7b8daa7de820d81f55c6091295f899b250fe6673531c8890",
+      "metadata": "8c0eb2feefbddda09fcd5c422c9c31d4c432f4336c663e3c3639a061d7318af3",
+      "lifecycle": "35ef3bd74e9a817582774d829296a925d61c06bf2911ee6e3a08c0ef75acadb4"
+    },
+    "seated-glute-stretch": {
+      "loop": "c5f25e6e8ba0756d27ee668bcdba705379baae43051732bf4e9975eeb6bb8065",
+      "metadata": "3e70c536e35fa0bdee0a890718e624a02c8411270369cb12047f89edecd6a235",
+      "lifecycle": "f6ca45f7669f5f0874e111834e9fbd3e918addfc4c3c719b2fbb68afd7092a98"
+    },
+    "standing-chest-shoulder-stretch": {
+      "loop": "54951b8efa3b5536f6d356566d6ae31603e69458e46347afb94457bf3a20c23f",
+      "metadata": "8c0eb2feefbddda09fcd5c422c9c31d4c432f4336c663e3c3639a061d7318af3",
+      "lifecycle": "cc07af44e9fc48edd7d2829abc7642da3a0bc9f5079f46bc8be877d764e9b70e"
+    },
+    "standing-calf-stretch": {
+      "loop": "29f685c1937e6b17bbd436a6371c4bd05b823ed2b46aa523092128dfaeea7dcd",
+      "metadata": "8c0eb2feefbddda09fcd5c422c9c31d4c432f4336c663e3c3639a061d7318af3",
+      "lifecycle": "2d201b5d71a256e8f73bdf0d29a27a1ae10ebe381a738030f74e30107616eca2"
+    },
+    "standing-thoracic-rotation": {
+      "loop": "9fc618e72125f05e2c6bc7fc11234025fe611c6c6852d161d862eb87ce6346f8",
+      "metadata": "8c0eb2feefbddda09fcd5c422c9c31d4c432f4336c663e3c3639a061d7318af3",
+      "lifecycle": "523f7581d4b8f755b4bfb67b7241a9d5bcb1d3b6c9e8f33dab82ca783881e4eb"
+    },
+    "cable-straight-bar-curl": {
+      "loop": "d39ab5a03155f7004fcb27d4ed912fcaf638eb4a91c520ecca69fa3ac26bdb85",
+      "metadata": "eab88c8660791c90bca3cb7291cea15a3e029b1f1f96b56cda7238c0f30a368c",
+      "lifecycle": "53bfa0264dceb0982b1231b24f6580fb1dc6550f56da0147c10253cd0951c566"
+    },
+    "cable-ez-bar-curl": {
+      "loop": "d1b820c029c1dfaccb6a703ae69105fbcd3e399c5a0137e56b9f7b70b9c9e7c6",
+      "metadata": "eab88c8660791c90bca3cb7291cea15a3e029b1f1f96b56cda7238c0f30a368c",
+      "lifecycle": "fb52b8d84306ea0ff5f0d0fb7169f18de7454a35a58192afe77014ddcdd86abc"
+    },
+    "cable-v-bar-row": {
+      "loop": "8fced13ce6fd40017bf658e78bb8a5dbc70da1a675bbc108c6648d1b12bacc41",
+      "metadata": "a4d7b163caa63078096cc4d79aa8d0bc403969753ffe6e314aa2bf77c20b883b",
+      "lifecycle": "7f4cd94a13ee2f54edd90ac3554295acf53f9e0155cd8d6a010e1362011c9630"
+    },
+    "cable-rope-face-pull": {
+      "loop": "7d5ffaed8d05a0b35df4ca8e8e3198fea3ec3beb3e26322796367c3c1f918760",
+      "metadata": "eab88c8660791c90bca3cb7291cea15a3e029b1f1f96b56cda7238c0f30a368c",
+      "lifecycle": "14b7629b3dc849954b1390442dbe686cc5d65d7ba9471a4888f2c5bc49d8b929"
+    },
+    "cable-single-arm-lateral-raise": {
+      "loop": "3efa4859ef9813a8e6783454fb3d29ef5d1160d1d00262688b4e7b3d96053a81",
+      "metadata": "2e1d1d91cd6bea402dfaa74e9fb72f71c1d2bb88e61bf07892a0b625dc42e029",
+      "lifecycle": "712f6496e78ce6b9c103e081a17dfbc39887c5ae4cbed4fdaff8b7d5afaddbcd"
+    },
+    "cable-ankle-kickback": {
+      "loop": "4d611a1959388d63d922cdc4a6a4fc69bcb5c286b722281b01d48810cf44c380",
+      "metadata": "d3c6bc032a261f69c4fe2a151e5825042302abb5d77fc7eb015d114b1da717ad",
+      "lifecycle": "189e2681aa86b5ed8fe215d7e1fc9826b4efd28ecabc4c04ed1af7b15940d9af"
+    }
+  },
+  "bench30": "21fa619e48f7d239f50e05c130aae2ab81d9de68179bba6925db85b1bd2c4151"
+}

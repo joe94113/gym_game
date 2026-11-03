@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 1,
+  "source": "CMU Graphics Lab Motion Capture Database",
+  "termsURL": "https://mocap.cs.cmu.edu/faqs.php",
+  "commercialTermsURL": "https://mocap.cs.cmu.edu/",
+  "attribution": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.",
+  "rawSourceHashes": {
+    "artifacts/mocap-v018/research/143.asf": "6d7207da3bb9eceeaa32f23fb641b69f5836d11242b00c052e7d64f0cbe20a35",
+    "artifacts/mocap-v018/research/143_18.amc": "569b08c314d08e0d32e0474e2a69fc73f4c340f6cf773b174c06361250e2e9c5",
+    "artifacts/mocap-v018/research/115.asf": "26c627af258f337930ec3c84bb75d3a727425e27083208b79107e10be16a9017",
+    "artifacts/mocap-v018/research/115_06.amc": "66d3a9e9a8eaed036ddc155dd335014a38c533924481b8075e1d5947c89a24c1",
+    "artifacts/mocap-v018/research/143_10.amc": "8d98200eb9b4530d9bbb344ca0ac04a51e25d71b1bc7ba82883da11f00ed6034",
+    ".local-tools/cmu-v015/79.asf": "aa7fb254b0e7b9155df59e0f0cf76cbe34c476c6f4b3f015e63d5ae170d2fe2d",
+    ".local-tools/cmu-v015/79_93.amc": "945bc0b9b13936581b0a71f775079f48d4bdbeec3fa6485dfcb5d4a2230927a4"
+  },
+  "generatorHashes": {
+    "scripts/import-cmu-transitions-v018.mjs": "51ac3521b02c28db5276b5f88dcfe7745c4ffcc5b6444699c063261629cab0d7",
+    "scripts/cmu-fullbody-v017.mjs": "c1278c6145179623d498ff97c419822f0c365cbbdba5c7747799294b9fb989eb"
+  },
+  "dataModule": {
+    "path": "src/captured-transition-data-v018.js",
+    "bytes": 25164,
+    "sha256": "ca49c121a7434d1e46dd3d5302d4faaec9280187ae7c9691e254bc0a7f952f3e"
+  },
+  "clips": [
+    {
+      "id": "sit-down-a",
+      "role": "sit-down",
+      "sourceRef": "cmu-143-18",
+      "fps": 120,
+      "first": 76,
+      "last": 193,
+      "metric": "pelvis-y-relative-ankles",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "Standing to sitting in a chair.",
+      "samples": 121,
+      "sourceDurationSeconds": 0.975,
+      "rawRange": [
+        0.394268,
+        0.719144
+      ],
+      "rawEndpoints": [
+        0.719144,
+        0.395894
+      ],
+      "rawSHA256": "f5838846cfbdf1dd06aa752326e18c57d6432edf6213acbe91526a2a5c697c43",
+      "progressSHA256": "1277f1112fe500723449c844de60fb2e81c4510c84eb880a047b146bd2fd044d"
+    },
+    {
+      "id": "sit-down-b",
+      "role": "sit-down",
+      "sourceRef": "cmu-143-18",
+      "fps": 120,
+      "first": 405,
+      "last": 525,
+      "metric": "pelvis-y-relative-ankles",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "Second standing-to-chair sitting.",
+      "samples": 121,
+      "sourceDurationSeconds": 1,
+      "rawRange": [
+        0.390126,
+        0.717126
+      ],
+      "rawEndpoints": [
+        0.717126,
+        0.391821
+      ],
+      "rawSHA256": "022c1699a0b54c02efa25636159c130b0e53156b9d70893c07476c37b887bc9e",
+      "progressSHA256": "14deb42c692eebd7e3a37ab78eaed15f5c2d7f37ee50794e8f724ba542e98a78"
+    },
+    {
+      "id": "stand-up-a",
+      "role": "stand-up",
+      "sourceRef": "cmu-143-18",
+      "fps": 120,
+      "first": 265,
+      "last": 377,
+      "metric": "pelvis-y-relative-ankles",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "First chair sit-to-stand.",
+      "samples": 121,
+      "sourceDurationSeconds": 0.9333333333333333,
+      "rawRange": [
+        0.389593,
+        0.718857
+      ],
+      "rawEndpoints": [
+        0.394557,
+        0.718857
+      ],
+      "rawSHA256": "0d131ae77d1311acd93d0a6c55465f3936520aa46adf39d09f64d4b695baff96",
+      "progressSHA256": "f2353bd13d80a31586a03fb51ce4d3fcdee13dc83fcf6078c554ed4fe51179ff"
+    },
+    {
+      "id": "stand-up-b",
+      "role": "stand-up",
+      "sourceRef": "cmu-143-18",
+      "fps": 120,
+      "first": 585,
+      "last": 690,
+      "metric": "pelvis-y-relative-ankles",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "Second chair sit-to-stand.",
+      "samples": 121,
+      "sourceDurationSeconds": 0.875,
+      "rawRange": [
+        0.384575,
+        0.720574
+      ],
+      "rawEndpoints": [
+        0.38809,
+        0.718746
+      ],
+      "rawSHA256": "5e0bb71965ba3801d83aa5b7e902b924c06fbfc427843539de77839c0a696b4f",
+      "progressSHA256": "2885c95db0e45e66d191201d90021c0740ffaebd9a9f62a941acb25b601587c5"
+    },
+    {
+      "id": "object-lower-a",
+      "role": "object-lower",
+      "sourceRef": "cmu-115-06",
+      "fps": 120,
+      "first": 48,
+      "last": 99,
+      "metric": "pelvis-y-relative-ankles",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "Bending knees to approach a box before picking it up; not a captured loaded putdown.",
+      "samples": 121,
+      "sourceDurationSeconds": 0.425,
+      "rawRange": [
+        0.392238,
+        0.82996
+      ],
+      "rawEndpoints": [
+        0.82996,
+        0.392238
+      ],
+      "rawSHA256": "84ea96d2465ea299e599a916233644616e7dbe057d9773c77b986fb419cde4c5",
+      "progressSHA256": "2c1764b487ea8aa703ae7f42bbf5b16d294c114b353c6e6c35d4147f94fadee1"
+    },
+    {
+      "id": "object-rise-a",
+      "role": "object-rise",
+      "sourceRef": "cmu-115-06",
+      "fps": 120,
+      "first": 99,
+      "last": 166,
+      "metric": "pelvis-y-relative-ankles",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "Rising after reaching for a box; box mass was not recorded.",
+      "samples": 121,
+      "sourceDurationSeconds": 0.5583333333333333,
+      "rawRange": [
+        0.392238,
+        0.821901
+      ],
+      "rawEndpoints": [
+        0.392238,
+        0.820692
+      ],
+      "rawSHA256": "ba136778a3d38bc01458b7d33755fa808a69e1500ec4901f9eeb7f5737b87f63",
+      "progressSHA256": "0cef5bf1fcfdc48d0637698c72b849f80dc74a4cdb4d90d6ff375322146c3647"
+    },
+    {
+      "id": "object-lower-b",
+      "role": "object-lower",
+      "sourceRef": "cmu-143-10",
+      "fps": 120,
+      "first": 365,
+      "last": 395,
+      "metric": "pelvis-y-relative-ankles",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "Second stationary bend in a walk-and-toolbox recording; not dumbbell rack pickup.",
+      "samples": 121,
+      "sourceDurationSeconds": 0.25,
+      "rawRange": [
+        0.538975,
+        0.66912
+      ],
+      "rawEndpoints": [
+        0.66912,
+        0.538975
+      ],
+      "rawSHA256": "d9b229e674dd76f458c9ac27452373d97f1f38ceb60d35cea4e722e276f711e8",
+      "progressSHA256": "60ba8a80c2a9484a225daa82be175516a17cb7d698aaafc004aa8a7620ce9ba8"
+    },
+    {
+      "id": "object-rise-b",
+      "role": "object-rise",
+      "sourceRef": "cmu-143-10",
+      "fps": 120,
+      "first": 395,
+      "last": 460,
+      "metric": "pelvis-y-relative-ankles",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "Rising from the second toolbox bend; object markers and mass unavailable.",
+      "samples": 121,
+      "sourceDurationSeconds": 0.5416666666666666,
+      "rawRange": [
+        0.538975,
+        0.705705
+      ],
+      "rawEndpoints": [
+        0.538975,
+        0.705705
+      ],
+      "rawSHA256": "ae82ecfbea17d6f2f94b5931ed19839ce281f486858a8c42afeb331278224449",
+      "progressSHA256": "54a3f60c025dfffe807e15b65c480662671864e14ce2a714af0c2673fa1aa3d0"
+    },
+    {
+      "id": "held-raise-a",
+      "role": "held-raise",
+      "sourceRef": "cmu-79-93",
+      "fps": 60,
+      "first": 90,
+      "last": 181,
+      "metric": "mean-wrist-y-relative-pelvis",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "Already holding dumbbells, raise from low carry toward shoulder position; not rack pickup.",
+      "samples": 121,
+      "sourceDurationSeconds": 1.5166666666666666,
+      "rawRange": [
+        0.066275,
+        0.414979
+      ],
+      "rawEndpoints": [
+        0.066275,
+        0.414979
+      ],
+      "rawSHA256": "a4115c6f9c2e1c8b0a5e940176f7b92969ef73c7f6a331234da538232f00880d",
+      "progressSHA256": "438f24dc157e887ac858584e76c141998e66b6f9bc5686b8690f8c19d01af0ed"
+    },
+    {
+      "id": "held-lower-a",
+      "role": "held-lower",
+      "sourceRef": "cmu-79-93",
+      "fps": 60,
+      "first": 1045,
+      "last": 1090,
+      "metric": "mean-wrist-y-relative-pelvis",
+      "filter": {
+        "nativeMovingAverageRadius": 2,
+        "monotonicCleanup": true,
+        "interpolation": "monotone cubic Hermite; zero endpoint slopes"
+      },
+      "sourceDirection": "forward-capture",
+      "sourceAction": "Already holding dumbbells, lower after the final press; not rack placement or release.",
+      "samples": 121,
+      "sourceDurationSeconds": 0.75,
+      "rawRange": [
+        0.056103,
+        0.771482
+      ],
+      "rawEndpoints": [
+        0.771482,
+        0.072285
+      ],
+      "rawSHA256": "2de3993e475a3d7dac9af812f35908a4a1c88a4b7addc9f7ad763320bd58d5a8",
+      "progressSHA256": "1dcd3f0d62ba340036037af5e19444ab72c603573993b27518c04fb869c5680b"
+    }
+  ],
+  "rejected": [
+    {
+      "motion": "79_93",
+      "first": 836,
+      "last": 1138,
+      "reason": "Nonmonotone source contains another action or excessive reversal",
+      "explanation": "This range contains another press ascent before the final lowering. Only frames1045–1090 are retained as lowering."
+    }
+  ],
+  "scope": "Measured scalar timing only, to retime authored stationary body/contact paths. Source body/object/action differs from gym machines; no raw captured pose, root motion, fingers, weight load or marker-exact equipment contact is reproduced. No source clip is reversed. Any reversed runtime adaptation must be labeled as such.",
+  "professionalReview": {
+    "status": "pending",
+    "reviewer": null
+  }
+}

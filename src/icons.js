@@ -1,0 +1,21 @@
+const paths = {
+  arrow: '<path d="M4 12h15m-5-5 5 5-5 5"/>',
+  close: '<path d="m6 6 12 12M6 18 18 6"/>',
+  map: '<path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Zm6-3v15m6-12v15"/>',
+  check: '<path d="m5 12 4 4L19 6"/>',
+  pin: '<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2"/>',
+  play: '<path d="m9 5 11 7-11 7V5Z"/>',
+  pause: '<path d="M8 5v14M16 5v14"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/>',
+  compass: '<circle cx="12" cy="12" r="9"/><path d="m16 8-2 6-6 2 2-6 6-2Z"/>',
+  book: '<path d="M12 5v15M3 4c4-1 6 0 9 2 3-2 5-3 9-2v15c-4-1-6 0-9 2-3-2-5-3-9-2V4Z"/>',
+  bolt: '<path d="m13 2-9 12h7l-1 8 10-13h-7V2Z"/>',
+  chest: '<path d="m4 7 4-3h8l4 3v6l-4 3-4-2-4 2-4-3V7Zm8-2v9M8 4 5 2m11 2 3-2"/>',
+  back: '<path d="m4 6 5-3h6l5 3-2 7-4 6h-4l-4-6-2-7Zm8-2v15M5 9l7 4 7-4"/>',
+  legs: '<path d="M6 3h12l-2 8 2 10h-5l-1-9-1 9H6l2-10-2-8Zm6 0v9"/>',
+  shoulders: '<path d="M8 7a4 4 0 0 1 8 0M8 9 4 11l-2 6h5l2-5h6l2 5h5l-2-6-4-2M9 19h6"/>',
+  fullbody: '<circle cx="12" cy="4" r="2"/><path d="m4 8 8 2 8-2m-8 2v6m0 0-5 6m5-6 5 6"/>',
+  route: '<circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 5h9a4 4 0 0 1 0 8H8a3 3 0 0 0 0 6h9"/>',
+  reset: '<path d="M3 11a9 9 0 1 1 2.5 7M3 4v7h7"/>',
+};
+export const icon = (name, cls = '') => `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.info}</svg>`;

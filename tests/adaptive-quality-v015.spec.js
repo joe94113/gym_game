@@ -1,0 +1,7 @@
+import {test,expect} from '@playwright/test';import {viteClientShim} from './vite-client-shim.js';
+test('自動畫質會回應持續長幀，手動畫質與角色活動仍可使用',async({page})=>{
+ const errors=[];page.on('pageerror',error=>errors.push(error.message));await page.route('**/@vite/client',route=>route.fulfill({body:viteClientShim,contentType:'text/javascript'}));await page.goto('/');await page.waitForFunction(()=>window.__FORM__?.state.loaded,null,{timeout:120000,polling:100});await page.locator('[data-action=free]').click();
+ const quality=await page.evaluate(()=>{const w=window.__FORM__.world;w.setGraphicsQuality('auto');for(let i=0;i<160;i++)w.recordFrameTiming(36);return w.getPerformanceDiagnostics();});expect(quality.active).toBe('flow');expect(quality.shadows).toBe(false);expect(quality.autoReason).toBeTruthy();
+ await page.locator('.header-actions [data-action=help]').click();await expect(page.locator('.graphics-settings')).toContainText('已自動降低解析度並關閉陰影');await page.locator('#graphics-quality').selectOption('clear');expect(await page.evaluate(()=>window.__FORM__.world.getPerformanceDiagnostics().active)).toBe('clear');await page.keyboard.press('Escape');
+ await page.evaluate(()=>{const a=window.__FORM__;a.openExercise('dumbbell-shoulder-press');if(!a.world.advanceUntilReady(180,false))throw Error('Cannot use exercise');});await expect(page.locator('[data-action=pause]')).toBeEnabled();expect(errors).toEqual([]);
+});

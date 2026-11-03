@@ -1,0 +1,35 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {frameStatistics,fixedProfileSettings} from './perf-stats-v013.mjs';
+import {hashPerformanceSources} from './performance-source-v013.mjs';
+const option=(name,fallback)=>process.argv.slice(2).find(value=>value.startsWith(`--${name}=`))?.slice(name.length+3)??fallback,output=option('output','artifacts/performance-v013'),quality=option('quality','flow'),files=option('reports',`${output}/transitions/before-${quality}.json,${output}/transitions/after-${quality}.json`).split(',');
+mkdirSync(output,{recursive:true});const target=`${output}/transitions-comparison-${quality}.json`;writeFileSync(target,JSON.stringify({pass:false,status:'validation-incomplete',reports:files}));
+const read=path=>JSON.parse(readFileSync(path,'utf8')),reports=files.map(read),same=(a,b)=>JSON.stringify(a)===JSON.stringify(b),scenarios=['load','mount','exit','classroom-wake','bathroom-wake'],versions={before:[],after:[]};
+if(new Set(files).size!==files.length||new Set(reports.map(report=>report.name)).size!==reports.length)throw Error('Duplicate transition report path/name.');
+for(let index=0;index<reports.length;index++){
+ const report=reports[index],version=report.name.startsWith('before')?'before':report.name.startsWith('after')?'after':null;
+ if(!(Date.parse(report.completedAt)>=Date.parse(report.startedAt))||index>0&&!(Date.parse(report.startedAt)>=Date.parse(reports[index-1].completedAt)))throw Error('Actual transition execution timestamps are missing or out of order.');
+ if(!report.validatorSourceHashes||report.changedValidators?.length||Object.entries(report.validatorSourceHashes).some(([path,value])=>createHash('sha256').update(readFileSync(path)).digest('hex')!==value))throw Error(`Measurement harness changed ${files[index]}`);
+ if(!version||!report.pass||report.rendererKind!=='native'||report.quality!==quality||report.errors.length||report.changedSources.length||report.results.length!==report.repeats*5)throw Error(`Invalid complete transition report ${files[index]}`);
+ if(!same(hashPerformanceSources(report.sourceRoot),report.sourceHashes))throw Error(`Transition sources changed after timing ${files[index]}`);
+ const unique=new Set();for(const result of report.results){
+  const pair=`${result.repeat}:${result.scenario}`;if(unique.has(pair)||!scenarios.includes(result.scenario))throw Error(`Duplicate or unexpected transition case ${pair}`);unique.add(pair);
+  const setting=fixedProfileSettings(result.setup,quality),raw=result.raw;
+  if(!result.pass||raw.visibility!=='visible'||!raw.detected?.proof||raw.frames.length<3||raw.frames.some(frame=>frame.activeProfile!==quality||frame.pixelRatio!==setting.pixelRatio||frame.shadows!==setting.shadows||!same(frame.framebuffer,setting.framebuffer)||!Number.isFinite(frame.callbackMs)||frame.callbackMs<0||!Object.hasOwn(frame,'phase')))throw Error(`Invalid real transition frames ${pair}`);
+  const recomputed=frameStatistics(raw.frames.map(frame=>frame.intervalMs));if(recomputed.samples!==result.cadence.samples||Math.abs(recomputed.meanMs-result.cadence.meanMs)>1e-7)throw Error('Stored transition cadence disagrees with raw frames');
+  if(result.scenario==='mount'&&raw.final.stage!=='exercising'||result.scenario==='exit'&&raw.final.stage!=='idle')throw Error('Transition did not finish');
+  if(result.scenario==='load'&&(!(raw.loadedAtMs>0)||!(raw.firstGameFrameAtMs>0)||!result.loading.navigation.length))throw Error('Actual initial load timing missing');
+  if(result.scenario.endsWith('-wake')&&(!result.beforeRoom.resources.gpuEvictionRequested||result.beforeRoom.room.visible||result.afterRoom.resources.gpuEvictionRequested||!result.afterRoom.room.visible||!raw.events.some(event=>event.type==='pointermove')))throw Error('Actual pointer-driven room return missing');
+ }
+ versions[version].push(report);
+}
+for(const version of ['before','after']){if(!versions[version].length)throw Error(`Missing ${version} data`);for(const report of versions[version])if(!same(report.sourceHashes,versions[version][0].sourceHashes))throw Error(`Source drift in ${version}`);}
+const rows=[];
+for(const scenario of scenarios){
+ const before=versions.before.flatMap(report=>report.results.filter(result=>result.scenario===scenario)),after=versions.after.flatMap(report=>report.results.filter(result=>result.scenario===scenario));if(before.length<2||after.length<2)throw Error(`At least two ${scenario} repetitions required per version`);
+ const all=[...before,...after],settings=all.map(result=>({...fixedProfileSettings(result.setup,quality),position:scenario==='mount'?result.setup.position:undefined,...(scenario.endsWith('-wake')?{viewInput:result.viewInput}:{})}));if(settings.some(value=>!same(value,settings[0])))throw Error(`Transition conditions differ ${scenario}`);
+ if(['mount','exit'].includes(scenario)&&all.some(result=>result.exercise!==all[0].exercise||result.station!==all[0].station))throw Error('Different apparatus/starting station');
+ const summarize=cases=>frameStatistics(cases.flatMap(result=>result.raw.frames.map(frame=>frame.intervalMs))),duration=cases=>({samples:cases.length,elapsedMs:cases.map(result=>result.raw.elapsedMs),completionMs:cases.map(result=>result.raw.completedAtMs),appReadyObservedMs:cases.map(result=>result.raw.loadedAtMs),stages:cases.map(result=>result.raw.stages)});
+ rows.push({profile:quality,scenario,settings:settings[0],before:summarize(before),after:summarize(after),beforeDuration:duration(before),afterDuration:duration(after),interpretation:['mount','exit'].includes(scenario)?'Elapsed duration includes intentionally authored animation. Compare cadence separately; longer preparation is not automatically a performance regression.':scenario==='load'?'App-ready and resource durations include startup before game RAF exists; RAF statistics describe only subsequent rendered app frames.':'Observed native cadence during the same real camera drag after room disposal requests; this does not quantify actual GL bytes.'});
+}
+const report={pass:true,version:'0.13.0',profile:quality,sourceHashes:versions.after[0].sourceHashes,baselineSourceHashes:versions.before[0].sourceHashes,reports:files,dependencies:Object.fromEntries(files.map(path=>[path,createHash('sha256').update(readFileSync(path)).digest('hex')])),rows,scope:'Recomputed all original frame intervals for at least two repetitions per version/scenario. Results may improve or worsen; PASS only certifies valid comparable measurements.',limits:reports[0].limits};writeFileSync(target,JSON.stringify(report,null,2));console.log(JSON.stringify({file:target,pass:true,rows:rows.map(row=>({scenario:row.scenario,beforeMean:row.before.meanMs,afterMean:row.after.meanMs,before95:row.before.p95Ms,after95:row.after.p95Ms,before25:row.before.over25Percent,after25:row.after.over25Percent,before50:row.before.over50Percent,after50:row.after.over50Percent,beforeElapsed:row.beforeDuration.elapsedMs,afterElapsed:row.afterDuration.elapsedMs}))}));

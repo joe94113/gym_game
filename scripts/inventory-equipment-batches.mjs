@@ -1,0 +1,9 @@
+import {createHash} from 'node:crypto';
+import {writeFileSync,mkdirSync} from 'node:fs';
+import {createEquipmentFixture} from './equipment-batching-fixture.mjs';
+const {scene,machines,character}=await createEquipmentFixture();
+const hash=g=>{const h=createHash('sha256');for(const [key,a]of Object.entries(g.attributes).sort()){h.update(key);h.update(Buffer.from(a.array.buffer,a.array.byteOffset,a.array.byteLength));}if(g.index)h.update(Buffer.from(g.index.array.buffer,g.index.array.byteOffset,g.index.array.byteLength));return h.digest('hex');};
+const sets={},objects=[];
+for(const m of machines.values())m.group.traverse(o=>{if(!o.isMesh||o.isSkinnedMesh||o.material.transparent||Array.isArray(o.material))return;let mutable=false;for(let p=o;p&&p!==m.group;p=p.parent)if(p.userData.loadable||p.userData.plate)mutable=true;if(mutable)return;objects.push({id:m.station.id,type:m.type,o,key:`${hash(o.geometry)}:${o.material.uuid}`});});
+for(const size of [0,8,12,16]){const groups=new Map();for(const entry of objects){const m=machines.get(entry.id),cell=size?`${Math.floor(m.group.position.x/size)},${Math.floor(m.group.position.z/size)}`:'all',key=`${cell}:${entry.key}`;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(entry);}const candidates=[...groups.values()].filter(v=>v.length>1);sets[size]={sources:objects.length,proxyCount:candidates.length,batchedSources:candidates.reduce((a,v)=>a+v.length,0),savedCalls:candidates.reduce((a,v)=>a+v.length-1,0),examples:candidates.sort((a,b)=>b.length-a.length).slice(0,15).map(a=>({sources:a.length,machines:[...new Set(a.map(v=>v.id))],geometry:a[0].o.geometry.type}))};}
+mkdirSync('artifacts/performance-v09',{recursive:true});writeFileSync('artifacts/performance-v09/equipment-inventory.json',JSON.stringify(sets,null,2));console.log(JSON.stringify(sets));character.dispose();

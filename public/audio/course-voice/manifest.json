@@ -1,0 +1,1299 @@
+{
+  "version": 1,
+  "voice": "Microsoft Hanhan Desktop",
+  "language": "zh-TW",
+  "sampleRate": 16000,
+  "channels": 1,
+  "bitsPerSample": 16,
+  "source": "Offline Windows System.Speech; original game cues, no branded recordings",
+  "phrases": [
+    {
+      "id": "b4dd47b0a8bc717b",
+      "text": "開始。先暖身，輕鬆踏步。",
+      "file": "b4dd47b0a8bc717b.wav",
+      "duration": 3.566,
+      "bytes": 114158
+    },
+    {
+      "id": "b709e0920dfb6649",
+      "text": "八秒後，肩部活動。",
+      "file": "b709e0920dfb6649.wav",
+      "duration": 2.3805,
+      "bytes": 76222
+    },
+    {
+      "id": "a4c3313deb180960",
+      "text": "三",
+      "file": "a4c3313deb180960.wav",
+      "duration": 0.989125,
+      "bytes": 31698
+    },
+    {
+      "id": "084b42f6e95e4e65",
+      "text": "二",
+      "file": "084b42f6e95e4e65.wav",
+      "duration": 0.82,
+      "bytes": 26286
+    },
+    {
+      "id": "51a75f4634dfa859",
+      "text": "一",
+      "file": "51a75f4634dfa859.wav",
+      "duration": 0.899,
+      "bytes": 28814
+    },
+    {
+      "id": "4504a40f730f0461",
+      "text": "暖身，肩部活動。",
+      "file": "4504a40f730f0461.wav",
+      "duration": 2.1435,
+      "bytes": 68638
+    },
+    {
+      "id": "604e5bc96265bc8f",
+      "text": "八秒後，左右踏步。",
+      "file": "604e5bc96265bc8f.wav",
+      "duration": 2.347125,
+      "bytes": 75154
+    },
+    {
+      "id": "f493372c3f9e7307",
+      "text": "暖身，左右踏步。",
+      "file": "f493372c3f9e7307.wav",
+      "duration": 2.110125,
+      "bytes": 67570
+    },
+    {
+      "id": "07457989770edf1b",
+      "text": "八秒後，練習屈髖。",
+      "file": "07457989770edf1b.wav",
+      "duration": 2.48675,
+      "bytes": 79622
+    },
+    {
+      "id": "b8b5cdec832fae66",
+      "text": "暖身，練習屈髖。",
+      "file": "b8b5cdec832fae66.wav",
+      "duration": 2.24475,
+      "bytes": 71878
+    },
+    {
+      "id": "31b6ab9733000bb3",
+      "text": "八秒後，交替抬膝。",
+      "file": "31b6ab9733000bb3.wav",
+      "duration": 2.403875,
+      "bytes": 76970
+    },
+    {
+      "id": "cfadc61115e28d5c",
+      "text": "暖身，交替抬膝。",
+      "file": "cfadc61115e28d5c.wav",
+      "duration": 2.166875,
+      "bytes": 69386
+    },
+    {
+      "id": "58cabbda01f3ce02",
+      "text": "八秒後，放慢踏步。",
+      "file": "58cabbda01f3ce02.wav",
+      "duration": 2.374375,
+      "bytes": 76026
+    },
+    {
+      "id": "d04bb91f02031a66",
+      "text": "暖身，放慢踏步。",
+      "file": "d04bb91f02031a66.wav",
+      "duration": 2.137375,
+      "bytes": 68442
+    },
+    {
+      "id": "b4ccc6b2cbc408e2",
+      "text": "八秒後，側向移動。",
+      "file": "b4ccc6b2cbc408e2.wav",
+      "duration": 2.36325,
+      "bytes": 75670
+    },
+    {
+      "id": "0d6df9bf37cc1815",
+      "text": "主要訓練，側向移動。",
+      "file": "0d6df9bf37cc1815.wav",
+      "duration": 2.492875,
+      "bytes": 79818
+    },
+    {
+      "id": "1b1c7e70eeee454d",
+      "text": "八秒後，小幅屈膝。",
+      "file": "1b1c7e70eeee454d.wav",
+      "duration": 2.426125,
+      "bytes": 77682
+    },
+    {
+      "id": "2b5b76b05e058a4f",
+      "text": "主要訓練，小幅屈膝。",
+      "file": "2b5b76b05e058a4f.wav",
+      "duration": 2.589125,
+      "bytes": 82898
+    },
+    {
+      "id": "6f55d40126262db6",
+      "text": "八秒後，抬膝與站穩。",
+      "file": "6f55d40126262db6.wav",
+      "duration": 2.6175,
+      "bytes": 83806
+    },
+    {
+      "id": "fdb2f40a2a2ad896",
+      "text": "主要訓練，抬膝與站穩。",
+      "file": "fdb2f40a2a2ad896.wav",
+      "duration": 2.747125,
+      "bytes": 87954
+    },
+    {
+      "id": "bd4e10a01ea2f913",
+      "text": "八秒後，屈髖活動。",
+      "file": "bd4e10a01ea2f913.wav",
+      "duration": 2.415,
+      "bytes": 77326
+    },
+    {
+      "id": "6c94c5ce1b61f079",
+      "text": "主要訓練，屈髖活動。",
+      "file": "6c94c5ce1b61f079.wav",
+      "duration": 2.544625,
+      "bytes": 81474
+    },
+    {
+      "id": "5f4b89655669d23c",
+      "text": "八秒後，胸肩開合。",
+      "file": "5f4b89655669d23c.wav",
+      "duration": 2.537375,
+      "bytes": 81242
+    },
+    {
+      "id": "815d31bab048214c",
+      "text": "主要訓練，胸肩開合。",
+      "file": "815d31bab048214c.wav",
+      "duration": 2.668125,
+      "bytes": 85426
+    },
+    {
+      "id": "d3ea11b89c64550e",
+      "text": "八秒後，全身踏步。",
+      "file": "d3ea11b89c64550e.wav",
+      "duration": 2.415,
+      "bytes": 77326
+    },
+    {
+      "id": "d64d0dc8fc03ab8f",
+      "text": "主要訓練，全身踏步。",
+      "file": "d64d0dc8fc03ab8f.wav",
+      "duration": 2.544625,
+      "bytes": 81474
+    },
+    {
+      "id": "8e704c30fc0c6191",
+      "text": "八秒後，縮小側步。",
+      "file": "8e704c30fc0c6191.wav",
+      "duration": 2.436125,
+      "bytes": 78002
+    },
+    {
+      "id": "3feadbaef7a6de8e",
+      "text": "緩和，縮小側步。",
+      "file": "3feadbaef7a6de8e.wav",
+      "duration": 2.20525,
+      "bytes": 70614
+    },
+    {
+      "id": "c46f7ad170f20675",
+      "text": "八秒後，放鬆肩部。",
+      "file": "c46f7ad170f20675.wav",
+      "duration": 2.4595,
+      "bytes": 78750
+    },
+    {
+      "id": "a7198c0bbe7f3274",
+      "text": "緩和，放鬆肩部。",
+      "file": "a7198c0bbe7f3274.wav",
+      "duration": 2.228625,
+      "bytes": 71362
+    },
+    {
+      "id": "0df54498f3bf1bc2",
+      "text": "八秒後，輕柔屈髖。",
+      "file": "0df54498f3bf1bc2.wav",
+      "duration": 2.4645,
+      "bytes": 78910
+    },
+    {
+      "id": "9dfd6c9309b6100d",
+      "text": "緩和，輕柔屈髖。",
+      "file": "9dfd6c9309b6100d.wav",
+      "duration": 2.228625,
+      "bytes": 71362
+    },
+    {
+      "id": "d8bc7a96696d20c3",
+      "text": "八秒後，慢慢踏步。",
+      "file": "d8bc7a96696d20c3.wav",
+      "duration": 2.334875,
+      "bytes": 74762
+    },
+    {
+      "id": "a002c2fe8deb5241",
+      "text": "緩和，慢慢踏步。",
+      "file": "a002c2fe8deb5241.wav",
+      "duration": 2.104,
+      "bytes": 67374
+    },
+    {
+      "id": "bf1e1ae2960c59c9",
+      "text": "八秒後，站穩與呼吸。",
+      "file": "bf1e1ae2960c59c9.wav",
+      "duration": 2.589125,
+      "bytes": 82898
+    },
+    {
+      "id": "8aa4a1fce8d28f8a",
+      "text": "緩和，站穩與呼吸。",
+      "file": "8aa4a1fce8d28f8a.wav",
+      "duration": 2.329875,
+      "bytes": 74602
+    },
+    {
+      "id": "d5d9d4c785ec0543",
+      "text": "八秒後，結束前放鬆。",
+      "file": "d5d9d4c785ec0543.wav",
+      "duration": 2.764375,
+      "bytes": 88506
+    },
+    {
+      "id": "9a900619e0103da2",
+      "text": "緩和，結束前放鬆。",
+      "file": "9a900619e0103da2.wav",
+      "duration": 2.527375,
+      "bytes": 80922
+    },
+    {
+      "id": "336d6142ded4d38e",
+      "text": "還有八秒，慢慢收好動作。",
+      "file": "336d6142ded4d38e.wav",
+      "duration": 2.944625,
+      "bytes": 94274
+    },
+    {
+      "id": "39d01ac892850e33",
+      "text": "這堂課到這裡，慢慢回到準備姿勢。",
+      "file": "39d01ac892850e33.wav",
+      "duration": 3.68175,
+      "bytes": 117862
+    },
+    {
+      "id": "0400283bbef0ecf8",
+      "text": "開始。先暖身，踏步找節奏。",
+      "file": "0400283bbef0ecf8.wav",
+      "duration": 3.78575,
+      "bytes": 121190
+    },
+    {
+      "id": "0a5aeb0caaeb9416",
+      "text": "八秒後，踏併步練習。",
+      "file": "0a5aeb0caaeb9416.wav",
+      "duration": 2.668125,
+      "bytes": 85426
+    },
+    {
+      "id": "5424a1714d6408ad",
+      "text": "暖身，踏併步練習。",
+      "file": "5424a1714d6408ad.wav",
+      "duration": 2.415,
+      "bytes": 77326
+    },
+    {
+      "id": "03d8d0e5025de5f4",
+      "text": "八秒後，側步與伸手。",
+      "file": "03d8d0e5025de5f4.wav",
+      "duration": 2.583,
+      "bytes": 82702
+    },
+    {
+      "id": "c0cac8460769bfbb",
+      "text": "暖身，側步與伸手。",
+      "file": "c0cac8460769bfbb.wav",
+      "duration": 2.341,
+      "bytes": 74958
+    },
+    {
+      "id": "485ba9804130c61f",
+      "text": "八秒後，小幅抬膝。",
+      "file": "485ba9804130c61f.wav",
+      "duration": 2.448375,
+      "bytes": 78394
+    },
+    {
+      "id": "1aa6aaa6e66c1892",
+      "text": "暖身，小幅抬膝。",
+      "file": "1aa6aaa6e66c1892.wav",
+      "duration": 2.211375,
+      "bytes": 70810
+    },
+    {
+      "id": "9a7a90b1bdbbd52a",
+      "text": "八秒後，踏併步。",
+      "file": "9a7a90b1bdbbd52a.wav",
+      "duration": 2.211375,
+      "bytes": 70810
+    },
+    {
+      "id": "2eda9199b11f94fa",
+      "text": "主要訓練，踏併步。",
+      "file": "2eda9199b11f94fa.wav",
+      "duration": 2.32375,
+      "bytes": 74406
+    },
+    {
+      "id": "748eb9db603d1d98",
+      "text": "八秒後，V 字踏步。",
+      "file": "748eb9db603d1d98.wav",
+      "duration": 2.36325,
+      "bytes": 75670
+    },
+    {
+      "id": "1c52067f5318e3ae",
+      "text": "主要訓練，V 字踏步。",
+      "file": "1c52067f5318e3ae.wav",
+      "duration": 2.494,
+      "bytes": 79854
+    },
+    {
+      "id": "dd0ef1e8922ad4e8",
+      "text": "主要訓練，交替抬膝。",
+      "file": "dd0ef1e8922ad4e8.wav",
+      "duration": 2.56575,
+      "bytes": 82150
+    },
+    {
+      "id": "6ffbf8005289f4b3",
+      "text": "八秒後，手腳組合。",
+      "file": "6ffbf8005289f4b3.wav",
+      "duration": 2.492875,
+      "bytes": 79818
+    },
+    {
+      "id": "b3c2b29c1c858b65",
+      "text": "主要訓練，手腳組合。",
+      "file": "b3c2b29c1c858b65.wav",
+      "duration": 2.623625,
+      "bytes": 84002
+    },
+    {
+      "id": "03930162c775382d",
+      "text": "八秒後，恢復踏步。",
+      "file": "03930162c775382d.wav",
+      "duration": 2.369375,
+      "bytes": 75866
+    },
+    {
+      "id": "0554328a889214b5",
+      "text": "恢復踏步。放慢動作，調整呼吸。",
+      "file": "0554328a889214b5.wav",
+      "duration": 4.14625,
+      "bytes": 132726
+    },
+    {
+      "id": "14beb073b51411a8",
+      "text": "八秒後，腿後勾腳。",
+      "file": "14beb073b51411a8.wav",
+      "duration": 2.44725,
+      "bytes": 78358
+    },
+    {
+      "id": "46360672dfcd81e4",
+      "text": "主要訓練，腿後勾腳。",
+      "file": "46360672dfcd81e4.wav",
+      "duration": 2.578,
+      "bytes": 82542
+    },
+    {
+      "id": "1dea21b45d168de9",
+      "text": "八秒後，側步伸手。",
+      "file": "1dea21b45d168de9.wav",
+      "duration": 2.391625,
+      "bytes": 76578
+    },
+    {
+      "id": "3100a693b89e3ce8",
+      "text": "主要訓練，側步伸手。",
+      "file": "3100a693b89e3ce8.wav",
+      "duration": 2.52625,
+      "bytes": 80886
+    },
+    {
+      "id": "a169dea225052c6d",
+      "text": "八秒後，慢慢縮小舞步。",
+      "file": "a169dea225052c6d.wav",
+      "duration": 2.75825,
+      "bytes": 88310
+    },
+    {
+      "id": "796a2f3156a86e19",
+      "text": "慢慢縮小舞步。放慢動作，調整呼吸。",
+      "file": "796a2f3156a86e19.wav",
+      "duration": 4.500625,
+      "bytes": 144066
+    },
+    {
+      "id": "eec31889598c09ff",
+      "text": "八秒後，輕鬆踏併步。",
+      "file": "eec31889598c09ff.wav",
+      "duration": 2.63975,
+      "bytes": 84518
+    },
+    {
+      "id": "a53622975dfc9d9e",
+      "text": "緩和，輕鬆踏併步。",
+      "file": "a53622975dfc9d9e.wav",
+      "duration": 2.403875,
+      "bytes": 76970
+    },
+    {
+      "id": "a9b22f5bf49ded34",
+      "text": "八秒後，輕柔側伸。",
+      "file": "a9b22f5bf49ded34.wav",
+      "duration": 2.44225,
+      "bytes": 78198
+    },
+    {
+      "id": "83f5bae1220ba6af",
+      "text": "緩和，輕柔側伸。",
+      "file": "83f5bae1220ba6af.wav",
+      "duration": 2.20525,
+      "bytes": 70614
+    },
+    {
+      "id": "f09535972f5555f6",
+      "text": "緩和，放慢踏步。",
+      "file": "f09535972f5555f6.wav",
+      "duration": 2.1385,
+      "bytes": 68478
+    },
+    {
+      "id": "6995eb2e0edb650c",
+      "text": "開始。先暖身，坐穩輕踩。",
+      "file": "6995eb2e0edb650c.wav",
+      "duration": 3.572125,
+      "bytes": 114354
+    },
+    {
+      "id": "b1485964123ba3f3",
+      "text": "八秒後，逐漸接上節奏。",
+      "file": "b1485964123ba3f3.wav",
+      "duration": 2.8645,
+      "bytes": 91710
+    },
+    {
+      "id": "d468c21d36f1ee04",
+      "text": "暖身，逐漸接上節奏。",
+      "file": "d468c21d36f1ee04.wav",
+      "duration": 2.64475,
+      "bytes": 84678
+    },
+    {
+      "id": "04f0524f6ce7d073",
+      "text": "八秒後，坐姿順踩。",
+      "file": "04f0524f6ce7d073.wav",
+      "duration": 2.448375,
+      "bytes": 78394
+    },
+    {
+      "id": "567110a84c139328",
+      "text": "暖身，坐姿順踩。",
+      "file": "567110a84c139328.wav",
+      "duration": 2.206375,
+      "bytes": 70650
+    },
+    {
+      "id": "dac1cddbe7040888",
+      "text": "八秒後，準備主段。",
+      "file": "dac1cddbe7040888.wav",
+      "duration": 2.329875,
+      "bytes": 74602
+    },
+    {
+      "id": "5c915332a1837695",
+      "text": "暖身，準備主段。",
+      "file": "5c915332a1837695.wav",
+      "duration": 2.094,
+      "bytes": 67054
+    },
+    {
+      "id": "e51b6de71b36b3d9",
+      "text": "八秒後，穩定踩踏。",
+      "file": "e51b6de71b36b3d9.wav",
+      "duration": 2.415,
+      "bytes": 77326
+    },
+    {
+      "id": "d39fc507338cda0d",
+      "text": "主要訓練，穩定踩踏。",
+      "file": "d39fc507338cda0d.wav",
+      "duration": 2.549625,
+      "bytes": 81634
+    },
+    {
+      "id": "b2130f1c80e32b80",
+      "text": "八秒後，踏頻段 A。",
+      "file": "b2130f1c80e32b80.wav",
+      "duration": 2.347125,
+      "bytes": 75154
+    },
+    {
+      "id": "af9844e391482853",
+      "text": "主要訓練，踏頻段 A。",
+      "file": "af9844e391482853.wav",
+      "duration": 2.47675,
+      "bytes": 79302
+    },
+    {
+      "id": "ee72624aa2b06c69",
+      "text": "八秒後，恢復輕踩。",
+      "file": "ee72624aa2b06c69.wav",
+      "duration": 2.431125,
+      "bytes": 77842
+    },
+    {
+      "id": "7ebfe9b975168c5b",
+      "text": "恢復輕踩。放慢動作，調整呼吸。",
+      "file": "7ebfe9b975168c5b.wav",
+      "duration": 4.208,
+      "bytes": 134702
+    },
+    {
+      "id": "05053226dad0817f",
+      "text": "八秒後，踏頻段 B。",
+      "file": "05053226dad0817f.wav",
+      "duration": 2.408875,
+      "bytes": 77130
+    },
+    {
+      "id": "61c30b1aba67ada6",
+      "text": "主要訓練，踏頻段 B。",
+      "file": "61c30b1aba67ada6.wav",
+      "duration": 2.5435,
+      "bytes": 81438
+    },
+    {
+      "id": "d6f1e4a5ca7444ab",
+      "text": "八秒後，收回節奏。",
+      "file": "d6f1e4a5ca7444ab.wav",
+      "duration": 2.48175,
+      "bytes": 79462
+    },
+    {
+      "id": "84dfc32af51fa07f",
+      "text": "收回節奏。放慢動作，調整呼吸。",
+      "file": "84dfc32af51fa07f.wav",
+      "duration": 4.236375,
+      "bytes": 135610
+    },
+    {
+      "id": "5539d4364017f152",
+      "text": "八秒後，逐漸放慢踩踏。",
+      "file": "5539d4364017f152.wav",
+      "duration": 2.808875,
+      "bytes": 89930
+    },
+    {
+      "id": "8e6d22c8e9e3740e",
+      "text": "逐漸放慢踩踏。放慢動作，調整呼吸。",
+      "file": "8e6d22c8e9e3740e.wav",
+      "duration": 4.5635,
+      "bytes": 146078
+    },
+    {
+      "id": "38cc41e068c0ac76",
+      "text": "八秒後，結束前輕踩。",
+      "file": "38cc41e068c0ac76.wav",
+      "duration": 2.72375,
+      "bytes": 87206
+    },
+    {
+      "id": "e4f71c5a6c85d086",
+      "text": "結束前輕踩。放慢動作，調整呼吸。",
+      "file": "e4f71c5a6c85d086.wav",
+      "duration": 4.483375,
+      "bytes": 143514
+    },
+    {
+      "id": "66e8448388e4f4ba",
+      "text": "開始。先暖身，站穩與握帶。",
+      "file": "66e8448388e4f4ba.wav",
+      "duration": 3.71175,
+      "bytes": 118822
+    },
+    {
+      "id": "833cede895dd68b1",
+      "text": "八秒後，小幅划船。",
+      "file": "833cede895dd68b1.wav",
+      "duration": 2.504,
+      "bytes": 80174
+    },
+    {
+      "id": "6cdaf03467ef1c90",
+      "text": "暖身，小幅划船。",
+      "file": "6cdaf03467ef1c90.wav",
+      "duration": 2.267,
+      "bytes": 72590
+    },
+    {
+      "id": "b5155b40781e207d",
+      "text": "八秒後，淺蹲練習。",
+      "file": "b5155b40781e207d.wav",
+      "duration": 2.4545,
+      "bytes": 78590
+    },
+    {
+      "id": "6338de5c3400e5e3",
+      "text": "暖身，淺蹲練習。",
+      "file": "6338de5c3400e5e3.wav",
+      "duration": 2.2175,
+      "bytes": 71006
+    },
+    {
+      "id": "1853dc30cb6ff516",
+      "text": "八秒後，低划船。",
+      "file": "1853dc30cb6ff516.wav",
+      "duration": 2.27425,
+      "bytes": 72822
+    },
+    {
+      "id": "da59d4ae5f76128e",
+      "text": "主要訓練，低划船。",
+      "file": "da59d4ae5f76128e.wav",
+      "duration": 2.3805,
+      "bytes": 76222
+    },
+    {
+      "id": "e37ef67a99784c2d",
+      "text": "八秒後，站穩調整。",
+      "file": "e37ef67a99784c2d.wav",
+      "duration": 2.3805,
+      "bytes": 76222
+    },
+    {
+      "id": "93223556c6502eda",
+      "text": "站穩調整。放慢動作，調整呼吸。",
+      "file": "93223556c6502eda.wav",
+      "duration": 4.117875,
+      "bytes": 131818
+    },
+    {
+      "id": "73f0c861e0b54c75",
+      "text": "八秒後，輔助淺蹲。",
+      "file": "73f0c861e0b54c75.wav",
+      "duration": 2.4545,
+      "bytes": 78590
+    },
+    {
+      "id": "1ce82a8c699126ac",
+      "text": "主要訓練，輔助淺蹲。",
+      "file": "1ce82a8c699126ac.wav",
+      "duration": 2.594125,
+      "bytes": 83058
+    },
+    {
+      "id": "7e554da8b69f9fec",
+      "text": "八秒後，交替划船。",
+      "file": "7e554da8b69f9fec.wav",
+      "duration": 2.470625,
+      "bytes": 79106
+    },
+    {
+      "id": "f865bc310b9470d8",
+      "text": "主要訓練，交替划船。",
+      "file": "f865bc310b9470d8.wav",
+      "duration": 2.60525,
+      "bytes": 83414
+    },
+    {
+      "id": "cfe90b0d9a2a9b82",
+      "text": "八秒後，短停留。",
+      "file": "cfe90b0d9a2a9b82.wav",
+      "duration": 2.250875,
+      "bytes": 72074
+    },
+    {
+      "id": "10e80f97a9e7d211",
+      "text": "主要訓練，短停留。",
+      "file": "10e80f97a9e7d211.wav",
+      "duration": 2.36325,
+      "bytes": 75670
+    },
+    {
+      "id": "8733502eb0f6ddba",
+      "text": "八秒後，恢復。",
+      "file": "8733502eb0f6ddba.wav",
+      "duration": 1.957125,
+      "bytes": 62674
+    },
+    {
+      "id": "6e2d4edec2beafbf",
+      "text": "恢復。放慢動作，調整呼吸。",
+      "file": "6e2d4edec2beafbf.wav",
+      "duration": 3.762375,
+      "bytes": 120442
+    },
+    {
+      "id": "e9c7c0730c635697",
+      "text": "八秒後，放慢划船回程。",
+      "file": "e9c7c0730c635697.wav",
+      "duration": 2.904,
+      "bytes": 92974
+    },
+    {
+      "id": "7c5196f5ebbf61ae",
+      "text": "緩和，放慢划船回程。",
+      "file": "7c5196f5ebbf61ae.wav",
+      "duration": 2.668125,
+      "bytes": 85426
+    },
+    {
+      "id": "a7439a8366299748",
+      "text": "八秒後，輕柔屈膝活動。",
+      "file": "a7439a8366299748.wav",
+      "duration": 2.870625,
+      "bytes": 91906
+    },
+    {
+      "id": "9919f1136d835caf",
+      "text": "緩和，輕柔屈膝活動。",
+      "file": "9919f1136d835caf.wav",
+      "duration": 2.63475,
+      "bytes": 84358
+    },
+    {
+      "id": "3288ca0839333bfd",
+      "text": "站穩與呼吸。放慢動作，調整呼吸。",
+      "file": "3288ca0839333bfd.wav",
+      "duration": 4.30925,
+      "bytes": 137942
+    },
+    {
+      "id": "cb77e9fc22ad9fdf",
+      "text": "開始。先暖身，握槓與屈髖準備。",
+      "file": "cb77e9fc22ad9fdf.wav",
+      "duration": 4.14125,
+      "bytes": 132566
+    },
+    {
+      "id": "1fc6a581b2a8ccc1",
+      "text": "八秒後，淺幅硬舉練習。",
+      "file": "1fc6a581b2a8ccc1.wav",
+      "duration": 2.88175,
+      "bytes": 92262
+    },
+    {
+      "id": "c2f769c20f592709",
+      "text": "暖身，淺幅硬舉練習。",
+      "file": "c2f769c20f592709.wav",
+      "duration": 2.64475,
+      "bytes": 84678
+    },
+    {
+      "id": "5f283453772b0a93",
+      "text": "八秒後，放槓與調整呼吸。",
+      "file": "5f283453772b0a93.wav",
+      "duration": 3.057,
+      "bytes": 97870
+    },
+    {
+      "id": "a7dd378de43d979b",
+      "text": "放槓與調整呼吸。放慢動作，調整呼吸。",
+      "file": "a7dd378de43d979b.wav",
+      "duration": 4.78825,
+      "bytes": 153270
+    },
+    {
+      "id": "56d7934d96380a45",
+      "text": "八秒後，羅馬尼亞硬舉。",
+      "file": "56d7934d96380a45.wav",
+      "duration": 2.707625,
+      "bytes": 86690
+    },
+    {
+      "id": "6c6bbc4d5b5bf9cc",
+      "text": "主要訓練，羅馬尼亞硬舉。",
+      "file": "6c6bbc4d5b5bf9cc.wav",
+      "duration": 2.82,
+      "bytes": 90286
+    },
+    {
+      "id": "d831e1b7c336e583",
+      "text": "八秒後，放槓休息。",
+      "file": "d831e1b7c336e583.wav",
+      "duration": 2.48175,
+      "bytes": 79462
+    },
+    {
+      "id": "599edb92d1a10d2d",
+      "text": "放槓休息。放慢動作，調整呼吸。",
+      "file": "599edb92d1a10d2d.wav",
+      "duration": 4.231375,
+      "bytes": 135450
+    },
+    {
+      "id": "2f4b0dba61f49bf4",
+      "text": "八秒後，屈髖划船。",
+      "file": "2f4b0dba61f49bf4.wav",
+      "duration": 2.505125,
+      "bytes": 80210
+    },
+    {
+      "id": "df04ab4e6ed5be32",
+      "text": "主要訓練，屈髖划船。",
+      "file": "df04ab4e6ed5be32.wav",
+      "duration": 2.63975,
+      "bytes": 84518
+    },
+    {
+      "id": "e292f9591cd5cf66",
+      "text": "八秒後，放槓調整。",
+      "file": "e292f9591cd5cf66.wav",
+      "duration": 2.426125,
+      "bytes": 77682
+    },
+    {
+      "id": "5603ab1d2c1aca7e",
+      "text": "放槓調整。放慢動作，調整呼吸。",
+      "file": "5603ab1d2c1aca7e.wav",
+      "duration": 4.179625,
+      "bytes": 133794
+    },
+    {
+      "id": "591a5caea025a618",
+      "text": "八秒後，站姿彎舉。",
+      "file": "591a5caea025a618.wav",
+      "duration": 2.403875,
+      "bytes": 76970
+    },
+    {
+      "id": "94340dc9ed76e6ae",
+      "text": "主要訓練，站姿彎舉。",
+      "file": "94340dc9ed76e6ae.wav",
+      "duration": 2.5385,
+      "bytes": 81278
+    },
+    {
+      "id": "010d01feb7966b8c",
+      "text": "八秒後，放槓恢復。",
+      "file": "010d01feb7966b8c.wav",
+      "duration": 2.413875,
+      "bytes": 77290
+    },
+    {
+      "id": "9fcc0831e8fe4499",
+      "text": "放槓恢復。放慢動作，調整呼吸。",
+      "file": "9fcc0831e8fe4499.wav",
+      "duration": 4.179625,
+      "bytes": 133794
+    },
+    {
+      "id": "51ffe96a25471e65",
+      "text": "八秒後，淺幅硬舉。",
+      "file": "51ffe96a25471e65.wav",
+      "duration": 2.396625,
+      "bytes": 76738
+    },
+    {
+      "id": "613b7c376927760c",
+      "text": "主要訓練，淺幅硬舉。",
+      "file": "613b7c376927760c.wav",
+      "duration": 2.52625,
+      "bytes": 80886
+    },
+    {
+      "id": "f999f5adf96ca9d6",
+      "text": "八秒後，放慢屈髖。",
+      "file": "f999f5adf96ca9d6.wav",
+      "duration": 2.470625,
+      "bytes": 79106
+    },
+    {
+      "id": "376ca51629e2f8a7",
+      "text": "緩和，放慢屈髖。",
+      "file": "376ca51629e2f8a7.wav",
+      "duration": 2.23475,
+      "bytes": 71558
+    },
+    {
+      "id": "1bd99bf332e4417b",
+      "text": "八秒後，放槓與放鬆。",
+      "file": "1bd99bf332e4417b.wav",
+      "duration": 2.667,
+      "bytes": 85390
+    },
+    {
+      "id": "0b7c2adeb9809610",
+      "text": "放槓與放鬆。放慢動作，調整呼吸。",
+      "file": "0b7c2adeb9809610.wav",
+      "duration": 4.43275,
+      "bytes": 141894
+    },
+    {
+      "id": "efce78a92f910b23",
+      "text": "八秒後，站穩並準備收器材。",
+      "file": "efce78a92f910b23.wav",
+      "duration": 3.299,
+      "bytes": 105614
+    },
+    {
+      "id": "a1305b2c1f1b0d25",
+      "text": "站穩並準備收器材。放慢動作，調整呼吸。",
+      "file": "a1305b2c1f1b0d25.wav",
+      "duration": 5.036375,
+      "bytes": 161210
+    },
+    {
+      "id": "583a6b9ac52e1c29",
+      "text": "開始。先暖身，握布與站穩。",
+      "file": "583a6b9ac52e1c29.wav",
+      "duration": 3.651125,
+      "bytes": 116882
+    },
+    {
+      "id": "71312331d2ba20e1",
+      "text": "八秒後，輕柔胸肩活動。",
+      "file": "71312331d2ba20e1.wav",
+      "duration": 2.870625,
+      "bytes": 91906
+    },
+    {
+      "id": "f37fa80dca356b8a",
+      "text": "暖身，輕柔胸肩活動。",
+      "file": "f37fa80dca356b8a.wav",
+      "duration": 2.628625,
+      "bytes": 84162
+    },
+    {
+      "id": "bbb7414cf7ae9ff4",
+      "text": "八秒後，小幅屈髖。",
+      "file": "bbb7414cf7ae9ff4.wav",
+      "duration": 2.494,
+      "bytes": 79854
+    },
+    {
+      "id": "bab64acf665bf446",
+      "text": "暖身，小幅屈髖。",
+      "file": "bab64acf665bf446.wav",
+      "duration": 2.257,
+      "bytes": 72270
+    },
+    {
+      "id": "bd5a245b78b3a13e",
+      "text": "八秒後，吊布離地坐姿。",
+      "file": "bd5a245b78b3a13e.wav",
+      "duration": 2.76325,
+      "bytes": 88470
+    },
+    {
+      "id": "0eaab661a338901e",
+      "text": "主要訓練，吊布離地坐姿。",
+      "file": "0eaab661a338901e.wav",
+      "duration": 2.894,
+      "bytes": 92654
+    },
+    {
+      "id": "db976b972a9a5221",
+      "text": "八秒後，左側舒展。",
+      "file": "db976b972a9a5221.wav",
+      "duration": 2.3855,
+      "bytes": 76382
+    },
+    {
+      "id": "366198603622540b",
+      "text": "主要訓練，左側舒展。",
+      "file": "366198603622540b.wav",
+      "duration": 2.51625,
+      "bytes": 80566
+    },
+    {
+      "id": "0269c1941377fdf2",
+      "text": "八秒後，右側舒展。",
+      "file": "0269c1941377fdf2.wav",
+      "duration": 2.357125,
+      "bytes": 75474
+    },
+    {
+      "id": "1de9ba9080b561fd",
+      "text": "主要訓練，右側舒展。",
+      "file": "1de9ba9080b561fd.wav",
+      "duration": 2.487875,
+      "bytes": 79658
+    },
+    {
+      "id": "7cc1ad545d9552db",
+      "text": "八秒後，吊布支撐倒掛與回正。",
+      "file": "7cc1ad545d9552db.wav",
+      "duration": 3.428625,
+      "bytes": 109762
+    },
+    {
+      "id": "4972a3f3ffc2df39",
+      "text": "主要訓練，吊布支撐倒掛與回正。",
+      "file": "4972a3f3ffc2df39.wav",
+      "duration": 3.56325,
+      "bytes": 114070
+    },
+    {
+      "id": "5daa74c18e0a18b4",
+      "text": "八秒後，短暫屈髖停留。",
+      "file": "5daa74c18e0a18b4.wav",
+      "duration": 2.96075,
+      "bytes": 94790
+    },
+    {
+      "id": "5154d6ad28fa0459",
+      "text": "主要訓練，短暫屈髖停留。",
+      "file": "5154d6ad28fa0459.wav",
+      "duration": 3.107625,
+      "bytes": 99490
+    },
+    {
+      "id": "ca85462454660d9e",
+      "text": "八秒後，回正與恢復。",
+      "file": "ca85462454660d9e.wav",
+      "duration": 2.606375,
+      "bytes": 83450
+    },
+    {
+      "id": "989ddd63f222d7f3",
+      "text": "回正與恢復。放慢動作，調整呼吸。",
+      "file": "989ddd63f222d7f3.wav",
+      "duration": 4.38825,
+      "bytes": 140470
+    },
+    {
+      "id": "409a70cff4407eb5",
+      "text": "八秒後，放慢胸肩活動。",
+      "file": "409a70cff4407eb5.wav",
+      "duration": 2.836125,
+      "bytes": 90802
+    },
+    {
+      "id": "044db026e591c110",
+      "text": "緩和，放慢胸肩活動。",
+      "file": "044db026e591c110.wav",
+      "duration": 2.60025,
+      "bytes": 83254
+    },
+    {
+      "id": "31e17535a5f6f4df",
+      "text": "八秒後，輕柔屈髖與回正。",
+      "file": "31e17535a5f6f4df.wav",
+      "duration": 3.129875,
+      "bytes": 100202
+    },
+    {
+      "id": "5f044925a00cf1cf",
+      "text": "緩和，輕柔屈髖與回正。",
+      "file": "5f044925a00cf1cf.wav",
+      "duration": 2.894,
+      "bytes": 92654
+    },
+    {
+      "id": "271942c75327c6f3",
+      "text": "開始。先暖身，仰躺呼吸。",
+      "file": "271942c75327c6f3.wav",
+      "duration": 3.520375,
+      "bytes": 112698
+    },
+    {
+      "id": "41d82320550e87dc",
+      "text": "八秒後，骨盆小幅活動。",
+      "file": "41d82320550e87dc.wav",
+      "duration": 2.813875,
+      "bytes": 90090
+    },
+    {
+      "id": "37a7a714b3bb0a9d",
+      "text": "暖身，骨盆小幅活動。",
+      "file": "37a7a714b3bb0a9d.wav",
+      "duration": 2.576875,
+      "bytes": 82506
+    },
+    {
+      "id": "4e5085124b1ee5bd",
+      "text": "八秒後，腳跟滑動練習。",
+      "file": "4e5085124b1ee5bd.wav",
+      "duration": 2.8545,
+      "bytes": 91390
+    },
+    {
+      "id": "9e62b7096aa4cf25",
+      "text": "暖身，腳跟滑動練習。",
+      "file": "9e62b7096aa4cf25.wav",
+      "duration": 2.611375,
+      "bytes": 83610
+    },
+    {
+      "id": "af2258c719f2735a",
+      "text": "八秒後，回正與呼吸。",
+      "file": "af2258c719f2735a.wav",
+      "duration": 2.606375,
+      "bytes": 83450
+    },
+    {
+      "id": "589b7a16bd287c9f",
+      "text": "暖身，回正與呼吸。",
+      "file": "589b7a16bd287c9f.wav",
+      "duration": 2.336,
+      "bytes": 74798
+    },
+    {
+      "id": "dbf6cd89fda34452",
+      "text": "八秒後，交替抬腳。",
+      "file": "dbf6cd89fda34452.wav",
+      "duration": 2.413875,
+      "bytes": 77290
+    },
+    {
+      "id": "af852d15c56362d8",
+      "text": "主要訓練，交替抬腳。",
+      "file": "af852d15c56362d8.wav",
+      "duration": 2.5435,
+      "bytes": 81438
+    },
+    {
+      "id": "f4f330a9599ebdaf",
+      "text": "八秒後，腳跟滑動。",
+      "file": "f4f330a9599ebdaf.wav",
+      "duration": 2.3805,
+      "bytes": 76222
+    },
+    {
+      "id": "876afd5f71d6b815",
+      "text": "主要訓練，腳跟滑動。",
+      "file": "876afd5f71d6b815.wav",
+      "duration": 2.515125,
+      "bytes": 80530
+    },
+    {
+      "id": "d016234c39daa0ce",
+      "text": "八秒後，單側開膝。",
+      "file": "d016234c39daa0ce.wav",
+      "duration": 2.48675,
+      "bytes": 79622
+    },
+    {
+      "id": "edb88805b85adcdc",
+      "text": "主要訓練，單側開膝。",
+      "file": "edb88805b85adcdc.wav",
+      "duration": 2.64475,
+      "bytes": 84678
+    },
+    {
+      "id": "5261639228c21a8c",
+      "text": "八秒後，小幅橋式。",
+      "file": "5261639228c21a8c.wav",
+      "duration": 2.52625,
+      "bytes": 80886
+    },
+    {
+      "id": "21847ab2ac58b835",
+      "text": "主要訓練，小幅橋式。",
+      "file": "21847ab2ac58b835.wav",
+      "duration": 2.616375,
+      "bytes": 83770
+    },
+    {
+      "id": "e1a56d64919ebbb8",
+      "text": "八秒後，仰躺恢復。",
+      "file": "e1a56d64919ebbb8.wav",
+      "duration": 2.40275,
+      "bytes": 76934
+    },
+    {
+      "id": "85979487e17ed5da",
+      "text": "仰躺恢復。放慢動作，調整呼吸。",
+      "file": "85979487e17ed5da.wav",
+      "duration": 4.1685,
+      "bytes": 133438
+    },
+    {
+      "id": "5db78d9c1a109252",
+      "text": "八秒後，輕柔骨盆活動。",
+      "file": "5db78d9c1a109252.wav",
+      "duration": 2.80275,
+      "bytes": 89734
+    },
+    {
+      "id": "296f60f351601597",
+      "text": "緩和，輕柔骨盆活動。",
+      "file": "296f60f351601597.wav",
+      "duration": 2.56575,
+      "bytes": 82150
+    },
+    {
+      "id": "947e030ecdf619d8",
+      "text": "八秒後，放慢開膝活動。",
+      "file": "947e030ecdf619d8.wav",
+      "duration": 2.836125,
+      "bytes": 90802
+    },
+    {
+      "id": "cc4d7c73aeaa0853",
+      "text": "緩和，放慢開膝活動。",
+      "file": "cc4d7c73aeaa0853.wav",
+      "duration": 2.60025,
+      "bytes": 83254
+    },
+    {
+      "id": "7bdb7aef05e5e2dd",
+      "text": "八秒後，放鬆與呼吸。",
+      "file": "7bdb7aef05e5e2dd.wav",
+      "duration": 2.657,
+      "bytes": 85070
+    },
+    {
+      "id": "4f4f5d279b94900f",
+      "text": "緩和，放鬆與呼吸。",
+      "file": "4f4f5d279b94900f.wav",
+      "duration": 2.40275,
+      "bytes": 76934
+    },
+    {
+      "id": "816b46c204a13e79",
+      "text": "八秒後，回到墊上休息。",
+      "file": "816b46c204a13e79.wav",
+      "duration": 2.88175,
+      "bytes": 92262
+    },
+    {
+      "id": "76e2d27ed3fe7592",
+      "text": "回到墊上休息。放慢動作，調整呼吸。",
+      "file": "76e2d27ed3fe7592.wav",
+      "duration": 4.631375,
+      "bytes": 148250
+    },
+    {
+      "id": "b6094fbe0a1a726a",
+      "text": "預覽到這裡結束。",
+      "file": "b6094fbe0a1a726a.wav",
+      "duration": 2.115125,
+      "bytes": 67730
+    },
+    {
+      "id": "0a3883ce1575ca12",
+      "text": "準備好了，我們開始。",
+      "file": "0a3883ce1575ca12.wav",
+      "duration": 2.44725,
+      "bytes": 78358
+    },
+    {
+      "id": "58328589932dddfa",
+      "text": "休息一下，調整呼吸。",
+      "file": "58328589932dddfa.wav",
+      "duration": 2.633625,
+      "bytes": 84322
+    }
+  ]
+}

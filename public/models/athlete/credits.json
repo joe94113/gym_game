@@ -1,0 +1,26 @@
+[
+  {
+    "name": "MakeHuman base human, young Asian male skin, eyes, brows, eyelashes and short hair",
+    "sourceUrl": "https://static.makehumancommunity.org/assets/assetpacks/makehuman_system_assets.html",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "attribution": "MakeHuman Community; original core asset copyright holders include Data Collection AB, Joel Palmius and Jonas Hauquier.",
+    "changes": "Character shape generated with MPFB 2.0.18, modelling targets baked, helper geometry removed, model and skeleton normalised to 1.78 metres, textures prepared for PBR web export. Fitted charcoal compression shorts are a new shell derived from the CC0 body surface with identical skin weights; body skin below the old loose shorts restored."
+  },
+  {
+    "name": "Male athletic tank top (elvs_male_athletic_tank1)",
+    "sourceUrl": "https://static.makehumancommunity.org/assets/assetpacks/shirts03.html",
+    "license": "CC BY, as declared by the official asset pack and source asset header",
+    "licenseUrl": "https://static.makehumancommunity.org/assets/assetpacks/shirts03.html",
+    "attribution": "Male athletic tank top by Elvaerwyn, distributed by MakeHuman Community under CC BY. Original asset UUID: 3077e09d-1175-4b99-a97a-4436d6f9c54d.",
+    "changes": "Fitted to generated athlete, skinned to GameEngine skeleton, garment mesh reduced for real-time rendering, lower hem leg influences reassigned to pelvis for deep hip flexion, material exported as opaque PBR. Source header records CC-by without a version number; that declaration is preserved here."
+  },
+  {
+    "name": "Running shoes (punkduck_running_shoes_01)",
+    "sourceUrl": "https://static.makehumancommunity.org/assets/assetpacks/shoes02.html",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "attribution": "Running shoes by punkduck, distributed by MakeHuman Community under CC BY 3.0. Original asset UUID: e57655db-9408-43ed-a795-971c115219fe.",
+    "changes": "Fitted and skinned to the generated athlete; textures prepared for opaque PBR web export."
+  }
+]

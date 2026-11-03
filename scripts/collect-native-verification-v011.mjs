@@ -1,0 +1,19 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+
+const read=path=>JSON.parse(readFileSync(path,'utf8').replace(/^\uFEFF/,'')),freeze=read('artifacts/source-freeze-v011.json');
+for(const [path,hash]of Object.entries(freeze.sourceHashes))if(createHash('sha256').update(readFileSync(path)).digest('hex')!==hash)throw Error(`runtime changed: ${path}`);
+const fullPath='artifacts/playwright-v011-native-first.json',retestPath='artifacts/playwright-v011-native-retest.json',full=read(fullPath),retest=read(retestPath),merged=structuredClone(full);
+function* specs(report){for(const suite of report.suites||[]){yield* suite.specs||[];yield* specs(suite);}}
+const failed=[...specs(full)].filter(spec=>!spec.ok),retested=[...specs(retest)];
+if(failed.length!==3||retested.length!==3||retest.stats.expected!==3||retest.stats.unexpected||retest.stats.flaky||retest.stats.skipped)throw Error('expected three corrected test cases, each passing on targeted rerun');
+for(const spec of specs(merged))if(!spec.ok){const replacement=retested.find(item=>item.file===spec.file&&item.title===spec.title);if(!replacement?.ok)throw Error(`missing passing retest: ${spec.title}`);Object.assign(spec,replacement);}
+const cases=[...specs(merged)];if(cases.length!==44||cases.some(spec=>!spec.ok||spec.tests.some(test=>test.status!=='expected'||test.results.at(-1)?.status!=='passed')))throw Error('all 44 unique cases must pass');
+Object.assign(merged,{mergedFrom:[fullPath,retestPath],retestedTitles:failed.map(spec=>spec.title),verificationScope:'44 unique native-WebGL cases. The initial full run contained three outdated test cases: two expected nine cable options instead of twelve, and one immediate position assertion spanned live browser animation frames. The expectations and the NPC test clock were corrected without runtime changes. Only those three cases were rerun; raw first-run failures and retest reports are preserved.',sourceHashes:freeze.sourceHashes});
+merged.stats={...merged.stats,expected:44,unexpected:0,flaky:0,skipped:0,duration:full.stats.duration+retest.stats.duration};
+writeFileSync('artifacts/playwright-v011-native.json',JSON.stringify(merged,null,2));
+const spec=cases.find(spec=>spec.title.includes('真正刪除 GL buffers')),attachment=spec.tests[0].results.at(-1).attachments.find(item=>item.name==='actual-gl-room-cycle-v011');
+if(!attachment?.body)throw Error('missing native resource instrumentation attachment');
+const report=JSON.parse(Buffer.from(attachment.body,'base64').toString('utf8')),pass=!/swiftshader|llvmpipe|software|basic render/i.test(report.renderer)&&report.coldGl.buffersDeleted>report.before.buffersDeleted&&report.cold.rendererMemory.geometries<report.warm.rendererMemory.geometries&&report.classroomReturn.rendererMemory.geometries>report.cold.rendererMemory.geometries&&report.classReady&&report.classExit&&report.showerReady&&report.showerExit&&report.activeEvictionRejected;
+mkdirSync('artifacts/room-gpu-resources-v011',{recursive:true});writeFileSync('artifacts/room-gpu-resources-v011/native-cycle.json',JSON.stringify({pass,sourceHashes:freeze.sourceHashes,renderer:report.renderer,report,scope:'Production gym native WebGL2. Both rooms rendered before cooling, true deleteBuffer/deleteTexture/deleteProgram counts for live GL objects only, renderer geometry/texture counts before cooling and on return. Object counts are not VRAM bytes. CPU arrays and shared human models remain resident.'},null,2));
+console.log(JSON.stringify({pass,cases:cases.length,retested:failed.length,renderer:report.renderer,deletedBuffers:report.coldGl.buffersDeleted-report.before.buffersDeleted,deletedTextures:report.coldGl.texturesDeleted-report.before.texturesDeleted,memory:{warm:report.warm.rendererMemory,cold:report.cold.rendererMemory,classroomReturn:report.classroomReturn.rendererMemory,bathroomReturn:report.bathroomReturn.rendererMemory}}));if(!pass)process.exitCode=1;

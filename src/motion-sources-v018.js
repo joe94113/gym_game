@@ -1,0 +1,16 @@
+import {inertialCurlInfo} from './inertial-curl-v018.js';
+import {lateralReferenceInfo} from './lateral-reference-v018.js';
+import {getCapturedPoseInfo} from './captured-pose-v017.js';
+import {lowerBodyCaptureInfo} from './lower-body-capture-v018.js';
+
+export function motionSourceInfo(id){return getCapturedPoseInfo(id)||lowerBodyCaptureInfo(id)||inertialCurlInfo(id)||lateralReferenceInfo(id);}
+/** Each component is reported independently. A timing reference is never
+ * promoted to an exact equipment recording or professional approval. */
+export function motionCoverage(catalog){return catalog.filter(item=>item.runtime!=='facility'||item.classKind).map(item=>{const source=motionSourceInfo(item.id);return{id:item.id,name:item.name,runtime:item.runtime,loop:source?{status:source.kind,sourceId:source.sourceId,scope:source.scope}: {status:'authored',sourceId:null,scope:'No matching public capture integrated for this exercise loop.'},transitions:{status:'runtime-segments-not-inspected',scope:'Captured timing is applied only to compatible stationary segments. Check the runtime transition coverage for actual clip/stage matches; special mounts retain their authored paths.'},professionalApproval:'pending'};});}
+export const motionDataCredits=Object.freeze([
+ {name:'UCI Weight Lifting Exercises',url:'https://doi.org/10.24432/C5WK63',terms:'https://creativecommons.org/licenses/by/4.0/',text:'Eduardo Velloso and Wallace Ugulino. CC BY 4.0. Changes: two correct class-A curl crops, timestamp-based resampling, forearm sensor-roll unwrapping, smoothing, monotone phase cleanup and bounded pacing. This is an IMU timing reference, not optical full-body capture or a calibrated anatomical elbow angle.'},
+ {name:'UI-PRMD',url:'https://zenodo.org/records/23104965',terms:'https://opendatacommons.org/licenses/pddl/1-0/',text:'University of Idaho Physical Rehabilitation Movement Data. ODC PDDL 1.0. Changes: Vicon right-arm marker selection, anatomical-rest normalization, six complete episode crops, resampling and quantization. The lateral-raise adaptation mirrors the right arm and bounds unloaded-source elevation to the existing loaded game range.'},
+ {name:'CMU Graphics Lab Motion Capture Database',url:'https://mocap.cs.cmu.edu/',terms:'https://mocap.cs.cmu.edu/faqs.php',text:'The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217. Selected poses and timing are adapted to the game skeleton, contacts and movement ranges.'},
+ {name:'SAME-Limb',url:'https://doi.org/10.57967/hf/9950',terms:'https://creativecommons.org/licenses/by/4.0/',text:'Dongxu Tang, Shih Ying-Lei, Zhuoyi Ren, Jianting Liao, and Yitian Shao. CC BY 4.0. Changes: optical lower-limb channel selection, smoothing, anatomical-rest normalization, repetition crops, resampling, quantization, phase alignment and bounded pacing/pelvis adaptation. No EMG/AMG channel drives the game muscle colours.'},
+]);
+export function motionCreditsMarkup(){return `<section class="motion-data-credits"><h3>真人動作資料</h3>${motionDataCredits.map(source=>`<p><a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.name} ↗</a> · <a href="${source.terms}" target="_blank" rel="noopener noreferrer">使用條款 ↗</a><small>${source.text}</small></p>`).join('')}</section>`;}

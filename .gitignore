@@ -1,0 +1,11 @@
+node_modules/
+dist/
+artifacts/
+.local-tools/
+test-results/
+playwright-report/
+*.log
+server/data/
+.env
+.env.*
+!.env.example

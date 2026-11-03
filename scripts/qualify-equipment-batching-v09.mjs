@@ -1,0 +1,42 @@
+import {createHash} from 'node:crypto';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {createEquipmentFixture} from './equipment-batching-fixture.mjs';
+import {createEquipmentBatcher} from '../src/equipment-batching.js';
+import {createMachineLifecycle} from '../src/machine-lifecycle.js';
+const f=await createEquipmentFixture(),{THREE,scene,machines,metrics,character}=f,b=createEquipmentBatcher({...f,installRenderHook:false}),phaseCount=Number(process.env.FORM_PHASE_COUNT||101);
+const checked=['src/equipment-batching.js','src/equipment.js','src/additional-equipment.js','src/machine-lifecycle.js','src/barbell-lifecycle-paths.js','src/skinned-character.js','public/models/athlete/athlete.glb','public/models/athlete/rig.json'],sha=p=>createHash('sha256').update(readFileSync(p)).digest('hex'),sourceHashes=Object.fromEntries(checked.map(p=>[p,sha(p)]));
+const digest=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex'),issues=[],results=[],matrix=new THREE.Matrix4(),renderWorld=new THREE.Matrix4(),normalSource=new THREE.Matrix3(),normalRender=new THREE.Matrix3(),point=new THREE.Vector3(),other=new THREE.Vector3();
+let frames=0,vertices=0,normals=0,maxVertexError=0,maxNormalError=0,maxMatrixError=0,rayCases=0;
+const logical=m=>({contacts:m.getActualContacts?.(),axes:m.getActualGripAxes?.(),colliders:m.getCollisionVolumes?.(),plates:m.getPlateState?.(),interaction:m.interaction.toArray(),footprint:m.footprint});
+function compareRecord(record,fullVertices){
+ if(record.renderMode==='original'&&record.visibleInScene)renderWorld.copy(record.source.matrixWorld);else{if(record.instanceIndex<0)return;record.proxy.getMatrixAt(record.instanceIndex,matrix);renderWorld.multiplyMatrices(record.proxy.matrixWorld,matrix);}for(let i=0;i<16;i++)maxMatrixError=Math.max(maxMatrixError,Math.abs(record.source.matrixWorld.elements[i]-renderWorld.elements[i]));
+ const geometry=record.source.geometry;if(record.proxy.geometry.attributes.position.count!==geometry.attributes.position.count)issues.push({kind:'geometry count'});
+ // All geometry buffers must match, not just hand/body markers.
+ for(const [name,a]of Object.entries(geometry.attributes)){const q=record.proxy.geometry.attributes[name];if(!q||a.itemSize!==q.itemSize||a.array.length!==q.array.length||a.array.some((v,i)=>!Object.is(v,q.array[i])))issues.push({kind:'geometry data',name});}
+ const positions=geometry.attributes.position,ns=geometry.attributes.normal;normalSource.getNormalMatrix(record.source.matrixWorld);normalRender.getNormalMatrix(renderWorld);
+ const sample=i=>{point.fromBufferAttribute(positions,i);other.copy(point).applyMatrix4(renderWorld);point.applyMatrix4(record.source.matrixWorld);maxVertexError=Math.max(maxVertexError,point.distanceTo(other));vertices++;if(ns){point.fromBufferAttribute(ns,i).applyNormalMatrix(normalSource);other.fromBufferAttribute(ns,i).applyNormalMatrix(normalRender);maxNormalError=Math.max(maxNormalError,point.distanceTo(other));normals++;}};
+ if(fullVertices)for(let i=0;i<positions.count;i++)sample(i);else{
+  if(!geometry.boundingBox)geometry.computeBoundingBox();const box=geometry.boundingBox;
+  // An affine matrix difference reaches its coordinate extrema at the eight
+  // box corners, so this bounds every vertex between full-skin checkpoints.
+  for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){point.set(x,y,z);other.copy(point).applyMatrix4(renderWorld);point.applyMatrix4(record.source.matrixWorld);maxVertexError=Math.max(maxVertexError,point.distanceTo(other));vertices++;}
+ }
+}
+for(const machine of machines.values()){
+ const ids=machine.station.id==='pec-deck'?['machine-pec-deck','machine-reverse-fly']:[`machine-${machine.station.id}`];
+ for(const id of ids){const profile=machine.type==='dumbbellCurl'?null:createMachineLifecycle({THREE,machine,metrics,activityId:id}),r={id,type:machine.type,frames:0,logicalMismatches:0,visibleStates:0,plateLoads:[],rayCases:0};
+  for(const mode of profile?['loop','enter','exit']:['loop'])for(let i=0;i<phaseCount;i++){
+   const p=i/(phaseCount-1),sample=()=>mode==='loop'?machine.sampleActivity(p,p,id):profile.sample(mode,p);b.setEnabled(false);const beforePose=sample(),before=digest({pose:beforePose,logical:logical(machine)});b.setEnabled(true);const afterPose=sample(),after=digest({pose:afterPose,logical:logical(machine)});if(before!==after){r.logicalMismatches++;if(issues.length<30)issues.push({id,mode,p,kind:'logical mismatch'});}
+   b.update();const roots=machine.getBatchRoots?.()||[machine.group,machine.getVisualGroup?.()].filter(Boolean),records=b.getInspectionRecords().filter(record=>roots.includes(record.root));for(const record of records)compareRecord(record,i===0||i===phaseCount-1||i===Math.floor((phaseCount-1)/2));r.frames++;frames++;
+   if(i===0&&mode==='loop'){
+    const center=machine.group.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0,1,0)),ray=new THREE.Raycaster(center.clone().add(new THREE.Vector3(0,0,8)),new THREE.Vector3(0,0,-1)),enabled=ray.intersectObject(scene,true).filter(hit=>roots.some(root=>{for(let node=hit.object;node;node=node.parent)if(node===root)return true;return false;})).map(hit=>({id:hit.object.uuid,distance:hit.distance,point:hit.point.toArray()}));b.setEnabled(false);const disabled=ray.intersectObject(scene,true).filter(hit=>roots.some(root=>{for(let node=hit.object;node;node=node.parent)if(node===root)return true;return false;})).map(hit=>({id:hit.object.uuid,distance:hit.distance,point:hit.point.toArray()}));if(digest(enabled)!==digest(disabled))issues.push({id,kind:'raycast mismatch',enabled:enabled.length,disabled:disabled.length});b.setEnabled(true);r.rayCases++;rayCases++;
+   }
+  }
+  for(const kg of [5,10,20])if(machine.setPlateLoad){b.setEnabled(false);machine.setPlateLoad(kg);machine.sampleActivity(0,0,id);const before=digest(logical(machine));b.setEnabled(true);machine.sampleActivity(0,0,id);const after=digest(logical(machine));if(before!==after)issues.push({id,kind:'plate load mismatch',kg});r.plateLoads.push({kg,state:machine.getPlateState?.()});}
+  const root=machine.getVisualGroup?.()||machine.group,release=b.suspendRoots([root]);const review=new THREE.Scene(),parent=root.parent;review.add(root);b.update();for(const record of b.getInspectionRecords().filter(record=>record.root===root))if(record.source.layers.mask!==record.originalLayerMask)issues.push({id,kind:'review layer'});parent.add(root);release();b.update();r.visibleStates++;results.push(r);console.log(JSON.stringify(r));
+ }
+}
+for(const m of machines.values())m.sampleActivity(0,0,`machine-${m.station.id}`);const cameraChecks=[];
+for(const [name,position,target]of [['hall',[5,6,6],[-5,1,-4]],['classroom',[-24,5,31],[-24,1,25]],['bathroom',[18,4.5,12],[25,1,15]]]){const camera=new THREE.PerspectiveCamera(51,1.6,.1,150);camera.position.fromArray(position);camera.lookAt(...target);camera.updateMatrixWorld();b.update({camera,shadows:false});for(const record of b.getInspectionRecords())compareRecord(record,true);cameraChecks.push({name,...b.getDiagnostics()});}
+const changedSources=checked.filter(p=>sha(p)!==sourceHashes[p]),diagnostics=b.getDiagnostics(),pass=!issues.length&&!changedSources.length&&diagnostics.fallbacks===0&&maxVertexError<.00001&&maxNormalError<.00001;
+const report={pass,sourceHashes,changedSources,phaseCount,frames,vertices,normals,rayCases,maxVertexError,maxNormalError,maxMatrixError,diagnostics,cameraChecks,issues,scope:'Production GLB measurements and all ordinary machine variants, 101 loop/enter/exit samples each. Byte-identical render geometry and actual Float32 instance matrices or original singleton routes: full vertices/normals at start/middle/end; bounding-box corners bound all intermediate affine vertex errors. Three fixed camera snapshots additionally check actual visible original/instance routes. Logical pose/contact/collider/plate/navigation values must be identical with batching toggled. Ray hits map back to original fixture objects. No GPU or coach certification.',results};mkdirSync('artifacts/performance-v09',{recursive:true});writeFileSync('artifacts/performance-v09/equipment-batching-qualification.json',JSON.stringify(report,null,2));console.log(JSON.stringify({pass,frames,vertices,normals,rayCases,maxVertexError,maxNormalError,maxMatrixError,issues:issues.slice(0,20),diagnostics}));b.dispose();character.dispose();if(!pass)process.exitCode=1;

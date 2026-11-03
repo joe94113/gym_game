@@ -1,0 +1,28 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {parseCmuFullBody,sampleFullBodyCrop,encodeFullBodyValues,fullBodyAliases} from './cmu-fullbody-v017.mjs';
+
+const directory='.local-tools/cmu-v015',sha=value=>createHash('sha256').update(value).digest('hex');
+const sources=[
+  {id:'cmu-79-93',subject:'79',motion:'79_93',fps:60,sourceExercise:'Standing dumbbell shoulder press',exerciseId:'dumbbell-shoulder-press',loadInSource:'Two handheld dumbbells; source load mass is unknown.',crops:[{id:'shoulder-press-a',firstFrame:213,lastFrame:559},{id:'shoulder-press-b',firstFrame:559,lastFrame:836}]},
+  {id:'cmu-13-29',subject:'13',motion:'13_29',fps:120,sourceExercise:'Unweighted squat',exerciseId:'dumbbell-goblet-squat',loadInSource:'Bodyweight only; no dumbbell. Adaptation is not a weighted goblet-squat capture.',crops:[{id:'bodyweight-squat-a',firstFrame:3792,lastFrame:4143},{id:'bodyweight-squat-b',firstFrame:4143,lastFrame:4501}]},
+];
+const clips=[],records=[];let landmarks;
+for(const source of sources){
+  const files=[`${source.subject}.asf`,`${source.motion}.amc`],raw=files.map(file=>readFileSync(`${directory}/${file}`));
+  const motion=parseCmuFullBody(raw[0].toString(),raw[1].toString(),{fps:source.fps});
+  const runtimeNames=motion.landmarkNames.filter(name=>!/(?:fingers|thumb)$/.test(name));
+  if(landmarks&&JSON.stringify(landmarks)!==JSON.stringify(runtimeNames))throw Error('Capture landmark order differs');landmarks=runtimeNames;
+  const sourceClips=[];
+  for(const crop of source.crops){
+    const sample=sampleFullBodyCrop({...motion,landmarkNames:runtimeNames},crop),encoded=encodeFullBodyValues(sample.values),{values,rest,...metadata}=sample;
+    const clip={...metadata,sourceId:source.id,exerciseId:source.exerciseId,loadInSource:source.loadInSource,rest:rest.map(value=>Number(value.toFixed(6))),quantizedLE:encoded.quantizedLE};clips.push(clip);
+    sourceClips.push({...metadata,rest:clip.rest,maxQuantizationErrorMetres:encoded.maxErrorMetres,samplesSHA256:sha(Buffer.from(sample.values.map(value=>value.toFixed(8)).join(','))),packedSHA256:sha(Buffer.from(encoded.quantizedLE,'base64'))});
+  }
+  records.push({...source,sourceURL:`https://mocap.cs.cmu.edu/subjects/${source.subject}/${source.motion}.amc`,skeletonURL:`https://mocap.cs.cmu.edu/subjects/${source.subject}/${source.subject}.asf`,catalogURL:`https://mocap.cs.cmu.edu/search.php?subjectnumber=${source.subject}&trinum=${source.motion.split('_')[1]}`,sourceFrames:motion.frames,rawSourceHashes:Object.fromEntries(files.map((file,i)=>[`${directory}/${file}`,sha(raw[i])])),bones:motion.bones,coordinateConvention:motion.coordinateConvention,crops:sourceClips});
+}
+const module=`// Generated from actual CMU ASF/AMC. Provenance: public/motions/cmu-fullbody-v017.json.\nexport const capturedFullBodyQuantization=.0001;\nexport const capturedFullBodyLandmarks=${JSON.stringify(landmarks)};\nexport const capturedFullBodyAliases=${JSON.stringify(fullBodyAliases)};\nexport const capturedFullBodyClips=${JSON.stringify(clips)};\n/** Decode once per clip. First xyz is source root offset; subsequent xyz triples are ASF landmarks. */\nexport function decodeCapturedFullBodyClip(clip){const bytes=Uint8Array.from(atob(clip.quantizedLE),char=>char.charCodeAt(0));const view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength),values=new Float32Array(bytes.length/2);for(let i=0;i<values.length;i++)values[i]=view.getInt16(i*2,true)*capturedFullBodyQuantization;if(values.length!==clip.sampleCount*clip.stride)throw Error('Corrupt full-body clip');return values;}\n`;
+writeFileSync('src/captured-fullbody-data-v017.js',module);
+const manifest={schemaVersion:1,source:'CMU Graphics Lab Motion Capture Database',termsURL:'https://mocap.cs.cmu.edu/faqs.php',terms:'Motion capture data may be copied, modified, or redistributed without permission. CMU does not guarantee quality or classification.',attribution:'The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.',landmarkNames:landmarks,excludedRuntimeLandmarks:['lfingers','rfingers','lthumb','rthumb'],aliases:fullBodyAliases,layout:'First 3 channels are source root offset from the smoothed crop start, then xyz per landmarkNames. Values are metres. Packed payload is Int16LE at 0.0001 metres per unit, stored in the generated module.',quantizationMetres:.0001,module:{path:'src/captured-fullbody-data-v017.js',sha256:sha(module),bytes:Buffer.byteLength(module)},importerHashes:Object.fromEntries(['scripts/cmu-fullbody-v017.mjs','scripts/import-fullbody-v017.mjs'].map(path=>[path,sha(readFileSync(path))])),sources:records,scope:'Four real captured repetitions with multi-joint full-body source landmarks. Runtime retargeting must preserve game bone lengths, enforce hand/foot/equipment contacts and blend loop/lifecycle seams. Source positions and source actor quaternions are reconstructed offline; the compact runtime payload contains source landmarks and root offsets, not finger capture or game-ready direct bone animation. Source fingers/thumbs are excluded and do not supply genuine finger capture. Squat source is unweighted.',professionalReview:{status:'pending',reviewer:null}};
+mkdirSync('public/motions',{recursive:true});writeFileSync('public/motions/cmu-fullbody-v017.json',JSON.stringify(manifest,null,2));
+console.log(JSON.stringify({moduleBytes:manifest.module.bytes,landmarks:landmarks.length,clips:clips.length,samples:clips.reduce((sum,clip)=>sum+clip.sampleCount,0),maximumQuantizationError:Math.max(...records.flatMap(record=>record.crops.map(clip=>clip.maxQuantizationErrorMetres)))}));

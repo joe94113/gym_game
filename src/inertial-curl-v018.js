@@ -1,0 +1,6 @@
+import {imuCurlCaptureClips} from './imu-curl-data-v018.js';
+import {preparePacedReference,pacedReferenceEffort} from './paced-reference-v018.js';
+export const inertialCurlIds=Object.freeze(['dumbbell-curl','dumbbell-hammer-curl','cable-straight-bar-curl','cable-ez-bar-curl','cable-rope-hammer-curl','machine-preacher-curl']);
+const ids=new Set(inertialCurlIds),records=imuCurlCaptureClips.map(clip=>({clip,...preparePacedReference(clip.progress)}));
+export function inertialCurlEffort(id,phase,cycle=0){if(!ids.has(id)||!Number.isFinite(phase)||!Number.isFinite(cycle))return null;return pacedReferenceEffort(records[((Math.floor(cycle)%records.length)+records.length)%records.length],phase);}
+export function inertialCurlInfo(id){if(!ids.has(id))return null;return{exerciseId:id,sourceId:'uci-wle-273',kind:'measured-imu-tempo',sourceURL:'https://archive.ics.uci.edu/dataset/273/weight+lifting+exercises+monitored+with+inertial+measurement+units',license:'CC BY 4.0',repetitions:records.length,sourceLoad:'1.25 kg dumbbell curl; class A',humanApproval:false,scope:'Correct unilateral dumbbell-curl IMU forearm-roll excursion used only as a paced timing reference (35% measured reference). Not anatomical elbow angles, full-body optical capture, bilateral capture or a recording of this attachment. Existing ranges, wrist frames and physical contacts retained.'};}
